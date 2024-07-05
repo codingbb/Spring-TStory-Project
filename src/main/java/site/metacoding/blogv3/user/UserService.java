@@ -18,7 +18,7 @@ public class UserService {
 
     public User login(UserRequest.LoginDTO requestDTO) {
         User user = userRepo.findByUsernameAndPassword(requestDTO.getUsername(), requestDTO.getPassword())
-                .orElseThrow(() -> new LoginFailException());
+                .orElseThrow(() -> new RuntimeException());
 
         return user;
     }
