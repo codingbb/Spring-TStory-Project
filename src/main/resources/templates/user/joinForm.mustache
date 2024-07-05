@@ -7,16 +7,21 @@
             <div class="my_error_box my_hidden">
 
             </div>
-            <form action="/join" method="post">
+            <form action="/join" method="post" id="joinForm">
                 <input id="username" class="my_auth_form_box_input" type="text" name="username" placeholder="유저네임"
                     maxlength="20" value="ssar1" required />
+
                 <input id="password" class="my_auth_form_box_input" type="password" name="password" placeholder="비밀번호"
                     maxlength="20" value="1234" required />
+
                 <input id="same-password" class="my_auth_form_box_input" type="password" name="" placeholder="비밀번호 확인"
                     maxlength="20" value="1234" required />
+                <div id="nameCheckFalse" style="color: red">비밀번호가 일치하지 않습니다.</div>
+                <div id="nameCheckTrue" style="color: green">비밀번호가 일치합니다.</div>
+
                 <input class="my_auth_form_box_input" type="email" name="email" placeholder="이메일" maxlength="60"
                     value="ssar1@nate.com" required />
-                <button type="submit" class="my_secondary_btn">회원가입</button>
+                <button type="submit" id="joinBtn" class="my_secondary_btn">회원가입</button>
             </form>
             <div class="my_auth_form_box_link">
                 <div><a href="/login-form">로그인</a></div>
@@ -26,6 +31,65 @@
     </div>
     <br />
 </div>
+
+<script>
+    $("#nameCheckFalse").addClass("my_hidden");
+    $("#nameCheckTrue").addClass("my_hidden");
+
+    $("#same-password").on("input", function () {
+        let password = $("#password").val();
+        // console.log("패스워드 = " + password);
+
+        let confirmPassword = $("#same-password").val();
+        // console.log("확인용 = " + confirmPassword);
+
+        if (password === confirmPassword) {
+            $("#nameCheckTrue").removeClass("my_hidden");
+            $("#nameCheckFalse").addClass("my_hidden");
+            $("#joinBtn").css("background-color", "green");
+
+            // 값을 다 지웠으면 다시 둘 다 my_hidden 넣어줘야함
+        } else if (confirmPassword === "") {
+            $("#nameCheckFalse").addClass("my_hidden");
+            $("#nameCheckTrue").addClass("my_hidden");
+            $("#joinBtn").css("background-color", "");
+
+        }else {
+            $("#nameCheckFalse").removeClass("my_hidden");
+            $("#nameCheckTrue").addClass("my_hidden");
+            $("#joinBtn").css("background-color", "");
+        }
+    });
+
+    $("#joinForm").on("submit", function (e) {
+        let password = $("#password").val();
+        // console.log("패스워드 = " + password);
+
+        let confirmPassword = $("#same-password").val();
+        // console.log("확인용 = " + confirmPassword);
+
+        if (password !== confirmPassword) {
+            e.preventDefault();
+
+            swal({
+                text: "비밀번호를 확인해주세요",
+                icon: "warning",
+                button: "확인"
+            });
+
+        } else if (confirmPassword === "") {
+            e.preventDefault();
+
+            swal({
+                text: "비밀번호를 확인해주세요",
+                icon: "warning",
+                button: "확인"
+            });
+        }
+    });
+
+
+</script>
 
 
 {{>/layout/footer}}
