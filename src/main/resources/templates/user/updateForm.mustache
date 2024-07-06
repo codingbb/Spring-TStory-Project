@@ -1,5 +1,19 @@
 {{>/layout/main-header}}
 
+<style>
+    .password-container {
+        position: relative;
+    }
+
+    .password-container .fa-solid {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+    }
+</style>
+
 <input type="hidden" id="userId" value="">
 
 <div class="container">
@@ -10,7 +24,7 @@
                 <img src="/images/dog.jpg" class="my_profile_rounded_img_btn_lg" id="profile-img-btn_lg">
 
                 <form id="fileForm">
-                    <input type="file" class="my_hidden" id="profile-img-input" name="profileImgFile" />
+                    <input type="file" class="my_hidden" id="profile-img-input" name="profileImgFile"/>
                 </form>
             </div>
             <div class="my_error_box my_hidden">
@@ -18,14 +32,21 @@
             </div>
             <!-- 수정은 put 요청 fetch 사용해야함 -->
             <form id="updateUserForm">
-                <input id="username" name="username" class="my_auth_form_box_input" type="text" placeholder="유저네임" maxlength="20"
-                    value="{{model.username}}" required readonly />
-                <input id="password" name="password" class="my_auth_form_box_input" type="password" placeholder="기존 비밀번호" maxlength="20"
-                    required />
-                <input id="same-password" name="newPassword" class="my_auth_form_box_input" type="password" placeholder="수정 비밀번호"
-                    maxlength="20" required />
+                <input id="username" name="username" class="my_auth_form_box_input" type="text" placeholder="유저네임"
+                       maxlength="20"
+                       value="{{model.username}}" required readonly/>
+
+                <div class="password-container">
+                    <input id="password" name="password" class="my_auth_form_box_input" type="password"
+                           placeholder="기존 비밀번호" maxlength="20" required/>
+                    <i class="fa-solid fa-eye-slash togglePassword"></i>
+                </div>
+
+                <input id="same-password" name="newPassword" class="my_auth_form_box_input" type="password"
+                       placeholder="수정 비밀번호" maxlength="20" required/>
+
                 <input class="my_auth_form_box_input" type="email" name="email" placeholder="이메일" maxlength="60"
-                    value="{{model.email}}" required readonly />
+                       value="{{model.email}}" required readonly/>
                 <button type="submit" class="my_secondary_btn">회원정보수정</button>
             </form>
 
@@ -35,7 +56,7 @@
             </div>
         </div>
     </div>
-    <br />
+    <br/>
 </div>
 
 <script>
@@ -44,10 +65,10 @@
         e.preventDefault();
 
         let password = $("#password").val();
-        console.log("password " + password);
+        // console.log("password " + password);
 
         let newPassword = $("#same-password").val();
-        console.log("newPassword " + newPassword);
+        // console.log("newPassword " + newPassword);
 
         //한번에 넘기장
         let passwords = {
@@ -61,19 +82,19 @@
             contentType: 'application/json; charset=utf-8',
             type: 'POST'
 
-        }).done((res)=>{
+        }).done((res) => {
             //swal - 비동기적으로 작동. 그래서 자꾸 alert창 안뜨고 바로 /로 넘어간다
             swal({
                 text: "회원정보 변경이 완료되었습니다.",
                 icon: "success",
                 button: "확인"
 
-            // then - 비동기 작업이 완료된 후에 실행할 코드를 지정할 때 사용 (promise)
+                // then - 비동기 작업이 완료된 후에 실행할 코드를 지정할 때 사용 (promise)
             }).then(() => {
                 window.location.href = "/";
             });
 
-        }).fail((res)=>{
+        }).fail((res) => {
             swal({
                 // text: "동일한 비밀번호로는 변경할 수 없습니다.",
                 //res에서 msg 빼오고, apiException 만들어야하는데 exception 아직 하지 말라고 하셔서 패스
@@ -83,6 +104,19 @@
             });
 
         });
+    });
+
+    $(".togglePassword").click(function () {
+        if ($("#password, #same-password").attr("type") === "password") {
+            $(this).removeClass("fa-solid fa-eye-slash");
+            $(this).addClass("fa-solid fa-eye");
+            $("#password, #same-password").attr('type', 'text');
+
+        } else {
+            $(this).removeClass("fa-solid fa-eye");
+            $(this).addClass("fa-solid fa-eye-slash");
+            $("#password, #same-password").attr("type", "password");
+        }
     });
 
 </script>

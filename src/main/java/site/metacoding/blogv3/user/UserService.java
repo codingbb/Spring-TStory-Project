@@ -40,7 +40,7 @@ public class UserService {
 
     }
 
-    //비밀번호, 이메일 변경
+    //비밀번호 변경
     @Transactional
     public void userUpdate(Integer sessionUserId, UserRequest.UpdateDTO requestDTO) {
         //먼저 조회
