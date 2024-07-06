@@ -1,10 +1,14 @@
 package site.metacoding.blogv3.user;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import site.metacoding.blogv3._core.util.ApiUtil;
 
 
 @RequiredArgsConstructor
@@ -54,9 +58,22 @@ public class UserController {
     }
 
     @GetMapping("/user/update-form")
-    public String updateForm() {
+    public String updateForm(HttpServletRequest request) {
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        UserResponse.UpdateDTO updateDTO = userService.UpdateForm(sessionUser.getId());
+//        System.out.println("updateDTO = " + updateDTO);
+        request.setAttribute("model", updateDTO);
 
         return "user/updateForm";
+    }
+
+    @PostMapping("/user/update")
+    public ResponseEntity<?> update(@RequestBody UserRequest.UpdateDTO requestDTO) {
+        System.out.println("비번 확인용 = " + requestDTO);
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        userService.userUpdate(sessionUser.getId(), requestDTO);
+
+        return ResponseEntity.ok(new ApiUtil<>(true));
     }
 
     @GetMapping("/logout")

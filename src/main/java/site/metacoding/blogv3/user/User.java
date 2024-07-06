@@ -20,13 +20,8 @@ public class User {
     private String username;
     private String password;
     private String email;
-
-    // 오어스 로그인
-//    private String provider;
-
     @CreationTimestamp
     private LocalDateTime createdAt;
-
 
     @Builder
     public User(Integer id, String username, String password, String email, LocalDateTime createdAt) {
@@ -36,4 +31,5 @@ public class User {
         this.email = email;
         this.createdAt = createdAt;
     }
+
 }

@@ -18,7 +18,7 @@ public class UserService {
 
         //포함하면 true 반환 되어서 throw가 실행될 것임
         if (userOP.isPresent()) {
-            throw new RuntimeException();
+            throw new RuntimeException("중복된 아이디입니다.");
         }
 
         User user = userRepo.save(requestDTO.toEntity());
@@ -27,8 +27,36 @@ public class UserService {
 
     public User login(UserRequest.LoginDTO requestDTO) {
         User user = userRepo.findByUsernameAndPassword(requestDTO.getUsername(), requestDTO.getPassword())
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new RuntimeException("회원 정보가 존재하지 않습니다."));
 
         return user;
+    }
+
+    public UserResponse.UpdateDTO UpdateForm(Integer sessionUserId) {
+        User user = userRepo.findById(sessionUserId)
+                .orElseThrow(() -> new RuntimeException("회원 정보가 존재하지 않습니다."));
+
+        return new UserResponse.UpdateDTO(user.getUsername(), user.getEmail());
+
+    }
+
+    //비밀번호, 이메일 변경
+    @Transactional
+    public void userUpdate(Integer sessionUserId, UserRequest.UpdateDTO requestDTO) {
+        //먼저 조회
+        User user = userRepo.findById(sessionUserId)
+                .orElseThrow(() -> new RuntimeException());
+
+        if (requestDTO.getNewPassword().equals(user.getPassword())) {
+            //
+            throw new RuntimeException("동일한 비밀번호로는 변경할 수 없습니다.");
+        }
+
+        if (!requestDTO.getPassword().equals(user.getPassword())) {
+            throw new RuntimeException("기존 비밀번호가 일치하지 않습니다.");
+        }
+
+        user.setPassword(requestDTO.getNewPassword());
+
     }
 }
