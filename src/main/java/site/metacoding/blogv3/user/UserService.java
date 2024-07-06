@@ -59,4 +59,24 @@ public class UserService {
         user.setPassword(requestDTO.getNewPassword());
 
     }
+
+//    username 중복 검색
+    public UserEnum usernameCheck(String username) {
+        Optional<User> userOP = userRepo.findByUsername(username);
+//        System.out.println("userOP = " + userOP);
+
+        UserEnum userStatus;
+
+        if (userOP.isPresent()) {
+            userStatus = UserEnum.USER_EXIST;
+            System.out.println("userStatus = " + userStatus);
+            return userStatus;
+
+        } else {
+            userStatus = UserEnum.USER_NO_EXIST;
+            System.out.println("userStatus = " + userStatus);
+            return userStatus;
+        }
+
+    }
 }

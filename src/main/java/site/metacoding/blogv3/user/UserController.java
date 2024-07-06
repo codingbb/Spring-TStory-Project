@@ -29,6 +29,22 @@ public class UserController {
         return "redirect:/";
     }
 
+    @GetMapping("/username-check")
+    public ResponseEntity<?> usernameCheck(String username) {
+//        System.out.println("username = " + username);
+        UserEnum usernameCheck = userService.usernameCheck(username);
+
+//        System.out.println("usernameCheck = " + usernameCheck);
+        
+        if (usernameCheck.equals(UserEnum.USER_EXIST)) {
+            return ResponseEntity.ok(new ApiUtil<>(usernameCheck));
+        } else {
+            return ResponseEntity.ok(new ApiUtil<>(usernameCheck));
+        }
+
+    }
+
+
     @GetMapping("/join-form")
     public String joinForm() {
 

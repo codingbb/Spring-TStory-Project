@@ -10,6 +10,8 @@
             <form action="/join" method="post" id="joinForm">
                 <input id="username" class="my_auth_form_box_input" type="text" name="username" placeholder="유저네임"
                     maxlength="20" value="ssar1" required />
+                <div id="usernameExist" class="my_hidden" style="color: red">중복된 아이디입니다.</div>
+                <div id="usernameNoExist" class="my_hidden" style="color: green">사용 가능한 아이디입니다.</div>
 
                 <input id="password" class="my_auth_form_box_input" type="password" name="password" placeholder="비밀번호"
                     maxlength="20" value="1234" required />
@@ -33,6 +35,44 @@
 </div>
 
 <script>
+<!--    username 중복 체크 -->
+    $("#username").keyup(function () {
+       console.log($(this).val());
+        let username = $(this).val();
+
+        $.ajax({
+            url: '/username-check',
+            data: {username: username},
+            type: 'GET'
+
+        }).done((res) => {
+            console.log("Res " + JSON.stringify(res));
+
+            if (res.body === "USER_EXIST") {
+                $("#usernameExist").removeClass("my_hidden");
+                $("#usernameNoExist").addClass("my_hidden")
+            }
+
+            if (res.body === "USER_NO_EXIST") {
+                $("#usernameExist").addClass("my_hidden");
+                $("#usernameNoExist").removeClass("my_hidden");
+            }
+
+            if ((username) === "") {
+                $("#usernameNoExist").addClass("my_hidden");
+                $("#usernameExist").addClass("my_hidden");
+            }
+
+        }).fail((res) => {
+            alert("오류");
+        });
+
+    });
+
+// username 중복 체크 끝
+
+
+<!--    비밀번호 동일 체크 -->
     $("#nameCheckFalse").addClass("my_hidden");
     $("#nameCheckTrue").addClass("my_hidden");
 
@@ -60,7 +100,10 @@
             $("#joinBtn").css("background-color", "");
         }
     });
+    // 비밀번호 동일체크 끝
 
+
+    // 비번이 다르면 form 제출 못하게 막아놓음
     $("#joinForm").on("submit", function (e) {
         let password = $("#password").val();
         // console.log("패스워드 = " + password);
@@ -87,7 +130,7 @@
             });
         }
     });
-
+// 비번이 다르면 form 제출 못하게 막아놓음
 
 </script>
 
