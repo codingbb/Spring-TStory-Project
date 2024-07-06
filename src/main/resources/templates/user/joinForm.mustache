@@ -36,38 +36,38 @@
 
 <script>
 <!--    username 중복 체크 -->
-    $("#username").keyup(function () {
-       console.log($(this).val());
-        let username = $(this).val();
+$("#username").on("keyup", _.debounce(function() {
+    console.log($(this).val());
+    let username = $(this).val();
 
-        $.ajax({
-            url: '/username-check',
-            data: {username: username},
-            type: 'GET'
+    $.ajax({
+        url: '/username-check',
+        data: {username: username},
+        type: 'GET'
 
-        }).done((res) => {
-            console.log("Res " + JSON.stringify(res));
+    }).done((res) => {
+        console.log("Res " + JSON.stringify(res));
 
-            if (res.body === "USER_EXIST") {
-                $("#usernameExist").removeClass("my_hidden");
-                $("#usernameNoExist").addClass("my_hidden")
-            }
+        if (res.body === "USER_EXIST") {
+            $("#usernameExist").removeClass("my_hidden");
+            $("#usernameNoExist").addClass("my_hidden")
+        }
 
-            if (res.body === "USER_NO_EXIST") {
-                $("#usernameExist").addClass("my_hidden");
-                $("#usernameNoExist").removeClass("my_hidden");
-            }
+        if (res.body === "USER_NO_EXIST") {
+            $("#usernameExist").addClass("my_hidden");
+            $("#usernameNoExist").removeClass("my_hidden");
+        }
 
-            if ((username) === "") {
-                $("#usernameNoExist").addClass("my_hidden");
-                $("#usernameExist").addClass("my_hidden");
-            }
+        if ((username) === "") {
+            $("#usernameNoExist").addClass("my_hidden");
+            $("#usernameExist").addClass("my_hidden");
+        }
 
-        }).fail((res) => {
-            alert("오류");
-        });
-
+    }).fail((res) => {
+        alert("오류");
     });
+
+}, 500));
 
 // username 중복 체크 끝
 
