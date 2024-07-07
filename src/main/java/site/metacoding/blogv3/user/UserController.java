@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import site.metacoding.blogv3._core.util.ApiUtil;
+import site.metacoding.blogv3._core.util.EmailUtil;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.Random;
 
 
 @RequiredArgsConstructor
@@ -17,6 +22,7 @@ public class UserController {
 
     private final HttpSession session;
     private final UserService userService;
+    private final EmailUtil emailUtil;
 
     @PostMapping("/join")
     public String join(UserRequest.JoinDTO requestDTO) {
@@ -27,6 +33,40 @@ public class UserController {
         session.setAttribute("sessionUser", sessionUser);
 
         return "redirect:/";
+    }
+
+    @GetMapping("/sendmail")
+    public ResponseEntity<?> sendMail(String email) {
+        String decodedEmail;
+        // 이메일 주소 디코딩
+        try {
+            decodedEmail = URLDecoder.decode(email, "UTF-8");
+            System.out.println("decodedEmail = " + decodedEmail);
+
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+
+        // 타이틀
+        String subject = "[Tistroy 회원가입 인증메일입니다]";
+
+//        랜덤한 인증번호
+        Random random = new Random();
+        int randomNumb;
+        String randomNumStr = "";
+
+        for (int i = 0; i < 8; i++) {
+            // 0부터 9까지 
+            randomNumb = random.nextInt(10);
+            randomNumStr = randomNumStr + randomNumb;
+
+        }
+//        System.out.println("randomNumStr = " + randomNumStr);
+
+        emailUtil.sendEmail(decodedEmail, subject, randomNumStr);
+        return null;
+//        return "메일 잘 보내졌어";
+
     }
 
     @GetMapping("/username-check")
