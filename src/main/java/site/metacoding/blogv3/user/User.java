@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Data
 @Table(name = "user_tb")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -21,6 +20,7 @@ public class User {
     private String password;
     private String email;
     private Boolean emailConfirm;  //이메일 인증 여부
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 

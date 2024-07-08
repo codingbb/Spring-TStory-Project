@@ -12,11 +12,7 @@ public class IndexController {
         return "main";
     }
 
-    @GetMapping("/category/write-form")
-    public String writeForm() {
 
-        return "category/writeForm";
-    }
 
     @GetMapping("/post/detail")
     public String postDetail() {

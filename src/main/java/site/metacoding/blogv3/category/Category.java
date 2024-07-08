@@ -5,16 +5,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import site.metacoding.blogv3.post.Post;
 import site.metacoding.blogv3.user.User;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
 @Data
 @Table(name = "category_tb")
 public class Category {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -23,14 +25,18 @@ public class Category {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Post> posts = new ArrayList<>();
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @Builder
-    public Category(Integer id, String categoryName, User user, LocalDateTime createdAt) {
+    public Category(Integer id, String categoryName, User user, List<Post> posts, LocalDateTime createdAt) {
         this.id = id;
         this.categoryName = categoryName;
         this.user = user;
+        this.posts = posts;
         this.createdAt = createdAt;
     }
 }
