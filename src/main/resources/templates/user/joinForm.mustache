@@ -47,7 +47,7 @@
 <div id="authModal" class="modal">
     <div class="modal-content">
         <p style="font-size: 30px">💌</p>
-        <input type="text" id="authCode" placeholder="인증번호를 입력해주세요"/>
+        <input type="text" id="authCodeText" placeholder="인증번호를 입력해주세요"/>
         <div class="modal-buttons">
             <button id="cancelBtn">취소</button>
             <button id="confirmBtn">확인</button>
@@ -59,13 +59,13 @@
 <script>
     // 모달창을 보이게 하는 함수
     function showModal() {
-        $('#authCode').val('');
+        $('#authCodeText').val('');
         $('#authModal').css('display', 'block');
     }
 
     // "인증하기" 버튼 클릭 시 이메일로 인증번호 보내기 모달창 보이기
     $('#emailAuthButton').on('click', function () {
-        emailCheck();
+        emailSendCode();
     });
 
     // 취소 버튼 클릭 시 모달창 닫기
@@ -79,7 +79,7 @@
     // 전역 변수 선언
     let emailCode;
 
-    function emailCheck() {
+    function emailSendCode() {
         console.log($("#email").val());
         let email = encodeURIComponent($("#email").val());
 
@@ -108,10 +108,10 @@
 
     $("#confirmBtn").click(function () {
 
-        let checkCode = $("#authCode").val();
+        let checkEmailCode = $("#authCodeText").val();
         // console.log("입력 코드 " + checkCode);
 
-        if (emailCode !== checkCode) {
+        if (emailCode !== checkEmailCode) {
             swal({
                 text: "인증번호를 확인해주세요",
                 icon: "warning",

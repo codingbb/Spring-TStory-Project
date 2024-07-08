@@ -106,14 +106,19 @@
         });
     });
 
+    // 클릭 할 때마다 눈 감은 것 -> 눈 뜬 것 교체
     $(".togglePassword").click(function () {
         if ($("#password, #same-password").attr("type") === "password") {
+            // 눈감은 이모지
             $(this).removeClass("fa-solid fa-eye-slash");
+            // 눈 뜬 이모지
             $(this).addClass("fa-solid fa-eye");
             $("#password, #same-password").attr('type', 'text');
 
         } else {
+            // 눈 뜬 이모지
             $(this).removeClass("fa-solid fa-eye");
+            // 눈 감은 이모지
             $(this).addClass("fa-solid fa-eye-slash");
             $("#password, #same-password").attr("type", "password");
         }
