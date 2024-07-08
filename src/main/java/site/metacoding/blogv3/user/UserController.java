@@ -22,7 +22,6 @@ public class UserController {
 
     private final HttpSession session;
     private final UserService userService;
-    private final EmailUtil emailUtil;
 
     @PostMapping("/join")
     public String join(UserRequest.JoinDTO requestDTO) {
@@ -37,35 +36,10 @@ public class UserController {
 
     @GetMapping("/sendmail")
     public ResponseEntity<?> sendMail(String email) {
-        String decodedEmail;
-        // 이메일 주소 디코딩
-        try {
-            decodedEmail = URLDecoder.decode(email, "UTF-8");
-            System.out.println("decodedEmail = " + decodedEmail);
+        String emailCode = userService.mailCheck(email);
+        System.out.println("emailCode = " + emailCode);
 
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-
-        // 타이틀
-        String subject = "[Tistroy 회원가입 인증메일입니다]";
-
-//        랜덤한 인증번호
-        Random random = new Random();
-        int randomNumb;
-        String randomNumStr = "";
-
-        for (int i = 0; i < 8; i++) {
-            // 0부터 9까지 
-            randomNumb = random.nextInt(10);
-            randomNumStr = randomNumStr + randomNumb;
-
-        }
-//        System.out.println("randomNumStr = " + randomNumStr);
-
-        emailUtil.sendEmail(decodedEmail, subject, randomNumStr);
-        return null;
-//        return "메일 잘 보내졌어";
+        return ResponseEntity.ok(new ApiUtil<>(emailCode));
 
     }
 

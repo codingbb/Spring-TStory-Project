@@ -4,13 +4,54 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.metacoding.blogv3._core.errors.exception.LoginFailException;
+import site.metacoding.blogv3._core.util.EmailUtil;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.Optional;
+import java.util.Random;
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
     private final UserJPARepository userRepo;
+    private final EmailUtil emailUtil;
+
+
+    // 이메일 인증
+    public String mailCheck(String email) {
+        String decodedEmail;
+        // 이메일 주소 디코딩
+        try {
+            decodedEmail = URLDecoder.decode(email, "UTF-8");
+            System.out.println("decodedEmail = " + decodedEmail);
+
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+
+        // 타이틀
+        String subject = "[Tistroy 회원가입 인증메일입니다]";
+
+//        랜덤한 인증번호
+        Random random = new Random();
+        int randomNumb;
+        String randomNumStr = "";
+
+        for (int i = 0; i < 8; i++) {
+            // 0부터 9까지
+            randomNumb = random.nextInt(10);
+            randomNumStr = randomNumStr + randomNumb;
+
+        }
+//        System.out.println("randomNumStr = " + randomNumStr);
+
+        emailUtil.sendEmail(decodedEmail, subject, randomNumStr);
+
+        return randomNumStr;
+
+    }
+
 
     @Transactional
     public User join(UserRequest.JoinDTO requestDTO) {
@@ -79,4 +120,6 @@ public class UserService {
         }
 
     }
+
+
 }
