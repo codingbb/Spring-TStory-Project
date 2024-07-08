@@ -62,8 +62,14 @@ public class UserService {
             throw new RuntimeException("중복된 아이디입니다.");
         }
 
-        User user = userRepo.save(requestDTO.toEntity());
-        return user;
+        if (requestDTO.getIsEmailConfirmed() == true) {
+            User user = userRepo.save(requestDTO.toEntity());
+            return user;
+
+        } else {
+            throw new RuntimeException("이메일 인증이 필요합니다.");
+        }
+
     }
 
     public User login(UserRequest.LoginDTO requestDTO) {

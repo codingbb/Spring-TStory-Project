@@ -257,12 +257,20 @@
             type: 'POST'
 
         }).done((res)=>{
-            alert("성공");
+            swal({
+                text: "회원가입이 완료되었습니다.",
+                icon: "success",
+                button: "확인"
+            });
+
             window.location.href = "/";
 
         }).fail((res)=>{
-            alert("실패")
-
+            swal({
+                text: "이메일 인증을 해주세요",
+                icon: "warning",
+                button: "확인"
+            });
         });
 
     });
