@@ -14,16 +14,16 @@
             <form id="joinForm">
                 <input id="username" class="my_auth_form_box_input" type="text" name="username" placeholder="유저네임"
                        maxlength="20" value="ssar1" required/>
-                <div id="usernameExist" class="my_hidden" style="color: red">중복된 아이디입니다.</div>
-                <div id="usernameNoExist" class="my_hidden" style="color: green">사용 가능한 아이디입니다.</div>
+                <div id="usernameDuplicatedText" class="my_hidden" style="color: red">중복된 아이디입니다.</div>
+                <div id="usernameNoDuplicatedText" class="my_hidden" style="color: green">사용 가능한 아이디입니다.</div>
 
                 <input id="password" class="my_auth_form_box_input" type="password" name="password" placeholder="비밀번호"
                        maxlength="20" value="1234" required/>
 
-                <input id="same-password" class="my_auth_form_box_input" type="password" name="" placeholder="비밀번호 확인"
+                <input id="samePassword" class="my_auth_form_box_input" type="password" name="" placeholder="비밀번호 확인"
                        maxlength="20" value="1234" required/>
-                <div id="nameCheckFalse" style="color: red">비밀번호가 일치하지 않습니다.</div>
-                <div id="nameCheckTrue" style="color: green">비밀번호가 일치합니다.</div>
+                <div id="errorTextBox" style="color: red">비밀번호가 일치하지 않습니다.</div>
+                <div id="successTextBox" style="color: green">비밀번호가 일치합니다.</div>
 
                 <div class="email-container">
                     <input class="my_auth_form_box_input" id="email" type="email" name="email" placeholder="이메일"
@@ -134,6 +134,7 @@
 
 
     <!--username 중복 체크 -->
+    // keyup - debounce (한번에 모았다가 일정 시간이 지나면 보낸다)
     $("#username").on("keyup", _.debounce(function () {
         console.log($(this).val());
         let username = $(this).val();
@@ -147,18 +148,18 @@
             // console.log("Res " + JSON.stringify(res));
 
             if (res.body === "USER_EXIST") {
-                $("#usernameExist").removeClass("my_hidden");
-                $("#usernameNoExist").addClass("my_hidden")
+                showUsernameDuplicatedText();
+                hideUsernameSuccessText();
             }
 
             if (res.body === "USER_NO_EXIST") {
-                $("#usernameExist").addClass("my_hidden");
-                $("#usernameNoExist").removeClass("my_hidden");
+                hideUsernameDuplicatedText();
+                showUsernameSuccessText();
             }
 
             if ((username) === "") {
-                $("#usernameNoExist").addClass("my_hidden");
-                $("#usernameExist").addClass("my_hidden");
+                hideUsernameSuccessText();
+                hideUsernameDuplicatedText();
             }
 
         }).fail((res) => {
@@ -171,34 +172,37 @@
 
 
     <!--    비밀번호 동일 체크 -->
-    $("#nameCheckFalse").addClass("my_hidden");
-    $("#nameCheckTrue").addClass("my_hidden");
+    hideErrorTextBox();
+    hideSuccessTextBox();
 
-    $("#same-password").on("input", function () {
+    $("#samePassword").on("input", function () {
         let password = $("#password").val();
         // console.log("패스워드 = " + password);
 
-        let confirmPassword = $("#same-password").val();
+        let confirmPassword = $("#samePassword").val();
         // console.log("확인용 = " + confirmPassword);
 
         if (password === confirmPassword) {
-            $("#nameCheckTrue").removeClass("my_hidden");
-            $("#nameCheckFalse").addClass("my_hidden");
+            showSuccessTextBox();
+            hideErrorTextBox();
             $("#joinBtn").css("background-color", "green");
 
             // 값을 다 지웠으면 다시 둘 다 my_hidden 넣어줘야함
         } else if (confirmPassword === "") {
-            $("#nameCheckFalse").addClass("my_hidden");
-            $("#nameCheckTrue").addClass("my_hidden");
+            hideErrorTextBox();
+            hideSuccessTextBox();
             $("#joinBtn").css("background-color", "");
 
         } else {
-            $("#nameCheckFalse").removeClass("my_hidden");
-            $("#nameCheckTrue").addClass("my_hidden");
+            showErrorTextBox();
+            hideSuccessTextBox();
             $("#joinBtn").css("background-color", "");
         }
     });
     // 비밀번호 동일체크 끝
+
+
+
 
     $("#email").on("input", function () {
         isEmailConfirmed = false;
@@ -215,7 +219,7 @@
         let password = $("#password").val();
         // console.log("패스워드 = " + password);
 
-        let confirmPassword = $("#same-password").val();
+        let confirmPassword = $("#samePassword").val();
         // console.log("확인용 = " + confirmPassword);
 
         if (password !== confirmPassword) {
@@ -277,6 +281,44 @@
 
     });
     // 이메일 인증 안되면 막기 + 비번이 다르면 form 제출 못하게 막아놓음 끝
+
+
+    // 유저 네임 중복체크
+    function hideUsernameDuplicatedText() {
+        $("#usernameDuplicatedText").addClass("my_hidden");
+    }
+
+    function hideUsernameSuccessText() {
+        $("#usernameNoDuplicatedText").addClass("my_hidden");
+    }
+
+    function showUsernameSuccessText() {
+        $("#usernameNoDuplicatedText").removeClass("my_hidden");
+    }
+
+    function showUsernameDuplicatedText() {
+        $("#usernameDuplicatedText").removeClass("my_hidden");
+    }
+//     유저네임 중복체크 끝
+
+
+    // 비밀번호 동일 체크
+    function hideErrorTextBox() {
+        $("#errorTextBox").addClass("my_hidden");
+    }
+
+    function hideSuccessTextBox() {
+        $("#successTextBox").addClass("my_hidden");
+    }
+
+    function showErrorTextBox() {
+        $("#errorTextBox").removeClass("my_hidden");
+    }
+
+    function showSuccessTextBox() {
+        $("#successTextBox").removeClass("my_hidden");
+    }
+//     비밀번호 동일 체크 끝
 
 </script>
 
