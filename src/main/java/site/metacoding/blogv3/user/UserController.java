@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import site.metacoding.blogv3._core.util.ApiUtil;
@@ -24,11 +25,11 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/join")
-    public String join(UserRequest.JoinDTO requestDTO) {
-//        System.out.println("requestDTO = " + requestDTO);
+    public String join(@ModelAttribute UserRequest.JoinDTO requestDTO) {
+        System.out.println("JOIN_requestDTO = " + requestDTO);
 
         User sessionUser = userService.join(requestDTO);
-        // 회원가입 후 바로 로그인....... 필요없나요?
+        // 회원가입 후 바로 로그인
         session.setAttribute("sessionUser", sessionUser);
 
         return "redirect:/";

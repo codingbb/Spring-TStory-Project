@@ -7,11 +7,11 @@
 <div class="container">
     <div class="my_auth_box">
         <div class="my_auth_form_box">
-            <div class="my_auth_form_box_title">JSotry</div>
+            <div class="my_auth_form_box_title">JStory</div>
             <div class="my_error_box my_hidden">
 
             </div>
-            <form action="/join" method="post" id="joinForm">
+            <form id="joinForm">
                 <input id="username" class="my_auth_form_box_input" type="text" name="username" placeholder="유저네임"
                        maxlength="20" value="ssar1" required/>
                 <div id="usernameExist" class="my_hidden" style="color: red">중복된 아이디입니다.</div>
@@ -107,6 +107,8 @@
 
 
     // 인증번호 확인 로직
+    let isEmailConfirmed = false;
+
     $("#confirmBtn").click(function () {
 
         let checkCode = $("#authCode").val();
@@ -127,6 +129,7 @@
                 button: "확인"
             });
             $('#authModal').css('display', 'none');
+            isEmailConfirmed = true;
         }
     });
 
@@ -144,7 +147,7 @@
             type: 'GET'
 
         }).done((res) => {
-            console.log("Res " + JSON.stringify(res));
+            // console.log("Res " + JSON.stringify(res));
 
             if (res.body === "USER_EXIST") {
                 $("#usernameExist").removeClass("my_hidden");
@@ -203,6 +206,10 @@
 
     // 비번이 다르면 form 제출 못하게 막아놓음
     $("#joinForm").on("submit", function (e) {
+
+        //폼 막기
+        e.preventDefault();
+
         let password = $("#password").val();
         // console.log("패스워드 = " + password);
 
@@ -227,6 +234,37 @@
                 button: "확인"
             });
         }
+
+        // ajax로 받을 것임
+        let formData = new FormData();
+
+        let username = $("#username").val();
+        console.log("username " + username);
+
+        let email = $("#email").val();
+        console.log("email " + email)
+
+        formData.append('username', username);
+        formData.append('email', email);
+        formData.append('password', password);
+        formData.append('isEmailConfirmed', isEmailConfirmed);
+
+        $.ajax({
+            url: "/join",
+            data: formData,
+            contentType: false,
+            processData: false,
+            type: 'POST'
+
+        }).done((res)=>{
+            alert("성공");
+            window.location.href = "/";
+
+        }).fail((res)=>{
+            alert("실패")
+
+        });
+
     });
     // 비번이 다르면 form 제출 못하게 막아놓음 끝
 

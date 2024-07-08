@@ -21,12 +21,14 @@ public class UserRequest {
         private String username;
         private String password;
         private String email;
+        private Boolean isEmailConfirmed;
 
         public User toEntity() {
             return User.builder()
                     .username(username)
                     .password(password)
                     .email(email)
+                    .emailConfirm(isEmailConfirmed)
                     .build();
 
         }
