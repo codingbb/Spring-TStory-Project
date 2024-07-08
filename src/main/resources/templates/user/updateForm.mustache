@@ -80,7 +80,7 @@
             url: '/user/update',
             data: JSON.stringify(passwords),
             contentType: 'application/json; charset=utf-8',
-            type: 'POST'
+            type: 'PUT'
 
         }).done((res) => {
             //swal - 비동기적으로 작동. 그래서 자꾸 alert창 안뜨고 바로 /로 넘어간다
@@ -109,20 +109,38 @@
     // 클릭 할 때마다 눈 감은 것 -> 눈 뜬 것 교체
     $(".togglePassword").click(function () {
         if ($("#password, #same-password").attr("type") === "password") {
-            // 눈감은 이모지
-            $(this).removeClass("fa-solid fa-eye-slash");
-            // 눈 뜬 이모지
-            $(this).addClass("fa-solid fa-eye");
+            hideEyeSlash();
+            showEyeOpen();
             $("#password, #same-password").attr('type', 'text');
 
         } else {
-            // 눈 뜬 이모지
-            $(this).removeClass("fa-solid fa-eye");
-            // 눈 감은 이모지
-            $(this).addClass("fa-solid fa-eye-slash");
+            hideEyeOpen();
+            showEyeSlash();
             $("#password, #same-password").attr("type", "password");
         }
     });
+
+
+    function hideEyeSlash() {
+        // 눈감은 이모지
+        $(this).removeClass("fa-solid fa-eye-slash");
+    }
+
+    function showEyeSlash() {
+        // 눈 감은 이모지
+        $(this).addClass("fa-solid fa-eye-slash");
+    }
+
+    function hideEyeOpen() {
+        // 눈 뜬 이모지
+        $(this).removeClass("fa-solid fa-eye");
+    }
+
+    function showEyeOpen() {
+        // 눈 뜬 이모지
+        $(this).addClass("fa-solid fa-eye");
+    }
+
 
 </script>
 

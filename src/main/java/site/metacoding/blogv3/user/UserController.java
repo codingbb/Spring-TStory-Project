@@ -5,10 +5,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import site.metacoding.blogv3._core.util.ApiUtil;
 import site.metacoding.blogv3._core.util.EmailUtil;
 
@@ -98,7 +95,7 @@ public class UserController {
         return "user/updateForm";
     }
 
-    @PostMapping("/user/update")
+    @PutMapping("/user/update")
     public ResponseEntity<?> update(@RequestBody UserRequest.UpdateDTO requestDTO) {
 //        System.out.println("비번 확인용 = " + requestDTO);
         User sessionUser = (User) session.getAttribute("sessionUser");

@@ -38,7 +38,7 @@ public class UserService {
         int randomNumb;
         String randomNumStr = "";
 
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 6; i++) {
             // 0부터 9까지
             randomNumb = random.nextInt(10);
             randomNumStr = randomNumStr + randomNumb;
