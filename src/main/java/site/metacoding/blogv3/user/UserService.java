@@ -62,6 +62,7 @@ public class UserService {
             throw new RuntimeException("중복된 아이디입니다.");
         }
 
+        // 이메일 인증 여부 확인
         if (requestDTO.getIsEmailConfirmed() == true) {
             User user = userRepo.save(requestDTO.toEntity());
             return user;

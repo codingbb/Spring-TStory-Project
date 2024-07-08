@@ -59,6 +59,7 @@
 <script>
     // 모달창을 보이게 하는 함수
     function showModal() {
+        $('#authCode').val('');
         $('#authModal').css('display', 'block');
     }
 
@@ -67,14 +68,10 @@
         emailCheck();
     });
 
-    // 확인 버튼 클릭 시 모달창 닫기
-    // $('#confirmBtn').on('click', function() {
-    //     $('#authModal').css('display', 'none');
-    // });
-
     // 취소 버튼 클릭 시 모달창 닫기
     $('#cancelBtn').on('click', function () {
         $('#authModal').css('display', 'none');
+        // 인증 코드 입력란 초기화
     });
     // 모달창 스크립트 끝
 
@@ -112,7 +109,7 @@
     $("#confirmBtn").click(function () {
 
         let checkCode = $("#authCode").val();
-        console.log("입력 코드 " + checkCode);
+        // console.log("입력 코드 " + checkCode);
 
         if (emailCode !== checkCode) {
             swal({
@@ -168,7 +165,7 @@
             alert("오류");
         });
 
-    }, 500));
+    }, 300));
 
     // username 중복 체크 끝
 
@@ -203,8 +200,13 @@
     });
     // 비밀번호 동일체크 끝
 
+    $("#email").on("input", function () {
+        isEmailConfirmed = false;
+        // console.log("isEmailConfirmed " + isEmailConfirmed);
+    });
 
-    // 비번이 다르면 form 제출 못하게 막아놓음
+
+    // 이메일 인증 안되면 막기 + 비번이 다르면 form 제출 못하게 막아놓음
     $("#joinForm").on("submit", function (e) {
 
         //폼 막기
@@ -239,10 +241,10 @@
         let formData = new FormData();
 
         let username = $("#username").val();
-        console.log("username " + username);
+        // console.log("username " + username);
 
         let email = $("#email").val();
-        console.log("email " + email)
+        // console.log("email " + email)
 
         formData.append('username', username);
         formData.append('email', email);
@@ -274,7 +276,7 @@
         });
 
     });
-    // 비번이 다르면 form 제출 못하게 막아놓음 끝
+    // 이메일 인증 안되면 막기 + 비번이 다르면 form 제출 못하게 막아놓음 끝
 
 </script>
 
