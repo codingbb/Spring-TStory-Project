@@ -45,7 +45,7 @@ public class EmailUtil {
     private String getCertificationMessage(String body) {
 
         String certificationMessage = "";
-        certificationMessage += "<h1 style='text-align: center;'>[Tistory 인증메일]</h1>";
+        certificationMessage += "<h1 style='text-align: center;'>[JStory 인증메일]</h1>";
         certificationMessage += "<h4 style='text-align: center;'>아래 숫자를 입력하고 회원가입을 완료해 주세요!</h4>";
         certificationMessage += "<h3 style='text-align: center;'>" +
                 "인증코드 : <strong style='font-size: 32px; letter-spacing: 8px;'>" + body + "</strong></h3>";

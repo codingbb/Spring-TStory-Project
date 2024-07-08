@@ -31,7 +31,7 @@ public class UserService {
         }
 
         // 타이틀
-        String subject = "[Tistroy 회원가입 인증메일입니다]";
+        String subject = "[JStory 회원가입 인증메일입니다]";
 
 //        랜덤한 인증번호
         Random random = new Random();
@@ -117,12 +117,12 @@ public class UserService {
 
         if (userOP.isPresent()) {
             userStatus = UserEnum.USER_EXIST;
-            System.out.println("userStatus = " + userStatus);
+//            System.out.println("userStatus = " + userStatus);
             return userStatus;
 
         } else {
             userStatus = UserEnum.USER_NO_EXIST;
-            System.out.println("userStatus = " + userStatus);
+//            System.out.println("userStatus = " + userStatus);
             return userStatus;
         }
 

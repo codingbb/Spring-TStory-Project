@@ -45,14 +45,8 @@ public class UserController {
     public ResponseEntity<?> usernameCheck(String username) {
 //        System.out.println("username = " + username);
         UserEnum usernameCheck = userService.usernameCheck(username);
-
 //        System.out.println("usernameCheck = " + usernameCheck);
-        
-        if (usernameCheck.equals(UserEnum.USER_EXIST)) {
-            return ResponseEntity.ok(new ApiUtil<>(usernameCheck));
-        } else {
-            return ResponseEntity.ok(new ApiUtil<>(usernameCheck));
-        }
+        return ResponseEntity.ok(new ApiUtil<>(usernameCheck));
 
     }
 
