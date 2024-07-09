@@ -35,7 +35,13 @@ public class PostService {
 
     @Transactional
     public void postSave(Integer sessionUserId, PostRequest.SaveDTO requestDTO) {
+        User sessionUser = userRepo.findById(sessionUserId)
+                .orElseThrow(() -> new RuntimeException("회원 정보가 존재하지 않습니다."));
 
+        Category category = categoryRepo.findById(requestDTO.getCategoryId())
+                        .orElseThrow(() -> new RuntimeException("카테고리가 존재하지 않습니다"));
+
+        postRepo.save(requestDTO.toEntity(sessionUser, category, requestDTO.getContent(), requestDTO.getThumbnailFile()));
         
 
     }

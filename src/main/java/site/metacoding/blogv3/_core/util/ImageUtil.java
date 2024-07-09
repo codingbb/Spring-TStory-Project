@@ -19,9 +19,12 @@ public class ImageUtil {
         Path profilePath = Paths.get("./upload/" + profileFilename);
 
         try {
+            Path uploadPath = Paths.get("./upload/");
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
             Files.write(profilePath, profile.getBytes());
-
-
         } catch (IOException e) {
             throw new RuntimeException("이미지 오류", e);
         }
