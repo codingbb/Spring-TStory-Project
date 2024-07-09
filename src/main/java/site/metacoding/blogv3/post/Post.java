@@ -33,20 +33,20 @@ public class Post {
     @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Image> images = new ArrayList<>();
 
-    private String imgFilename; //섬네일
+    private String thumbnailFile; //섬네일
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @Builder
-    public Post(Integer id, String title, String content, User user, Category category, List<Image> images, String imgFilename, LocalDateTime createdAt) {
+    public Post(Integer id, String title, String content, User user, Category category, List<Image> images, String thumbnailFile, LocalDateTime createdAt) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.user = user;
         this.category = category;
         this.images = images;
-        this.imgFilename = imgFilename;
+        this.thumbnailFile = thumbnailFile;
         this.createdAt = createdAt;
     }
 }

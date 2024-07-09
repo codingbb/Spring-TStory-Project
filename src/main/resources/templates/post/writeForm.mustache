@@ -5,23 +5,24 @@
         min-height: 40vh;
     }
 </style>
+<!-- Include the Quill library -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
 
 <div class="container">
-
-    <form id="hello" action="/s/post" method="post" enctype="multipart/form-data" onsubmit="return getQuill()">
+    <form id="postWriteForm" onsubmit="return getQuill()">
         <div class="form-group">
-            <select class="form-control" name="categoryId">
-
+            <select class="form-control" id="categoryId" name="categoryId">
                 {{#model.categoryNameDTO}}
-                        <option value="{{id}}">{{categoryName}}</option>
+                    <option value="{{id}}">{{categoryName}}</option>
                 {{/model.categoryNameDTO}}
-
             </select>
         </div>
-        <input type="text" placeholder="Enter Title" name="title" class="form-control">
 
-        <div id="toolbar-container">
+        <input id="title" name="title" class="form-control" type="text" placeholder="Enter Title">
+
+        <!--        퀼 에디터 디자인 부분 -->
+        <div id="toolbarContainer">
             <span class="ql-formats">
                 <select class="ql-font"></select>
                 <select class="ql-size"></select>
@@ -64,13 +65,14 @@
                 <button class="ql-clean"></button>
             </span>
         </div>
+        <!--        퀼 에디터 디자인 부분-->
 
-        <div id="editor-container"></div>
-        <textarea name="content" id="content" class="my_hidden">
+        <!-- 내용 적는 부분 form 데이터로 통으로 넣자 -->
+        <div id="editorContainer"></div>
+        <!-- 내용 적는 부분 -->
 
-        </textarea>
         <div class="form-control d-flex justify-content-end">
-            <div>섬네일 사진 등록 : <input type="file" name="thumnailFile"></div>
+            <div>섬네일 사진 등록 : <input id="thumbnailFile" type="file" name="thumbnailFile"></div>
         </div>
         <button type="submit" class="my_active_btn">글쓰기 등록</button>
     </form>
@@ -78,27 +80,80 @@
 
 </div>
 
+
+
 <script>
+
+    $("#postWriteForm").on("submit", function (e) {
+       e.preventDefault();
+
+       let formData = new FormData();
+
+       let title = $("#title").val();
+       console.log("제목 " + title);
+
+       let categoryId = $("#categoryId").val();
+       console.log("categoryId " + categoryId);
+
+       // <div id="editorContainer"></div> 이 부분 가져오기
+        let content = $("#editorContainer").find(".ql-editor").text();
+        console.log("content " + content);
+
+        // 섬네일
+        let thumbnailFile = $("#thumbnailFile")[0].files[0];
+        console.log("thumbnailFile " + thumbnailFile);
+
+        formData.append('title', title);
+        formData.append('content', content);
+        formData.append('categoryId', categoryId);
+        formData.append('thumbnailFile', thumbnailFile);
+
+
+        $.ajax({
+            url: "/post/save",
+            data: formData,
+            contentType: false,
+            processData: false,
+            type: 'POST'
+
+        }).done((res)=>{
+            swal({
+                text: "게시글 등록이 완료되었습니다.",
+                icon: "success",
+                button: "확인"
+            });
+
+            window.location.href = "/post/list";
+
+        }).fail((res)=>{
+            swal({
+                text: "게시글 등록 실패",
+                icon: "warning",
+                button: "확인"
+            });
+        });
+
+    });
+
+
+<!--    퀼 에디터 -->
     function getQuill() {
-        let quillContent = $("#editor-container .ql-editor").html();
+        let quillContent = $("#editorContainer .ql-editor").html();
         $("#content").html(quillContent);
         return true;
     }
-</script>
 
-<!-- Include the Quill library -->
-<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-
-<script>
-    var quill = new Quill('#editor-container', {
+    var quill = new Quill('#editorContainer', {
         modules: {
             formula: true,
             syntax: true,
-            toolbar: '#toolbar-container'
+            toolbar: '#toolbarContainer'
         },
         placeholder: '게시물을 작성해주세요.',
         theme: 'snow'
     });
+// 퀼 에디터 끝
+
 </script>
 
 

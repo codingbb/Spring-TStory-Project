@@ -21,7 +21,7 @@ VALUES ('다이어트', '3', now());
 -- 카테고리 더미 끝
 
 -- 게시글(포스트) 더미
-INSERT INTO post_tb (title, content, user_id, category_id, img_filename, created_at)
+INSERT INTO post_tb (title, content, user_id, category_id, thumbnail_file, created_at)
 VALUES ('스위스 13박 14일 여행 후기❤', '스위스에서 보낸 13박 14일 여행 후기!! 아름다운 자연 경관과 맛있는 음식들을 즐길 수 있었습니다.', 1, 1, 'swiss.jpg', NOW()),
        ('여름에 일본 빨리 갔다오기 (자유 여행)', '안녕하세요~ 오늘은 일본 여행에 대한 포스팅을 해보려고 해요!! 이번 여름에 일본을 갔다왔는데, 덥더라구요~~~', 1, 1, 'japan.jpg', NOW()),
        ('강아지와의 만남', '산책 나갔을 때 보았던 강아지!', 1, 2, 'dog.jpg', NOW()),
