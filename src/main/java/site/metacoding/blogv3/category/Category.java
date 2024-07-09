@@ -25,18 +25,14 @@ public class Category {
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Post> posts = new ArrayList<>();
-
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @Builder
-    public Category(Integer id, String categoryName, User user, List<Post> posts, LocalDateTime createdAt) {
+    public Category(Integer id, String categoryName, User user, LocalDateTime createdAt) {
         this.id = id;
         this.categoryName = categoryName;
         this.user = user;
-        this.posts = posts;
         this.createdAt = createdAt;
     }
 }
