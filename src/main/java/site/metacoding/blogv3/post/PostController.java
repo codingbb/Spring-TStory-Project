@@ -21,6 +21,9 @@ public class PostController {
     public String save(@ModelAttribute PostRequest.SaveDTO requestDTO) {
         System.out.println("post RequestDTO = " + requestDTO);
 
+        User user = (User) session.getAttribute("sessionUser");
+        postService.postSave(user.getId(), requestDTO);
+
         return "redirect:/post/list";
     }
 

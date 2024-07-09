@@ -13,8 +13,6 @@ public class PostRequest {
         private String content;
         private Integer categoryId;
         private MultipartFile thumbnailFile;
-        private List<MultipartFile> img;
-
 
     }
 

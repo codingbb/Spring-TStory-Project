@@ -25,11 +25,18 @@ public class PostService {
                 .orElseThrow(() -> new RuntimeException("회원 정보가 존재하지 않습니다."));
 
         List<PostResponse.WriteFormDTO.CategoryNameDTO> categoryList = categoryRepo.findByUserId(sessionUser.getId());
-        System.out.println("categoryList = " + categoryList);
+//        System.out.println("categoryList = " + categoryList);
 
         PostResponse.WriteFormDTO writeFormDTO = new PostResponse.WriteFormDTO(categoryList);
 
         return writeFormDTO;
+
+    }
+
+    @Transactional
+    public void postSave(Integer sessionUserId, PostRequest.SaveDTO requestDTO) {
+
+        
 
     }
 }
