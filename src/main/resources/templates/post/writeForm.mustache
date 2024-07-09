@@ -13,7 +13,9 @@
         <div class="form-group">
             <select class="form-control" name="categoryId">
 
-                <option value="1">제목</option>
+                {{#model.categoryNameDTO}}
+                        <option value="{{id}}">{{categoryName}}</option>
+                {{/model.categoryNameDTO}}
 
             </select>
         </div>
@@ -72,7 +74,7 @@
         </div>
         <button type="submit" class="my_active_btn">글쓰기 등록</button>
     </form>
-    <br />
+    <br/>
 
 </div>
 

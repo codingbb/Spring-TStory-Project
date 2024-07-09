@@ -12,25 +12,4 @@ public class IndexController {
         return "main";
     }
 
-
-
-    @GetMapping("/post/detail")
-    public String postDetail() {
-
-        return "post/detail";
-    }
-
-    @GetMapping("/post/list")
-    public String postList() {
-
-        return "post/list";
-    }
-
-    @GetMapping("/post/write-form")
-    public String postWriteForm() {
-
-        return "post/writeForm";
-    }
-
-
 }
