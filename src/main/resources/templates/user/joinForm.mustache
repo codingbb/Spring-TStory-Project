@@ -213,31 +213,8 @@
 
         //폼 막기
         e.preventDefault();
-
-        let password = $("#password").val();
-        // console.log("패스워드 = " + password);
-
-        let confirmPassword = $("#samePassword").val();
-        // console.log("확인용 = " + confirmPassword);
-
-        if (password !== confirmPassword) {
-            e.preventDefault();
-
-            swal({
-                text: "비밀번호를 확인해주세요",
-                icon: "warning",
-                button: "확인"
-            });
-
-        } else if (confirmPassword === "") {
-            e.preventDefault();
-
-            swal({
-                text: "비밀번호를 확인해주세요",
-                icon: "warning",
-                button: "확인"
-            });
-        }
+        //패스워드 유효성 검사
+        passwordValid();
 
         // ajax로 받을 것임
         let formData = new FormData();
@@ -256,8 +233,8 @@
         $.ajax({
             url: "/join",
             data: formData,
-            contentType: false,
-            processData: false,
+            contentType: "x-www-form-urlencoded",
+            // processData: false,
             type: 'POST'
 
         }).done((res)=>{
@@ -317,6 +294,35 @@
         $("#successTextBox").removeClass("my_hidden");
     }
 //     비밀번호 동일 체크 끝
+
+    // 패스워드 유효성 검사
+    function passwordValid() {
+        let password = $("#password").val();
+        // console.log("패스워드 = " + password);
+
+        let confirmPassword = $("#samePassword").val();
+        // console.log("확인용 = " + confirmPassword);
+
+        if (password !== confirmPassword) {
+            e.preventDefault();
+
+            swal({
+                text: "비밀번호를 확인해주세요",
+                icon: "warning",
+                button: "확인"
+            });
+
+        } else if (confirmPassword === "") {
+            e.preventDefault();
+
+            swal({
+                text: "비밀번호를 확인해주세요",
+                icon: "warning",
+                button: "확인"
+            });
+        }
+    }
+    // 패스워드 유효성검사 끝
 
 </script>
 

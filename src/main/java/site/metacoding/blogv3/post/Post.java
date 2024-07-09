@@ -32,9 +32,6 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     private Category category;
 
-//    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-//    private List<Image> images = new ArrayList<>();
-
     private String thumbnailFile; //섬네일
 
     @CreationTimestamp
