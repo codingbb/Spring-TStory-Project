@@ -15,7 +15,7 @@ public class CategoryController {
 
     @PostMapping("/category/save")
     public String save(String categoryName) {
-        System.out.println("categoryName = " + categoryName);
+//        System.out.println("categoryName = " + categoryName);
         User user = (User) session.getAttribute("sessionUser");
         categoryService.save(categoryName, user.getId());
 
