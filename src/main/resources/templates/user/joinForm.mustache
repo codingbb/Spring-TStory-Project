@@ -210,11 +210,17 @@
 
     // 이메일 인증 안되면 막기 + 비번이 다르면 form 제출 못하게 막아놓음
     $("#joinForm").on("submit", function (e) {
-
         //폼 막기
         e.preventDefault();
+
+        console.log("1");
+
         //패스워드 유효성 검사
-        passwordValid(e);
+        if (!passwordValid()) {
+            return;
+        }
+
+        console.log("2");
 
         // 폼 데이터를 배열로 변환
         let serializedDataArray = $("#joinForm").serializeArray();
@@ -222,6 +228,8 @@
 
         // URL-encoded 문자열로 변환
         let serializedData = $.param(serializedDataArray);
+
+        console.log("3");
 
         $.ajax({
             url: "/join",
@@ -231,6 +239,8 @@
             type: 'POST'
 
         }).done((res)=>{
+            console.log("4");
+
             swal({
                 text: "회원가입이 완료되었습니다.",
                 icon: "success",
@@ -240,6 +250,8 @@
             window.location.href = "/";
 
         }).fail((res)=>{
+            console.log("5");
+
             swal({
                 text: "이메일 인증을 해주세요",
                 icon: "warning",
@@ -289,7 +301,7 @@
 //     비밀번호 동일 체크 끝
 
     // 패스워드 유효성 검사
-    function passwordValid(e) {
+    function passwordValid() {
         let password = $("#password").val();
         // console.log("패스워드 = " + password);
 
@@ -297,23 +309,25 @@
         // console.log("확인용 = " + confirmPassword);
 
         if (password !== confirmPassword) {
-            e.preventDefault();
-
             swal({
                 text: "비밀번호를 확인해주세요",
                 icon: "warning",
                 button: "확인"
             });
+
+            return false;
 
         } else if (confirmPassword === "") {
-            e.preventDefault();
-
             swal({
                 text: "비밀번호를 확인해주세요",
                 icon: "warning",
                 button: "확인"
             });
+
+            return true;
         }
+
+        return true;
     }
     // 패스워드 유효성검사 끝
 
