@@ -28,7 +28,7 @@
                 <div class="email-container">
                     <input class="my_auth_form_box_input" id="email" type="email" name="email" placeholder="이메일"
                            maxlength="60"
-                           value="testcoding8@gmail.com" required/>
+                           value="codingstory2@gmail.com" required/>
                     <button class="btn btn-outline-success btn-sm" type="button" id="emailAuthButton">인증하기</button>
                 </div>
 
@@ -210,34 +210,37 @@
 
     // 이메일 인증 안되면 막기 + 비번이 다르면 form 제출 못하게 막아놓음
     $("#joinForm").on("submit", function (e) {
-
         //폼 막기
         e.preventDefault();
+
+        console.log("1");
+
         //패스워드 유효성 검사
-        passwordValid();
+        if (!passwordValid()) {
+            return;
+        }
 
-        // ajax로 받을 것임
-        let formData = new FormData();
+        console.log("2");
 
-        let username = $("#username").val();
-        // console.log("username " + username);
+        // 폼 데이터를 배열로 변환
+        let serializedDataArray = $("#joinForm").serializeArray();
+        serializedDataArray.push({ name: 'isEmailConfirmed', value: isEmailConfirmed });
 
-        let email = $("#email").val();
-        // console.log("email " + email)
+        // URL-encoded 문자열로 변환
+        let serializedData = $.param(serializedDataArray);
 
-        formData.append('username', username);
-        formData.append('email', email);
-        formData.append('password', password);
-        formData.append('isEmailConfirmed', isEmailConfirmed);
+        console.log("3");
 
         $.ajax({
             url: "/join",
-            data: formData,
-            contentType: "x-www-form-urlencoded",
-            processData: false,
+            data: serializedData,
+            contentType: "application/x-www-form-urlencoded",
+            processData: true,
             type: 'POST'
 
         }).done((res)=>{
+            console.log("4");
+
             swal({
                 text: "회원가입이 완료되었습니다.",
                 icon: "success",
@@ -247,6 +250,8 @@
             window.location.href = "/";
 
         }).fail((res)=>{
+            console.log("5");
+
             swal({
                 text: "이메일 인증을 해주세요",
                 icon: "warning",
@@ -304,23 +309,25 @@
         // console.log("확인용 = " + confirmPassword);
 
         if (password !== confirmPassword) {
-            e.preventDefault();
-
             swal({
                 text: "비밀번호를 확인해주세요",
                 icon: "warning",
                 button: "확인"
             });
+
+            return false;
 
         } else if (confirmPassword === "") {
-            e.preventDefault();
-
             swal({
                 text: "비밀번호를 확인해주세요",
                 icon: "warning",
                 button: "확인"
             });
+
+            return false;
         }
+
+        return true;
     }
     // 패스워드 유효성검사 끝
 
