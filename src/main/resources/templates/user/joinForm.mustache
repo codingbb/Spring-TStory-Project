@@ -28,7 +28,7 @@
                 <div class="email-container">
                     <input class="my_auth_form_box_input" id="email" type="email" name="email" placeholder="이메일"
                            maxlength="60"
-                           value="testcoding8@gmail.com" required/>
+                           value="codingstory2@gmail.com" required/>
                     <button class="btn btn-outline-success btn-sm" type="button" id="emailAuthButton">인증하기</button>
                 </div>
 
@@ -214,27 +214,20 @@
         //폼 막기
         e.preventDefault();
         //패스워드 유효성 검사
-        passwordValid();
+        passwordValid(e);
 
-        // ajax로 받을 것임
-        let formData = new FormData();
+        // 폼 데이터를 배열로 변환
+        let serializedDataArray = $("#joinForm").serializeArray();
+        serializedDataArray.push({ name: 'isEmailConfirmed', value: isEmailConfirmed });
 
-        let username = $("#username").val();
-        // console.log("username " + username);
-
-        let email = $("#email").val();
-        // console.log("email " + email)
-
-        formData.append('username', username);
-        formData.append('email', email);
-        formData.append('password', password);
-        formData.append('isEmailConfirmed', isEmailConfirmed);
+        // URL-encoded 문자열로 변환
+        let serializedData = $.param(serializedDataArray);
 
         $.ajax({
             url: "/join",
-            data: formData,
-            contentType: "x-www-form-urlencoded",
-            // processData: false,
+            data: serializedData,
+            contentType: "application/x-www-form-urlencoded",
+            processData: true,
             type: 'POST'
 
         }).done((res)=>{
@@ -296,7 +289,7 @@
 //     비밀번호 동일 체크 끝
 
     // 패스워드 유효성 검사
-    function passwordValid() {
+    function passwordValid(e) {
         let password = $("#password").val();
         // console.log("패스워드 = " + password);
 
