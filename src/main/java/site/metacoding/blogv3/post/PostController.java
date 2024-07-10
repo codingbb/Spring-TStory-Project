@@ -44,8 +44,16 @@ public class PostController {
     public String postWriteForm(HttpServletRequest request) {
         User user = (User) session.getAttribute("sessionUser");
         PostResponse.WriteFormDTO writeFormDTOList = postService.writeForm(user.getId());
-
+        System.out.println("writeFormDTOList = " + writeFormDTOList);
+        
         request.setAttribute("model", writeFormDTOList);
+
+        if (writeFormDTOList.getCategoryNameDTO().isEmpty()) {
+            request.setAttribute("noCategory", true);
+//            return "redirect:/category/write-form";
+        } else {
+            request.setAttribute("noCategory", false);
+        }
 
         return "post/writeForm";
     }

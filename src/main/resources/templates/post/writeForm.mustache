@@ -95,6 +95,23 @@
     // 퀼 에디터 끝
 
 
+    // 카테고리가 없으면 alret창 뜨게
+    let noCategory = {{noCategory}};
+    if (noCategory) {
+        swal({
+            text: "카테고리를 먼저 등록해주세요",
+            icon: "warning",
+            button: "확인"
+
+        }).then(() => {
+            window.location.href = "/category/write-form";
+        });
+    }
+
+    // 카테고리 없으면 alert창 뜨게 끝
+
+
+    // 게시글 작성 ajax
     $("#postWriteForm").on("submit", function (e) {
         e.preventDefault();
 
@@ -147,6 +164,7 @@
             });
         });
 
+    //     게시글 작성 ajax
     });
 
 
