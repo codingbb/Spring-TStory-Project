@@ -15,7 +15,9 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @Data
-@Table(name = "category_tb")
+@Table(name = "category_tb", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"categoryName", "user_id"})
+})
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +25,7 @@ public class Category {
     private String categoryName;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @CreationTimestamp
