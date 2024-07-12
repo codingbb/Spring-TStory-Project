@@ -111,6 +111,47 @@
     // 카테고리 없으면 alert창 뜨게 끝
 
 
+    // canvas로 이미지 리사이징
+        const WIDTH = 360;
+        const HEIGHT = 200;
+        let resizedFile;
+
+        // 캔버스 생성
+        let canvas = $("<canvas>")
+                .attr("width", WIDTH)
+                .attr("height", HEIGHT);
+
+        $("#thumbnailFile").on("change", function () {
+            // thumbnailFile 에 첨부된 이미지 파일
+           const file = this.files[0];
+
+           if (file) {
+               const context = canvas[0].getContext("2d");
+               const fileReader = new FileReader();
+               const img = new Image();
+
+               fileReader.onload = function (e) {
+
+                   console.log("e " + e.target.result);
+
+                   img.onload = function () {
+                       context.drawImage(img, 0, 0, WIDTH, HEIGHT);
+
+                       canvas[0].toBlob(function (blob) {
+                          resizedFile = new File([blob], file.name, {type: file.type});
+                       }, file.type);
+                   };
+
+                   img.src = e.target.result;
+               };
+
+               fileReader.readAsDataURL(file);
+           }
+        });
+
+
+    // canvas로 이미지 리사이징 끝
+
     // 게시글 작성 ajax
     $("#postWriteForm").on("submit", function (e) {
         e.preventDefault();
@@ -131,13 +172,13 @@
         console.log("content " + content);
 
         // 섬네일
-        let thumbnailFile = $("#thumbnailFile")[0].files[0];
-        console.log("thumbnailFile " + thumbnailFile);
+        // let thumbnailFile = $("#thumbnailFile")[0].files[0];
+        console.log("thumbnailFile " + resizedFile);
 
         formData.append('title', title);
         formData.append('content', content);
         formData.append('categoryId', categoryId);
-        formData.append('thumbnailFile', thumbnailFile);
+        formData.append('thumbnailFile', resizedFile);
 
         // 업로드된 확장자 파일 체크
         if (!uploadFileCheck()) {
