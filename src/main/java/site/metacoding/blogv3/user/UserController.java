@@ -3,6 +3,7 @@ package site.metacoding.blogv3.user;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -22,24 +23,45 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/join")
-    public String join(@ModelAttribute UserRequest.JoinDTO requestDTO) {
+    public ResponseEntity<?> join(@ModelAttribute UserRequest.JoinDTO requestDTO) {
         System.out.println("JOIN_requestDTO = " + requestDTO);
 
-        User sessionUser = userService.join(requestDTO);
-        // 회원가입 후 바로 로그인
-        session.setAttribute("sessionUser", sessionUser);
+        if (!requestDTO.getIsEmailConfirmed()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiUtil<>(HttpStatus.BAD_REQUEST.value(), "이메일 인증이 필요합니다."));
 
-        return "redirect:/";
+        } else {
+            User sessionUser = userService.join(requestDTO);
+            // 회원가입 후 바로 로그인
+            session.setAttribute("sessionUser", sessionUser);
+            return ResponseEntity.ok(new ApiUtil<>(200));
+        }
+
     }
 
-    @GetMapping("/sendmail")
+    @GetMapping("/send-mail")
     public ResponseEntity<?> sendMail(String email) {
         String emailCode = userService.mailCheck(email);
         System.out.println("emailCode = " + emailCode);
 
+        session.setAttribute("emailCode", emailCode);
+
         return ResponseEntity.ok(new ApiUtil<>(emailCode));
 
     }
+
+    @GetMapping("/check-email-code")
+    public ResponseEntity<?> checkEmailCode(String emailCode) {
+        String sessionEmailCode = (String) session.getAttribute("emailCode");
+        System.out.println("sessionEmailCode = " + sessionEmailCode);
+        
+        if (sessionEmailCode != null && sessionEmailCode.equals(emailCode)) {
+            return ResponseEntity.ok(new ApiUtil<>(true));
+        } else {
+            return ResponseEntity.ok(new ApiUtil<>(false));
+        }
+    }
+
 
     @GetMapping("/username-check")
     public ResponseEntity<?> usernameCheck(String username) {

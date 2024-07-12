@@ -63,13 +63,14 @@ public class UserService {
         }
 
         // 이메일 인증 여부 확인
-        if (requestDTO.getIsEmailConfirmed() == true) {
+//        if (requestDTO.getIsEmailConfirmed() == true) {
             User user = userRepo.save(requestDTO.toEntity());
             return user;
+//
+//        } else {
+//            throw new RuntimeException("이메일 인증이 필요합니다.");
+//        }
 
-        } else {
-            throw new RuntimeException("이메일 인증이 필요합니다.");
-        }
 
     }
 

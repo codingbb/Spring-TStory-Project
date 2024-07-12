@@ -84,7 +84,7 @@
         let email = encodeURIComponent($("#email").val());
 
         $.ajax({
-            url: '/sendmail?email=' + email,
+            url: '/send-mail?email=' + email,
             type: 'GET'
 
         }).done((res) => {
@@ -110,23 +110,33 @@
         let checkEmailCode = $("#authCodeText").val();
         // console.log("입력 코드 " + checkCode);
 
-        if (emailCode !== checkEmailCode) {
-            swal({
-                text: "인증번호를 확인해주세요",
-                icon: "warning",
-                button: "확인"
-            });
-            $('#authModal').css('display', 'block');
+        $.ajax({
+            url: '/check-email-code?emailCode=' + checkEmailCode,
+            type: 'GET'
 
-        } else {
-            swal({
-                text: "인증이 완료되었습니다.",
-                icon: "success",
-                button: "확인"
-            });
-            $('#authModal').css('display', 'none');
-            isEmailConfirmed = true;
-        }
+        }).done((res)=>{
+            if (res.body) {
+                swal({
+                    text: "인증이 완료되었습니다.",
+                    icon: "success",
+                    button: "확인"
+                });
+                $('#authModal').css('display', 'none');
+                isEmailConfirmed = true;
+
+            } else {
+                swal({
+                    text: "인증번호를 확인해주세요",
+                    icon: "warning",
+                    button: "확인"
+                });
+                $('#authModal').css('display', 'block');
+            }
+
+        }).fail((res) => {
+            alert("오류");
+        });
+
     });
 
     // 인증번호 확인 로직 끝
@@ -213,14 +223,12 @@
         //폼 막기
         e.preventDefault();
 
-        console.log("1");
+        // console.log("1");
 
         //패스워드 유효성 검사
         if (!passwordValid()) {
             return;
         }
-
-        console.log("2");
 
         // 폼 데이터를 배열로 변환
         let serializedDataArray = $("#joinForm").serializeArray();

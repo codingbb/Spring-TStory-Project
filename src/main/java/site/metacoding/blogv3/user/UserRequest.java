@@ -28,7 +28,7 @@ public class UserRequest {
                     .username(username)
                     .password(password)
                     .email(email)
-                    .emailConfirm(isEmailConfirmed)
+//                    .emailConfirm(isEmailConfirmed)
                     .build();
 
         }
