@@ -96,20 +96,36 @@
 
 
     // 원본 이미지 width, height 가져오기
-    // quill.on('text-change', function (delta, oldDelta, source) {
-    //     if (source === 'user') {
-    //         $('#editorContainer .ql-editor img').each(function () {
-    //             const img = this;
-    //             $(img).on('load', function () {
-    //                 const originalWidth = img.naturalWidth;
-    //                 console.log("원본 가로 " + originalWidth);
-    //                 const originalHeight = img.naturalHeight;
-    //                 console.log("원본 세로 " + originalHeight);
-    //             });
-    //         });
-    //     }
-    // });
-    // // 끝
+    quill.on('text-change', function (delta, oldDelta, source) {
+        if (source === 'user') {
+            $('#editorContainer .ql-editor img').each(function () {
+                const img = this;
+                // 이미지가 로드될때 들고와야함
+                $(img).on('load', function () {
+                    const originalWidth = img.naturalWidth;
+                    console.log("원본 가로 " + originalWidth);
+                    const originalHeight = img.naturalHeight;
+                    console.log("원본 세로 " + originalHeight);
+
+                    let maxSize = 600; // 최대 크기
+                    let ratio;
+
+                    if (originalWidth > originalHeight) {
+                        ratio = maxSize / originalWidth;
+                    } else {
+                        ratio = maxSize / originalHeight;
+                    }
+
+                    let newWidth = originalWidth * ratio;
+                    let newHeight = originalHeight * ratio;
+
+                    $(this).attr("width", newWidth);
+                    $(this).attr("height", newHeight);
+                });
+            });
+        }
+    });
+    // 끝
 
 
     // 카테고리가 없으면 alret창 뜨게
