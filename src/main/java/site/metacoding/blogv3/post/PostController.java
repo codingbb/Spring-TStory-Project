@@ -10,6 +10,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import site.metacoding.blogv3.user.User;
 
@@ -32,8 +33,13 @@ public class PostController {
     }
 
 
-    @GetMapping("/post/detail")
-    public String postDetail() {
+    @GetMapping("/post/detail/{postId}")
+    public String postDetail(@PathVariable Integer postId, HttpServletRequest request) {
+        User user = (User) session.getAttribute("sessionUser");
+        System.out.println("user = " + user);
+        PostResponse.DetailDTO postDetail = postService.postDetail(postId, user);
+
+        request.setAttribute("model", postDetail);
 
         return "post/detail";
     }

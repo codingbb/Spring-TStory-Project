@@ -34,6 +34,9 @@ public class Post {
 
     private String thumbnailFile; //섬네일
 
+    @Transient
+    private Boolean isPostOwner;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 

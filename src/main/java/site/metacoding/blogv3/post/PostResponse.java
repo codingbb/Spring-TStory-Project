@@ -10,6 +10,28 @@ import java.util.List;
 public class PostResponse {
 
     @Data
+    public static class DetailDTO {
+        private Integer postId;
+        private String title;
+        private String content;
+        private Integer userId;
+        private String username;
+        private String createdAt;
+        private Boolean isPostOwner;
+
+        public DetailDTO(Integer postId, String title, String content, Integer userId, String username, LocalDateTime createdAt) {
+            this.postId = postId;
+            this.title = title;
+            this.content = content;
+            this.userId = userId;
+            this.username = username;
+            this.createdAt = createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd (HH:mm)"));
+
+        }
+    }
+
+
+    @Data
     public static class ListDTO {
         //썸네일, 내용(flow건거), 제목, 생성날짜
         private Integer postId;

@@ -45,25 +45,44 @@ public class PostService {
         Category category = categoryRepo.findById(requestDTO.getCategoryId())
                         .orElseThrow(() -> new RuntimeException("카테고리가 존재하지 않습니다"));
 
-        Document doc = Jsoup.parse(requestDTO.getContent());
-        Elements imgElements = doc.select("img");   //태그 찾기
-        for (Element element : imgElements) {
-            element.attr("width", "600");
-            element.attr("height", "300");
-        }
+//        Document doc = Jsoup.parse(requestDTO.getContent());
+//        Elements imgElements = doc.select("img");   //태그 찾기
+//        for (Element element : imgElements) {
+//            element.attr("width", "600");
+//            element.attr("height", "300");
+//        }
+//
+//        String content = doc.html();
+//        System.out.println("content = " + content);
 
-        String content = doc.html();
-        System.out.println("content = " + content);
-
-        postRepo.save(requestDTO.toEntity(sessionUser, category, content, requestDTO.getThumbnailFile()));
+        postRepo.save(requestDTO.toEntity(sessionUser, category, requestDTO.getContent(), requestDTO.getThumbnailFile()));
         
 
     }
 
     public List<PostResponse.ListDTO> postList(Integer sessionUserId) {
-        List<PostResponse.ListDTO> listDTOs = postRepo.findByPostList(sessionUserId);
-        System.out.println("listDTOs = " + listDTOs);
+        List<PostResponse.ListDTO> postLists = postRepo.findByPostList(sessionUserId);
+        System.out.println("postLists = " + postLists);
 
-        return listDTOs;
+        return postLists;
+    }
+
+    public PostResponse.DetailDTO postDetail(Integer postId, User sessionUserId) {
+
+        PostResponse.DetailDTO postDetail = postRepo.findByPostId(postId)
+                .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
+        System.out.println("postDetail = " + postDetail);
+
+        Boolean isPostOwner = false;
+        if (sessionUserId != null) {
+            if (sessionUserId.getId() == postDetail.getUserId()) {
+                isPostOwner = true;
+            }
+        }
+
+        postDetail.setIsPostOwner(isPostOwner);
+
+        return postDetail;
+
     }
 }
