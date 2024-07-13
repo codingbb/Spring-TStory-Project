@@ -3,6 +3,10 @@ package site.metacoding.blogv3.post;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,7 +23,7 @@ public class PostController {
 
     @PostMapping("/post/save")
     public String save(@ModelAttribute PostRequest.SaveDTO requestDTO) {
-        System.out.println("post RequestDTO = " + requestDTO);
+//        System.out.println("post RequestDTO = " + requestDTO);
 
         User user = (User) session.getAttribute("sessionUser");
         postService.postSave(user.getId(), requestDTO);
@@ -35,8 +39,11 @@ public class PostController {
     }
 
     @GetMapping("/post/list")
-    public String postList() {
+    public String postList(HttpServletRequest request) {
+        User user = (User) session.getAttribute("sessionUser");
+        List<PostResponse.ListDTO> listDTOs = postService.postList(user.getId());
 
+        request.setAttribute("model", listDTOs);
         return "post/list";
     }
 

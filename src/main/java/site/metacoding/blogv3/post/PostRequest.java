@@ -16,6 +16,8 @@ public class PostRequest {
         private String content;     // MultipartFile 아니고 String으로 지정해준다
         private Integer categoryId;
         private MultipartFile thumbnailFile;
+        private Integer originWidth;
+        private Integer originHeight;
 
         public Post toEntity(User sessionUser, Category category, String content, MultipartFile thumbnailFile) {
             String imgThumbnailFile = ImageUtil.save(thumbnailFile);

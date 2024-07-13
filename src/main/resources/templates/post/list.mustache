@@ -1,5 +1,17 @@
 {{>/layout/post-header}}
 
+<style>
+    .content-wrapper {
+        width: 800px; /* 원하는 너비 설정 */
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* 표시할 줄 수 */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+</style>
+
 <div class="container">
     <div class="d-flex justify-content-end my_mb_sm_1">
 
@@ -11,20 +23,28 @@
 
     <div class="my_post_list">
 
-        <div class="my_post_list_item">
-            <div class="my_post_list_item_left">
-                <img src="/images/dog.jpg" width="100%" height="100%">
-<!--                <div class="my_fakeimg"> </div>-->
-            </div>
-            <div class="my_post_list_item_right my_ellipsis">
-                <div class="my_text_title my_ellipsis">
+        {{#model}}
+            <div class="my_post_list_item">
+                <div class="my_post_list_item_left">
+                    <img src="/upload/{{thumbnailFile}}" width="100%" height="100%">
+                    <!--                <div class="my_fakeimg"> </div>-->
                 </div>
-                <div class="my_text_body_sm"></div>
-                <div class="my_mt_md_1">
-                    <a href="/post/" class="my_success_btn">Read More</a>
+                <div class="my_post_list_item_right my_ellipsis">
+                    <div class="my_text_title my_ellipsis">
+                        {{title}}
+                    </div>
+                    <div class="my_text_body_sm">
+                        {{createdAt}}
+                    </div>
+                    <div class="content-wrapper">
+                        {{content}}
+                    </div>
+                    <div class="my_mt_md_1">
+                        <a href="/post/{{postId}}" class="my_success_btn">Read More</a>
+                    </div>
                 </div>
             </div>
-        </div>
+        {{/model}}
 
 
         <div class="my_paging d-flex justify-content-center align-items-center my_mb_lg_1">

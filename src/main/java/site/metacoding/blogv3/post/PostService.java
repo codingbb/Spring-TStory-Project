@@ -1,6 +1,10 @@
 package site.metacoding.blogv3.post;
 
 import lombok.RequiredArgsConstructor;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.metacoding.blogv3.category.Category;
@@ -41,8 +45,25 @@ public class PostService {
         Category category = categoryRepo.findById(requestDTO.getCategoryId())
                         .orElseThrow(() -> new RuntimeException("카테고리가 존재하지 않습니다"));
 
-        postRepo.save(requestDTO.toEntity(sessionUser, category, requestDTO.getContent(), requestDTO.getThumbnailFile()));
+        Document doc = Jsoup.parse(requestDTO.getContent());
+        Elements imgElements = doc.select("img");   //태그 찾기
+        for (Element element : imgElements) {
+            element.attr("width", "600");
+            element.attr("height", "300");
+        }
+
+        String content = doc.html();
+        System.out.println("content = " + content);
+
+        postRepo.save(requestDTO.toEntity(sessionUser, category, content, requestDTO.getThumbnailFile()));
         
 
+    }
+
+    public List<PostResponse.ListDTO> postList(Integer sessionUserId) {
+        List<PostResponse.ListDTO> listDTOs = postRepo.findByPostList(sessionUserId);
+        System.out.println("listDTOs = " + listDTOs);
+
+        return listDTOs;
     }
 }
