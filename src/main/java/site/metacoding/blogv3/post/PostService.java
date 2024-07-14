@@ -15,6 +15,8 @@ import site.metacoding.blogv3.user.UserJPARepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 @Service
@@ -45,20 +47,49 @@ public class PostService {
         Category category = categoryRepo.findById(requestDTO.getCategoryId())
                         .orElseThrow(() -> new RuntimeException("카테고리가 존재하지 않습니다"));
 
-//        Document doc = Jsoup.parse(requestDTO.getContent());
+
+        //1. 퀼 에디터로 작성된 내용을 Jsoup을 사용하여 파싱
+        Document doc = Jsoup.parse(requestDTO.getContent());
+
+        //2. 파싱된 문서에서 YouTube URL 패턴을 찾는다.
+        Pattern youtubePattern = Pattern.compile("https://www\\.youtube\\.com/watch\\?v=([a-zA-Z0-9_-]+)");
+        Matcher matcher = youtubePattern.matcher(requestDTO.getContent());
+
+        while (matcher.find()) {
+            //3. 찾은 YouTube URL에서 동영상 ID를 추출
+            String videoId = matcher.group(1);
+
+            //4. 동영상 ID를 사용하여 iframe 태그를 생성하고 문서에 삽입한다.
+            Element iframe = new Element("iframe");
+            iframe.attr("width", "560");
+            iframe.attr("height", "315");
+            iframe.attr("src", "https://www.youtube.com/embed/" + videoId);
+            iframe.attr("frameborder", "0");
+            iframe.attr("allowfullscreen", "true");
+
+            //5. iframe이 삽입된 걸로 교체
+            Element pTag = doc.select("p:containsOwn(" + matcher.group() + ")").first();
+            if (pTag != null) {
+                pTag.replaceWith(iframe);
+            }
+        }
+
+        String content = doc.html();
+
+
 //        Elements imgElements = doc.select("img");   //태그 찾기
 //        for (Element element : imgElements) {
-//            element.attr("width", "600");
-//            element.attr("height", "300");
+//            element.attr("width", "560");
+//            element.attr("height", "315");
 //        }
-//
 //        String content = doc.html();
 //        System.out.println("content = " + content);
 
-        postRepo.save(requestDTO.toEntity(sessionUser, category, requestDTO.getContent(), requestDTO.getThumbnailFile()));
-        
+
+        postRepo.save(requestDTO.toEntity(sessionUser, category, content, requestDTO.getThumbnailFile()));
 
     }
+
 
     public List<PostResponse.ListDTO> postList(Integer sessionUserId) {
         List<PostResponse.ListDTO> postLists = postRepo.findByPostList(sessionUserId);

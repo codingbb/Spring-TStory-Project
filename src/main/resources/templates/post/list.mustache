@@ -66,16 +66,17 @@
 
 </div>
 
+
 <script>
 
     // text-overflow에서 이미지 제외
-    let contentWrapper = $(".content-wrapper");
-    console.log("1 " + contentWrapper);
+    $(".content-wrapper").each(function() {
+        let contentHtml = $(this).html();
+        contentHtml = contentHtml.replace(/<img[^>]+>/g, '');
+        contentHtml = contentHtml.replace(/<iframe[^>]+>/g, '');
+        $(this).html(contentHtml);
+    });
 
-    let contentHtml = contentWrapper.html();
-    console.log("2 " + contentHtml);
-
-    contentWrapper.html(contentHtml.replace(/<img[^>]+>/g, ''));
     // text-overflow에서 이미지 제외
 
 </script>
