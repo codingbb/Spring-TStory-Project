@@ -14,53 +14,28 @@
 
 <div class="container">
     <div class="d-flex justify-content-end my_mb_sm_1">
-
         <a href="/s/post/write-form" class="my_atag_none">
-            <div class="my_icon_rounded_btn d-flex justify-content-center align-items-center"><i
-                    class="fa-solid fa-pencil"></i></div>
+            <div class="my_icon_rounded_btn d-flex justify-content-center align-items-center">
+                <i class="fa-solid fa-pencil"></i></div>
         </a>
     </div>
 
     <div class="my_post_list">
 
-        {{#model}}
-            <div class="my_post_list_item">
-                <div class="my_post_list_item_left">
-                    <img src="/upload/{{thumbnailFile}}" width="170" height="190">
-                    <!--                <div class="my_fakeimg"> </div>-->
-                </div>
-                <div class="my_post_list_item_right my_ellipsis">
-                    <div class="my_text_title my_ellipsis">
-                        {{title}}
-                    </div>
-                    <div class="my_text_body_sm">
-                        {{createdAt}}
-                    </div>
-                    <div class="content-wrapper">
-                        {{{content}}}
-                    </div>
-                    <div class="my_mt_md_1">
-                        <a href="/post/detail/{{postId}}" class="my_success_btn">Read More</a>
-                    </div>
-                </div>
-            </div>
-        {{/model}}
+        <!--        append 할 부분 -->
+        <div id="postList"></div>
 
         <div class="my_paging d-flex justify-content-center align-items-center my_mb_lg_1">
-
             <a class="my_atag_none my_mr_sm_1" href="/user/post?page=">
                 <i class="fa-solid fa-angle-left"></i>
             </a>
-
             <a class="my_atag_none" href="/user/post?page=">
                 <div class="my_paging_number_box my_mr_sm_1">
                 </div>
             </a>
-
             <a class="my_atag_none my_ml_sm_1" href="/user/post?page=">
                 <i class="fa-solid fa-angle-right"></i>
             </a>
-
         </div>
     </div>
 
@@ -69,15 +44,72 @@
 
 <script>
 
-    // text-overflow에서 이미지 제외
-    $(".content-wrapper").each(function() {
-        let contentHtml = $(this).html();
-        contentHtml = contentHtml.replace(/<img[^>]+>/g, '');
-        contentHtml = contentHtml.replace(/<iframe[^>]+>/g, '');
-        $(this).html(contentHtml);
-    });
-
-    // text-overflow에서 이미지 제외
+    alert("ffff");
+    console.log("ddddddddd");
+    //
+    // //     AJAX로 게시글 로드하기
+    // let page = 0;
+    //
+    // function pageLoad() {
+    //     console.log("실행됨");
+    //     alert("Ddd");
+    //
+    //     $.ajax({
+    //         // 쿼리스트링 형식으로
+    //         url: `/post/list?page=${page}`,
+    //         // 서버에서 보내준 데이터가 JSON 형식이라는 것을 알려줌
+    //         dataType: 'json'
+    //
+    //     }).done((res) => {
+    //         console.log("성공", res);
+    //         res.body.content.forEach((post) => {
+    //             let postItem = getPostItem(post);
+    //             $("#postList").append(postItem);
+    //         });
+    //
+    //     }).fail((res) => {
+    //         console.log("실패", res);
+    //     });
+    // }
+    //
+    // pageLoad()
+    //
+    // //
+    // // function getPostItem(post) {
+    // //     let item = `<div class="my_post_list_item">
+    // //             <div class="my_post_list_item_left">
+    // //                 <img src="/upload/${post.content.thumbnailFile}" width="170" height="190">
+    // //                 <!--                <div class="my_fakeimg"> </div>-->
+    // //             </div>
+    // //             <div class="my_post_list_item_right my_ellipsis">
+    // //                 <div class="my_text_title my_ellipsis">
+    // //                     ${post.content.title}
+    // //                 </div>
+    // //                 <div class="my_text_body_sm">
+    // //                     ${post.content.createdAt}
+    // //                 </div>
+    // //                 <div class="content-wrapper">
+    // //                     ${post.content.content}
+    // //                 </div>
+    // //                 <div class="my_mt_md_1">
+    // //                     <a href="/post/detail/{${post.content.postId}" class="my_success_btn">Read More</a>
+    // //                 </div>
+    // //             </div>
+    // //         </div>`
+    // //
+    // //     return item;
+    // //
+    // // }
+    //
+    //
+    // // text-overflow에서 이미지 제외
+    // $(".content-wrapper").each(function () {
+    //     let contentHtml = $(this).html();
+    //     contentHtml = contentHtml.replace(/<img[^>]+>/g, '');
+    //     contentHtml = contentHtml.replace(/<iframe[^>]+>/g, '');
+    //     $(this).html(contentHtml);
+    // });
+    // // text-overflow에서 이미지 제외
 
 </script>
 

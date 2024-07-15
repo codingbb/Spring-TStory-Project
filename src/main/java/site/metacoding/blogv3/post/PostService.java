@@ -5,6 +5,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.metacoding.blogv3.category.Category;
@@ -91,12 +93,21 @@ public class PostService {
     }
 
 
-    public List<PostResponse.ListDTO> postList(Integer sessionUserId) {
-        List<PostResponse.ListDTO> postLists = postRepo.findByPostList(sessionUserId);
+    // readOnly를 하면 DB에 반영을 하지 않게 되어 프로그램이 더 깔끔해진다
+    @Transactional(readOnly = true)
+    public Page<PostResponse.ListDTO> postList(Integer sessionUserId, Pageable pageable) {
+        Page<PostResponse.ListDTO> postLists = postRepo.findByPostList(sessionUserId, pageable);
         System.out.println("postLists = " + postLists);
 
         return postLists;
     }
+
+//    public List<PostResponse.ListDTO> postList(Integer sessionUserId) {
+//        List<PostResponse.ListDTO> postLists = postRepo.findByPostList(sessionUserId);
+//        System.out.println("postLists = " + postLists);
+//
+//        return postLists;
+//    }
 
     public PostResponse.DetailDTO postDetail(Integer postId, User sessionUserId) {
 
