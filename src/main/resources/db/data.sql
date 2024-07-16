@@ -113,3 +113,6 @@ VALUES ('스위스 13박 14일 여행 후기❤',
 --        ('IT 기술 동향 - 5G 네트워크 발전', '최근 5G 네트워크 기술의 발전 동향과 향후 전망에 대해 정리해보았습니다.', 5, 2, '5g_network.jpg', NOW()),
 
 
+INSERT INTO reply_tb (comment, user_id, post_id, created_at)
+VALUES ('고양이 귀엽네요...', 2, 14, NOW()),
+       ('전 강아지 키우는데 ㅋㅋㅋ', 3, 14, NOW());
