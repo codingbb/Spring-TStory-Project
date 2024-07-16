@@ -5,6 +5,14 @@ INSERT INTO user_tb (username, password, email, created_at)
 VALUES ('cos', '1234', 'cos@nate.com', now());
 INSERT INTO user_tb (username, password, email, created_at)
 VALUES ('love', '1234', 'love@nate.com', now());
+INSERT INTO user_tb (username, password, email, created_at)
+VALUES ('vivi', '1234', 'vivi@nate.com', now());
+INSERT INTO user_tb (username, password, email, created_at)
+VALUES ('cindy', '1234', 'cindy@nate.com', now());
+INSERT INTO user_tb (username, password, email, created_at)
+VALUES ('mango', '1234', 'mango@nate.com', now());
+INSERT INTO user_tb (username, password, email, created_at)
+VALUES ('kia1234', '1234', 'kia1234@nate.com', now());
 -- 유저 더미 끝
 
 -- 카테고리 더미 (it도 넣기)
@@ -115,4 +123,37 @@ VALUES ('스위스 13박 14일 여행 후기❤',
 
 INSERT INTO reply_tb (comment, user_id, post_id, created_at)
 VALUES ('고양이 귀엽네요...', 2, 14, NOW()),
-       ('전 강아지 키우는데 ㅋㅋㅋ', 3, 14, NOW());
+       ('전 강아지 키우는데 ㅋㅋㅋ', 3, 14, NOW()),
+       ('고양이에게 너무 좋은 사료를 하나 알고 있는데요. 추천해드려도 될까요? ssar님 어떠신가요??', 6, 14, NOW()),
+       ('고양이 키우는 게 어렵지 않나요?', 5, 14, NOW()),
+       ('엥ㅋㅋ 고양이 너무 귀엽네요??', 3, 13, NOW()),
+       ('고양이 좋아하는데 집에서 키우기 힘들어요;', 5, 13, NOW()),
+       ('멍멍이랑 냥이 둘 다 좋아요ㅠㅠㅠㅠㅠ 어케 그렇게 귀엽지...', 4, 13, NOW()),
+       ('고양이 키우고 싶은데 집이 좀 작아요... 안되겠죠 역시', 6, 13, NOW()),
+       ('이 고양이 이름이 뭔가요?', 4, 11, NOW()),
+       ('저도 고양이 키워보고 싶어요', 4, 10, NOW()),
+       ('광고사절', 1, 10, NOW()),
+       ('고양이 산책은 말도 안 되는 소리입니다~~~^^', 2, 10, NOW()),
+       ('강아지랑 고양이 둘 다 좋아요^^', 4, 8, NOW()),
+       ('적적하다', 3, 8, NOW()),
+       ('동물 좋아하는데... 저는 햄스터가 좋아여 ㅎㅎ', 2, 8, NOW());
+
+INSERT INTO reply_tb (comment, user_id, post_id, created_at)
+VALUES ('저도 여행 가고 싶어요! 너무 피곤하니까 힐링 여행~', 2, 1, NOW()),
+       ('강아지, 고양이는 어쩌고 스위스 여행을 가셨나요', 3, 1, NOW()),
+       ('혼자 맛있는거 드셨네요', 6, 1, NOW()),
+       ('가족이랑 여행 가는 건 어떤가요?? 이번에 여행 계획중인데...', 7, 1, NOW()),
+       ('저는 제주도 가고 싶어요ㅎㅎ 국내 여행 포스팅도 많이 해주세요!', 4, 1, NOW()),
+       ('여행 가면 스트레스 풀리죠. 잘 보고갑니다.', 5, 1, NOW()),
+       ('다음에는 어디로 여행 가고 싶으신가요?', 5, 2, NOW()),
+       ('광곤가요 ㅡㅡ', 4, 2, NOW()),
+       ('여행 가면 스트레스만 더 쌓여서 오던데요 ㅋㅋ 괜찮으신지? 진짜 자주 가시네.. 팁 ㄳ', 3, 2, NOW()),
+       ('제주도는 혼자 여행 가는 것도 좋지요~~', 4, 3, NOW()),('흠,, 사진 많이 찍느라 바쁘신듯 ㅋ', 2, 3, NOW()),
+       ('오 태국 ㅎ', 6, 4, NOW()),
+       ('여행 다녀오면 힐링이 되더라고요ㅎㅎㅎ', 1, 4, NOW()),
+       ('맛있는거 드셨네요', 3, 4, NOW()),
+       ('여행 갈 때 뭘 먼저 준비하세요?', 2, 4, NOW()),
+       ('여행 갈 때 뭘 챙겨가세요? 제가 좋은 상품 알고 있는데요, ssar님처럼 여행 자주 다니시는 분들에게 좋아요', 4, 4, NOW()),
+       ('고생하셨어요~~', 1, 5, NOW()),
+       ('여름에 가셔서 고생하셨겠어요 ㅋㅋㅋㅋ 일본 여름은 진짜 덥던데', 5, 6, NOW()),
+       ('일본여행!!!! 가까워서 좋지여ㅎ 대만은 가보셧나요ㅋ', 6, 6, NOW());

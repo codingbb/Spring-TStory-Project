@@ -1,6 +1,7 @@
 package site.metacoding.blogv3.post;
 
 import lombok.Data;
+import site.metacoding.blogv3.reply.Reply;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -45,6 +46,7 @@ public class PostResponse {
 
     @Data
     public static class DetailDTO {
+//        다음엔 애도 dto로 담자
         private Integer postId;
         private String title;
         private String content;
@@ -53,15 +55,37 @@ public class PostResponse {
         private String createdAt;
         private Boolean isPostOwner;
 
-        public DetailDTO(Integer postId, String title, String content, Integer userId, String username, LocalDateTime createdAt) {
-            this.postId = postId;
-            this.title = title;
-            this.content = content;
-            this.userId = userId;
-            this.username = username;
-            this.createdAt = createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd (HH:mm)"));
+        private List<ReplyDTO> replyDTOs;
 
+        public DetailDTO(Post post, List<Reply> replies) {
+            this.postId = post.getId();
+            this.title = post.getTitle();
+            this.content = post.getContent();
+            this.userId = post.getUser().getId();
+            this.username = post.getUser().getUsername();
+            this.createdAt = post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd (HH:mm)"));
+            this.replyDTOs = replies.stream().map(reply -> new ReplyDTO(reply)).toList();
         }
+
+        @Data
+        public static class ReplyDTO {
+            private Integer userId;
+            private Integer postId;
+            private String comment;
+            private String username;
+            private LocalDateTime createdAt;
+            private Boolean isReplyOwner;
+
+            public ReplyDTO(Reply reply) {
+                this.userId = reply.getUser().getId();
+                this.postId = reply.getPost().getId();
+                this.comment = reply.getComment();
+                this.username = reply.getUser().getUsername();
+                this.createdAt = reply.getCreatedAt();
+//                this.isReplyOwner = isReplyOwner;
+            }
+        }
+
     }
 
 

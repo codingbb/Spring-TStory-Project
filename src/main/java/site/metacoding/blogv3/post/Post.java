@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import site.metacoding.blogv3._core.util.ImageUtil;
 import site.metacoding.blogv3.category.Category;
 import site.metacoding.blogv3.image.Image;
+import site.metacoding.blogv3.reply.Reply;
 import site.metacoding.blogv3.user.User;
 
 import java.time.LocalDateTime;
@@ -38,17 +39,21 @@ public class Post {
     @Transient
     private Boolean isPostOwner;
 
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Reply> replyList = new ArrayList<>();
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @Builder
-    public Post(Integer id, String title, String content, User user, Category category, String thumbnailFile, LocalDateTime createdAt) {
+    public Post(Integer id, String title, String content, User user, Category category, String thumbnailFile, Boolean isPostOwner, LocalDateTime createdAt) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.user = user;
         this.category = category;
         this.thumbnailFile = thumbnailFile;
+        this.isPostOwner = isPostOwner;
         this.createdAt = createdAt;
     }
 

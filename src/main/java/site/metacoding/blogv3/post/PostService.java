@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import site.metacoding.blogv3.category.Category;
 import site.metacoding.blogv3.category.CategoryJPARepository;
 import site.metacoding.blogv3.category.CategoryResponse;
+import site.metacoding.blogv3.reply.Reply;
+import site.metacoding.blogv3.reply.ReplyJPARepository;
 import site.metacoding.blogv3.user.User;
 import site.metacoding.blogv3.user.UserJPARepository;
 
@@ -26,6 +28,7 @@ public class PostService {
     private final PostJPARepository postRepo;
     private final CategoryJPARepository categoryRepo;
     private final UserJPARepository userRepo;
+    private final ReplyJPARepository replyRepo;
 
     @Transactional
     public void postUpdate(Integer postId, Integer sessionUserId, PostRequest.UpdateDTO requestDTO) {
@@ -51,14 +54,14 @@ public class PostService {
     public PostResponse.UpdateFormDTO updateForm(Integer postId, Integer sessionUserId) {
         Post post = postRepo.findById(postId).orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
         List<PostResponse.UpdateFormDTO.CategoryNameDTO> categoryNameDTOS = categoryRepo.findByUserIdUpdate(sessionUserId);
-        System.out.println("categoryNameDTOS = " + categoryNameDTOS);
+//        System.out.println("categoryNameDTOS = " + categoryNameDTOS);
 
         if (post.getUser().getId() != sessionUserId) {
             throw new RuntimeException("수정 권한이 존재하지 않습니다");
         }
 
         PostResponse.UpdateFormDTO updateFormDTO = new PostResponse.UpdateFormDTO(post, categoryNameDTOS);
-        System.out.println("updateFormDTO = " + updateFormDTO);
+//        System.out.println("updateFormDTO = " + updateFormDTO);
 
     return updateFormDTO;
 
@@ -84,7 +87,7 @@ public class PostService {
                 .orElseThrow(() -> new RuntimeException("회원 정보가 존재하지 않습니다."));
 
         List<PostResponse.WriteFormDTO.CategoryNameDTO> categoryList = categoryRepo.findByUserId(sessionUser.getId());
-        System.out.println("categoryList = " + categoryList);
+//        System.out.println("categoryList = " + categoryList);
 
         PostResponse.WriteFormDTO writeFormDTO = new PostResponse.WriteFormDTO(categoryList);
 
@@ -148,34 +151,41 @@ public class PostService {
     @Transactional(readOnly = true)
     public Page<PostResponse.ListDTO> postList(Integer sessionUserId, Pageable pageable) {
         Page<PostResponse.ListDTO> postLists = postRepo.findByPostList(sessionUserId, pageable);
-        System.out.println("postLists = " + postLists);
+//        System.out.println("postLists = " + postLists);
 
         return postLists;
     }
 
     public List<PostResponse.ListDTO> postList(Integer sessionUserId) {
         List<PostResponse.ListDTO> postLists = postRepo.findByPostList(sessionUserId);
-        System.out.println("postLists = " + postLists);
+//        System.out.println("postLists = " + postLists);
 
         return postLists;
     }
 
+    @Transactional(readOnly = true)
     public PostResponse.DetailDTO postDetail(Integer postId, User sessionUserId) {
-
-        PostResponse.DetailDTO postDetail = postRepo.findByPostId(postId)
+//        게시글 부분
+        Post post = postRepo.findById(postId)
                 .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
-        System.out.println("postDetail = " + postDetail);
+//        System.out.println("postDetail = " + postDetail);
 
         Boolean isPostOwner = false;
         if (sessionUserId != null) {
-            if (sessionUserId.getId() == postDetail.getUserId()) {
+            if (sessionUserId.getId() == post.getUser().getId()) {
                 isPostOwner = true;
             }
         }
+        post.setIsPostOwner(isPostOwner);
+//        게시글 부분
 
-        postDetail.setIsPostOwner(isPostOwner);
+//        댓글 부분
+        List<Reply> replies = replyRepo.findByPostId(postId);
+//        post.setReplyList(replies);
 
-        return postDetail;
+        PostResponse.DetailDTO detailDTO = new PostResponse.DetailDTO(post, replies);
+
+        return detailDTO;
 
     }
 

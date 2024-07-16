@@ -72,7 +72,7 @@ public class PostController {
     @GetMapping("/post/detail/{postId}")
     public String postDetail(@PathVariable Integer postId, HttpServletRequest request) {
         User user = (User) session.getAttribute("sessionUser");
-        System.out.println("user = " + user);
+//        System.out.println("user = " + user);
         PostResponse.DetailDTO postDetail = postService.postDetail(postId, user);
 
         request.setAttribute("model", postDetail);
@@ -84,7 +84,7 @@ public class PostController {
     public ResponseEntity<?> postList(@PageableDefault(size = 5) Pageable pageable) {
         User user = (User) session.getAttribute("sessionUser");
         Page<PostResponse.ListDTO> listDTOs = postService.postList(user.getId(), pageable);
-        System.out.println("listDTOs = " + listDTOs);
+//        System.out.println("listDTOs = " + listDTOs);
 
 //        request.setAttribute("model", listDTOs);
         return ResponseEntity.ok(new ApiUtil<>(listDTOs));
