@@ -28,6 +28,23 @@ public class PostService {
     private final UserJPARepository userRepo;
 
 
+    public PostResponse.UpdateFormDTO updateForm(Integer postId, Integer sessionUserId) {
+        Post post = postRepo.findById(postId).orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
+        List<PostResponse.UpdateFormDTO.CategoryNameDTO> categoryNameDTOS = categoryRepo.findByUserIdUpdate(sessionUserId);
+        System.out.println("categoryNameDTOS = " + categoryNameDTOS);
+
+        if (post.getUser().getId() != sessionUserId) {
+            throw new RuntimeException("수정 권한이 존재하지 않습니다");
+        }
+
+        PostResponse.UpdateFormDTO updateFormDTO = new PostResponse.UpdateFormDTO(post, categoryNameDTOS);
+        System.out.println("updateFormDTO = " + updateFormDTO);
+
+    return updateFormDTO;
+
+    }
+
+
     @Transactional
     public void delete(Integer postId, User user) {
         Post post = postRepo.findById(postId).orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
@@ -141,5 +158,7 @@ public class PostService {
         return postDetail;
 
     }
+
+
 
 }

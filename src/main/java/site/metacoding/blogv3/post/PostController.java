@@ -28,6 +28,28 @@ public class PostController {
     private final PostService postService;
     private final HttpSession session;
 
+
+    @GetMapping("/post/update-form/{postId}")
+    public String updateForm(@PathVariable Integer postId, HttpServletRequest request) {
+        User user = (User) session.getAttribute("sessionUser");
+//        System.out.println("postId = " + postId);
+        PostResponse.UpdateFormDTO updateFormDTO = postService.updateForm(postId, user.getId());
+
+        request.setAttribute("model", updateFormDTO);
+        return "post/updateForm";
+    }
+
+
+//    @PostMapping("/post/update")
+//    public String update(@PathVariable Integer postId) {
+//        User user = (User) session.getAttribute("sessionUser");
+    //List<PostResponse.UpdateDTO> updateDTOs = postService.postUpdate(user.getId());
+//        postService.delete(postId, user);
+//
+//        return "redirect:/post/list";
+//    }
+
+
     @PostMapping("/post/delete/{postId}")
     public String delete(@PathVariable Integer postId) {
         User user = (User) session.getAttribute("sessionUser");
@@ -82,7 +104,7 @@ public class PostController {
     public String postWriteForm(HttpServletRequest request) {
         User user = (User) session.getAttribute("sessionUser");
         PostResponse.WriteFormDTO writeFormDTOList = postService.writeForm(user.getId());
-        System.out.println("writeFormDTOList = " + writeFormDTOList);
+//        System.out.println("writeFormDTOList = " + writeFormDTOList);
         
         request.setAttribute("model", writeFormDTOList);
 

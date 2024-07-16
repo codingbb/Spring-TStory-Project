@@ -10,6 +10,38 @@ import java.util.List;
 public class PostResponse {
 
     @Data
+    public static class UpdateFormDTO {
+        //        게시글  //제목, 내용, 썸네일(유지), postId
+        private Integer postId;
+        private String title;
+        private String content;
+        private String thumbnailFile;
+        private List<CategoryNameDTO> categoryNameDTO;     //카테고리
+
+        public UpdateFormDTO(Post post, List<CategoryNameDTO> categoryList) {
+            this.postId = post.getId();
+            this.title = post.getTitle();
+            this.content = post.getContent();
+            this.thumbnailFile = post.getThumbnailFile();
+            this.categoryNameDTO = categoryList;
+        }
+
+        // 카테고리 네임 뿌리기
+        @Data
+        public static class CategoryNameDTO {
+            private Integer id;     // 카테고리 id (post 저장할때 같이 저장)
+            private String categoryName;
+
+            public CategoryNameDTO(Integer id, String categoryName) {
+                this.id = id;
+                this.categoryName = categoryName;
+            }
+        }
+
+    }
+
+
+    @Data
     public static class DetailDTO {
         private Integer postId;
         private String title;

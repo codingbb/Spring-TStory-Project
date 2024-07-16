@@ -23,4 +23,5 @@ public interface PostJPARepository extends JpaRepository<Post, Integer> {
     @Query("select new site.metacoding.blogv3.post.PostResponse$DetailDTO(p.id, p.title, p.content, p.user.id, p.user.username, p.createdAt)" +
             "from Post p where p.id = :postId")
     Optional<PostResponse.DetailDTO> findByPostId(Integer postId);
+
 }

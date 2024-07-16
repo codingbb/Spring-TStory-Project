@@ -1,0 +1,261 @@
+{{>/layout/main-header}}
+
+<style>
+    .ql-editor {
+        min-height: 40vh;
+    }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/quill/dist/quill.min.js"></script>
+
+
+<div class="container">
+    <form id="postWriteForm" onsubmit="return getQuill()">
+        <div class="form-group">
+            <select class="form-control" id="categoryId" name="categoryId">
+                {{#model.categoryNameDTO}}
+                    <option value="{{id}}">{{categoryName}}</option>
+                {{/model.categoryNameDTO}}
+            </select>
+        </div>
+
+        <input id="title" name="title" class="form-control" type="text" value="{{model.title}}" placeholder="Enter Title">
+
+        <!--        퀼 에디터 디자인 부분 -->
+        <div id="toolbarContainer">
+            <span class="ql-formats">
+                <select class="ql-font"></select>
+                <select class="ql-size"></select>
+            </span>
+            <span class="ql-formats">
+                <button class="ql-bold"></button>
+                <button class="ql-italic"></button>
+                <button class="ql-underline"></button>
+                <button class="ql-strike"></button>
+            </span>
+            <span class="ql-formats">
+                <select class="ql-color"></select>
+                <select class="ql-background"></select>
+            </span>
+            <span class="ql-formats">
+                <button class="ql-script" value="sub"></button>
+                <button class="ql-script" value="super"></button>
+            </span>
+            <span class="ql-formats">
+                <button class="ql-header" value="1"></button>
+                <button class="ql-header" value="2"></button>
+                <button class="ql-blockquote"></button>
+            </span>
+            <span class="ql-formats">
+                <button class="ql-list" value="ordered"></button>
+                <button class="ql-list" value="bullet"></button>
+                <button class="ql-indent" value="-1"></button>
+                <button class="ql-indent" value="+1"></button>
+            </span>
+            <span class="ql-formats">
+                <button class="ql-direction" value="rtl"></button>
+                <select class="ql-align"></select>
+            </span>
+            <span class="ql-formats">
+                <button class="ql-link"></button>
+                <button class="ql-image"></button>
+                <button class="ql-video"></button>
+            </span>
+            <span class="ql-formats">
+                <button class="ql-clean"></button>
+            </span>
+        </div>
+        <!--        퀼 에디터 디자인 부분-->
+
+        <!-- 내용 적는 부분 form 데이터로 통으로 넣자 -->
+        <div id="editorContainer">
+            {{{model.content}}}
+        </div>
+        <!-- 내용 적는 부분 -->
+
+        <div class="form-control d-flex justify-content-end">
+            <div>섬네일 사진 등록 : <input id="thumbnailFile" type="file" name="thumbnailFile"></div>
+        </div>
+        <button type="submit" class="my_active_btn">글쓰기 등록</button>
+    </form>
+    <br/>
+
+</div>
+
+
+<script>
+
+    var quill = new Quill('#editorContainer', {
+        modules: {
+            formula: true,
+            syntax: true,
+            toolbar: '#toolbarContainer'
+        },
+        placeholder: '게시물을 작성해주세요.',
+        theme: 'snow'
+    });
+
+    // 퀼 에디터 끝
+
+
+    // 원본 이미지 width, height 가져오기
+    quill.on('text-change', function (delta, oldDelta, source) {
+        if (source === 'user') {
+            $('#editorContainer .ql-editor img').each(function () {
+                const img = this;
+                // 이미지가 로드될때 들고와야함
+                $(img).on('load', function () {
+                    const originalWidth = img.naturalWidth;
+                    console.log("원본 가로 " + originalWidth);
+                    const originalHeight = img.naturalHeight;
+                    console.log("원본 세로 " + originalHeight);
+
+                    let maxSize = 600; // 최대 크기
+                    let ratio;
+
+                    if (originalWidth > originalHeight) {
+                        ratio = maxSize / originalWidth;
+                    } else {
+                        ratio = maxSize / originalHeight;
+                    }
+
+                    let newWidth = originalWidth * ratio;
+                    let newHeight = originalHeight * ratio;
+
+                    $(this).attr("width", newWidth);
+                    $(this).attr("height", newHeight);
+                });
+            });
+        }
+    });
+    // 끝
+
+
+    // canvas로 이미지 리사이징
+    const WIDTH = 170;
+    const HEIGHT = 200;
+    let resizedFile;
+
+    // 캔버스 생성
+    let canvas = $("<canvas>")
+            .attr("width", WIDTH)
+            .attr("height", HEIGHT);
+
+    $("#thumbnailFile").on("change", function () {
+        // thumbnailFile 에 첨부된 이미지 파일
+        const file = this.files[0];
+
+        if (file) {
+            const context = canvas[0].getContext("2d");
+            const fileReader = new FileReader();
+            const img = new Image();
+
+            fileReader.onload = function (e) {
+                // console.log(e);
+                // console.log("e " + e.target.result);
+
+                img.onload = function () {
+                    context.drawImage(img, 0, 0, WIDTH, HEIGHT);
+
+                    canvas[0].toBlob(function (blob) {
+                        resizedFile = new File([blob], file.name, {type: file.type});
+                        //용량 확인
+                        console.log("Resized size = " + blob.size);
+                    }, file.type);
+                };
+
+                img.src = e.target.result;
+            };
+
+            fileReader.readAsDataURL(file);
+        }
+    });
+    // canvas로 이미지 리사이징 끝
+
+
+    // 게시글 작성 ajax
+    $("#postWriteForm").on("submit", function (e) {
+        e.preventDefault();
+
+        let formData = new FormData();
+
+        let title = $("#title").val();
+        console.log("제목 " + title);
+
+        let categoryId = $("#categoryId").val();
+        console.log("categoryId " + categoryId);
+
+        // <div id="editorContainer"></div> 이 부분 가져오기
+        // let content = $("#editorContainer").find(".ql-editor").text();
+        // console.log("content " + content);
+
+        let content = quill.root.innerHTML;
+        console.log("content " + content);
+
+        // 섬네일
+        // let thumbnailFile = $("#thumbnailFile")[0].files[0];
+        console.log("thumbnailFile " + resizedFile);
+
+        formData.append('title', title);
+        formData.append('content', content);
+        formData.append('categoryId', categoryId);
+        formData.append('thumbnailFile', resizedFile);
+
+        // 업로드된 확장자 파일 체크
+        if (!uploadFileCheck()) {
+            return;
+        }
+
+        $.ajax({
+            url: "/post/update",
+            data: formData,
+            contentType: false,
+            processData: false,
+            type: 'POST'
+
+        }).done((res) => {
+            Swal.fire({
+                text: "게시글 등록이 완료되었습니다.",
+                icon: "success",
+                button: "확인"
+            }).then(() => {
+                window.location.href = "/post/list";
+            });
+
+        }).fail((res) => {
+            Swal.fire({
+                text: "게시글 등록 실패",
+                icon: "warning",
+                button: "확인"
+            });
+        });
+
+        //     게시글 작성 ajax
+    });
+
+    //     확장자 체크
+    function uploadFileCheck() {
+        // console.log("뜨긴하나");
+
+        let fileCheck = $("#thumbnailFile").val();
+        if (fileCheck != "") {
+            let ext = fileCheck.split(`.`).pop().toLowerCase();
+            if ($.inArray(ext, ['jpg', 'jpeg', 'png']) == -1) {
+                // alert("dff");
+                Swal.fire({
+                    text: "jpg, jpeg, png 파일만 업로드할 수 있습니다.",
+                    icon: "warning",
+                    button: "확인"
+                });
+                $("#thumbnailFile").val(``);  //여기서 올라간 파일 초기화를 시켜주면 됨!
+                return false; // 폼 제출 방지
+            }
+        }
+        return true;    // 폼 허용
+    }
+
+    // 확장자 체크 끝
+
+</script>
+
+
+{{>/layout/footer}}

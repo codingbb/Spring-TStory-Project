@@ -17,4 +17,8 @@ public interface CategoryJPARepository extends JpaRepository<Category, Integer> 
     @Query("select new site.metacoding.blogv3.post.PostResponse$WriteFormDTO$CategoryNameDTO(c.id, c.categoryName) " +
             "from Category c where c.user.id = :sessionUser order by c.categoryName")
     List<PostResponse.WriteFormDTO.CategoryNameDTO> findByUserId(Integer sessionUser);
+
+    @Query("select new site.metacoding.blogv3.post.PostResponse$UpdateFormDTO$CategoryNameDTO(c.id, c.categoryName) " +
+            "from Category c where c.user.id = :sessionUserId order by c.categoryName")
+    List<PostResponse.UpdateFormDTO.CategoryNameDTO> findByUserIdUpdate(Integer sessionUserId);
 }
