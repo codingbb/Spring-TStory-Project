@@ -11,6 +11,14 @@ import java.util.List;
 public class PostRequest {
 
     @Data
+    public static class UpdateDTO {
+        private String title;
+        private String content;
+        private Category category;
+        private MultipartFile thumbnailFile;
+    }
+
+    @Data
     public static class SaveDTO {
         private String title;
         private String content;     // MultipartFile 아니고 String으로 지정해준다

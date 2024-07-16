@@ -13,7 +13,7 @@
         <div class="form-group">
             <select class="form-control" id="categoryId" name="categoryId">
                 {{#model.categoryNameDTO}}
-                    <option value="{{id}}">{{categoryName}}</option>
+                    <option value="{{id}}" {{#isSelected}}selected{{/isSelected}}>{{categoryName}}</option>
                 {{/model.categoryNameDTO}}
             </select>
         </div>
@@ -73,7 +73,9 @@
         <!-- 내용 적는 부분 -->
 
         <div class="form-control d-flex justify-content-end">
-            <div>섬네일 사진 등록 : <input id="thumbnailFile" type="file" name="thumbnailFile"></div>
+            <div>섬네일 사진 등록 :
+                <input id="thumbnailFile" type="file" name="thumbnailFile">
+            </div>
         </div>
         <button type="submit" class="my_active_btn">글쓰기 등록</button>
     </form>
@@ -184,10 +186,6 @@
         let categoryId = $("#categoryId").val();
         console.log("categoryId " + categoryId);
 
-        // <div id="editorContainer"></div> 이 부분 가져오기
-        // let content = $("#editorContainer").find(".ql-editor").text();
-        // console.log("content " + content);
-
         let content = quill.root.innerHTML;
         console.log("content " + content);
 
@@ -198,7 +196,11 @@
         formData.append('title', title);
         formData.append('content', content);
         formData.append('categoryId', categoryId);
-        formData.append('thumbnailFile', resizedFile);
+        // formData.append('thumbnailFile', resizedFile);
+        // 썸네일을 교체하지 않을 경우에도 업데이트 되도록
+        let thumbnailFileInput = $("#thumbnailFile")[0];
+        let thumbnailFile = thumbnailFileInput.files[0] || new File([], "");
+        formData.append('thumbnailFile', thumbnailFile);
 
         // 업로드된 확장자 파일 체크
         if (!uploadFileCheck()) {
@@ -206,7 +208,7 @@
         }
 
         $.ajax({
-            url: "/post/update",
+            url: "/post/update/{{model.postId}}",
             data: formData,
             contentType: false,
             processData: false,
@@ -214,7 +216,7 @@
 
         }).done((res) => {
             Swal.fire({
-                text: "게시글 등록이 완료되었습니다.",
+                text: "게시글 수정이 완료되었습니다.",
                 icon: "success",
                 button: "확인"
             }).then(() => {
@@ -223,7 +225,7 @@
 
         }).fail((res) => {
             Swal.fire({
-                text: "게시글 등록 실패",
+                text: "게시글 수정 실패",
                 icon: "warning",
                 button: "확인"
             });

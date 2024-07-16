@@ -24,6 +24,7 @@ public class PostResponse {
             this.content = post.getContent();
             this.thumbnailFile = post.getThumbnailFile();
             this.categoryNameDTO = categoryList;
+
         }
 
         // 카테고리 네임 뿌리기
@@ -31,6 +32,7 @@ public class PostResponse {
         public static class CategoryNameDTO {
             private Integer id;     // 카테고리 id (post 저장할때 같이 저장)
             private String categoryName;
+            private Boolean isSelected; //카테고리 선택된게 나오게
 
             public CategoryNameDTO(Integer id, String categoryName) {
                 this.id = id;

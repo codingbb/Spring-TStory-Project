@@ -40,14 +40,13 @@ public class PostController {
     }
 
 
-//    @PostMapping("/post/update")
-//    public String update(@PathVariable Integer postId) {
-//        User user = (User) session.getAttribute("sessionUser");
-    //List<PostResponse.UpdateDTO> updateDTOs = postService.postUpdate(user.getId());
-//        postService.delete(postId, user);
-//
-//        return "redirect:/post/list";
-//    }
+    @PostMapping("/post/update/{postId}")
+    public String update(@PathVariable Integer postId, PostRequest.UpdateDTO requestDTO) {
+        User user = (User) session.getAttribute("sessionUser");
+        postService.postUpdate(postId, user.getId(), requestDTO);
+
+        return "redirect:/post/list";
+    }
 
 
     @PostMapping("/post/delete/{postId}")
@@ -105,7 +104,7 @@ public class PostController {
         User user = (User) session.getAttribute("sessionUser");
         PostResponse.WriteFormDTO writeFormDTOList = postService.writeForm(user.getId());
 //        System.out.println("writeFormDTOList = " + writeFormDTOList);
-        
+
         request.setAttribute("model", writeFormDTOList);
 
         if (writeFormDTOList.getCategoryNameDTO().isEmpty()) {
@@ -117,7 +116,6 @@ public class PostController {
 
         return "post/writeForm";
     }
-
 
 
 }

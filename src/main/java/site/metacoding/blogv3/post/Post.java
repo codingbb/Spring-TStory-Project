@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import site.metacoding.blogv3._core.util.ImageUtil;
 import site.metacoding.blogv3.category.Category;
 import site.metacoding.blogv3.image.Image;
 import site.metacoding.blogv3.user.User;
@@ -50,4 +51,15 @@ public class Post {
         this.thumbnailFile = thumbnailFile;
         this.createdAt = createdAt;
     }
+
+
+    //    의미있는 메소드
+    public void update(PostRequest.UpdateDTO requestDTO) {
+        this.title = requestDTO.getTitle();
+        this.content = requestDTO.getContent();
+        this.category = requestDTO.getCategory();
+        String imgThumbnailFile = ImageUtil.save(requestDTO.getThumbnailFile());
+        this.thumbnailFile = imgThumbnailFile;
+    }
+
 }

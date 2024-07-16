@@ -27,6 +27,26 @@ public class PostService {
     private final CategoryJPARepository categoryRepo;
     private final UserJPARepository userRepo;
 
+    @Transactional
+    public void postUpdate(Integer postId, Integer sessionUserId, PostRequest.UpdateDTO requestDTO) {
+        Post post = postRepo.findById(postId).orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
+        if (post.getUser().getId() != sessionUserId) {
+            throw new RuntimeException("수정 권한이 존재하지 않습니다");
+        }
+
+        if (!requestDTO.getThumbnailFile().isEmpty()) {
+            // 의미있는 메소드
+            post.update(requestDTO);
+
+        } else {
+            post.setTitle(requestDTO.getTitle());
+            post.setContent(requestDTO.getContent());
+            post.setCategory(requestDTO.getCategory());
+            post.setThumbnailFile(post.getThumbnailFile());
+
+        }
+
+    }
 
     public PostResponse.UpdateFormDTO updateForm(Integer postId, Integer sessionUserId) {
         Post post = postRepo.findById(postId).orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
