@@ -164,15 +164,15 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public PostResponse.DetailDTO postDetail(Integer postId, User sessionUserId) {
+    public PostResponse.DetailDTO postDetail(Integer postId, User sessionUser) {
 //        게시글 부분
         Post post = postRepo.findById(postId)
                 .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
 //        System.out.println("postDetail = " + postDetail);
 
         Boolean isPostOwner = false;
-        if (sessionUserId != null) {
-            if (sessionUserId.getId() == post.getUser().getId()) {
+        if (sessionUser != null) {
+            if (sessionUser.getId() == post.getUser().getId()) {
                 isPostOwner = true;
             }
         }
@@ -183,7 +183,7 @@ public class PostService {
         List<Reply> replies = replyRepo.findByPostId(postId);
 //        post.setReplyList(replies);
 
-        PostResponse.DetailDTO detailDTO = new PostResponse.DetailDTO(post, replies);
+        PostResponse.DetailDTO detailDTO = new PostResponse.DetailDTO(post, replies, sessionUser);
 
         return detailDTO;
 

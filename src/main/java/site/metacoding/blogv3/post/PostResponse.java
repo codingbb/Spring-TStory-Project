@@ -2,6 +2,7 @@ package site.metacoding.blogv3.post;
 
 import lombok.Data;
 import site.metacoding.blogv3.reply.Reply;
+import site.metacoding.blogv3.user.User;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -57,14 +58,14 @@ public class PostResponse {
 
         private List<ReplyDTO> replyDTOs;
 
-        public DetailDTO(Post post, List<Reply> replies) {
+        public DetailDTO(Post post, List<Reply> replies, User sessionUser) {
             this.postId = post.getId();
             this.title = post.getTitle();
             this.content = post.getContent();
             this.userId = post.getUser().getId();
             this.username = post.getUser().getUsername();
             this.createdAt = post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd (HH:mm)"));
-            this.replyDTOs = replies.stream().map(reply -> new ReplyDTO(reply)).toList();
+            this.replyDTOs = replies.stream().map(reply -> new ReplyDTO(reply, sessionUser)).toList();
         }
 
         @Data
@@ -76,14 +77,22 @@ public class PostResponse {
             private LocalDateTime createdAt;
             private Boolean isReplyOwner;
 
-            public ReplyDTO(Reply reply) {
+            public ReplyDTO(Reply reply, User sessionUser) {
                 this.userId = reply.getUser().getId();
                 this.postId = reply.getPost().getId();
                 this.comment = reply.getComment();
                 this.username = reply.getUser().getUsername();
                 this.createdAt = reply.getCreatedAt();
-//                this.isReplyOwner = isReplyOwner;
+
+                isReplyOwner = false;
+                if (sessionUser != null) {
+                    if (sessionUser.getId() == reply.getUser().getId()) {
+                        isReplyOwner = true;
+                    }
+                }
             }
+
+
         }
 
     }
