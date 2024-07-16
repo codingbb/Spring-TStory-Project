@@ -11,22 +11,6 @@
         margin-right: 1rem;
     }
 
-    .comment-section {
-        margin-top: 2rem;
-    }
-
-    .comment-box {
-        margin-bottom: 1rem;
-    }
-
-    .comment-list {
-        margin-top: 1rem;
-    }
-
-    .comment {
-        padding: 1rem;
-        border-bottom: 1px solid #ccc;
-    }
 </style>
 
 <div class="container">
@@ -93,12 +77,15 @@
                         <div class="px-1 me-1 text-white rounded" style="margin-right: 10px; background-color: #1EB49F">
                             {{username}}
                         </div>
-                        <div>{{comment}}</div>
+                        <div id="comment-{{replyId}}" data-reply="{{comment}}">{{comment}}</div>
                     </div>
                     {{#isReplyOwner}}
-                        <form action="/board/delete" method="post">
-                            <button class="btn">🗑</button>
-                        </form>
+                        <div>
+                            <button class="btn-sm btn-success replyUpdateBtn" id="reply-{{replyId}}">수정</button>
+                            <form action="/board/delete" method="post" class="d-inline-block">
+                                <button class="btn">🗑</button>
+                            </form>
+                        </div>
                     {{/isReplyOwner}}
                 </div>
             {{/model.replyDTOs}}
@@ -106,6 +93,65 @@
     </div>
 
     <br><br>
+
+    <script>
+        <!--        replyId 가져오기 -->
+        $(".replyUpdateBtn").click(function () {
+            let replyId = $(this).attr('id');
+            console.log("reply " + replyId);
+
+            // 지금 이거 못가져옴
+            let comment = $(this).closest('.list-group-item').find('#comment-'+replyId).val();
+            console.log("comment " + comment);
+
+            // append 아닌듯 다시 (그리고 밑에서 show됨)
+            $(`#reply-${replyId}`).append($("#showReplyUpdateForm").show());
+            //
+            // $('.btn-reply-update').click(function() {
+            //     const replyId = $(this).data('reply-id');
+            //     const replyComment = $(this).data('reply-comment');
+            //
+            //     $('#reply-id').val(replyId);
+            //     $('#reply-comment').val(replyComment);
+            //     $('#reply-update-form').show();
+            // });
+
+
+
+        });
+
+
+    </script>
+
+    <!--    댓글 수정 뷰 -->
+    <div id="showReplyUpdateForm" class="list-group-item justify-content-between align-items-center" style="display: none">
+        <div class="d-flex">
+            <div class="px-1 me-1 text-white rounded" style="margin-right: 10px; background-color: #1EB49F">
+                333
+            </div>
+            <textarea class="form-control" rows="3" name="comment" id="reply-comment"
+                      style="width: 100%; height: 80px;"></textarea>
+        </div>
+        <div class="d-flex justify-content-end" style="margin-top: 5px;">
+            <a class="btn-sm btn-success" href="/reply/update/replyId}}">수정</a>
+            <button class="btn-sm btn-danger">취소</button>
+        </div>
+    </div>
+    <!--    댓글 수정 뷰 -->
+
+    <!-- 댓글수정 -->
+    <!--    <div class="card mt-3" id="reply-update-form">-->
+    <!--        <div class="card-body">-->
+    <!--            <form action="/reply/update" method="post">-->
+    <!--                <input type="hidden" name="replyId" id="reply-id">-->
+    <!--                <textarea class="form-control" rows="2" name="comment" id="reply-comment"></textarea>-->
+    <!--                <div class="d-flex justify-content-end">-->
+    <!--                    <button type="submit" class="btn btn-outline-success mt-1">댓글수정</button>-->
+    <!--                </div>-->
+    <!--            </form>-->
+    <!--        </div>-->
+    <!--    </div>-->
+
 
     <!-- 댓글 섹션 끝 -->
 

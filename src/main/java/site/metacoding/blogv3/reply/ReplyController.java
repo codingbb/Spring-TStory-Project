@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import site.metacoding.blogv3.user.User;
 
@@ -13,6 +14,12 @@ public class ReplyController {
     private final ReplyService replyService;
     private final HttpSession session;
 
+//    @PostMapping("/reply/update/{replyId}")
+//    public String update(@PathVariable Integer replyId, String comment) {
+//        User user = (User) session.getAttribute("sessionUser");
+//        replyService.replyUpdate(user, replyId, comment);
+//
+//    }
 
     @PostMapping("/reply/save")
     public String save(ReplyRequest.SaveDTO requestDTO) {

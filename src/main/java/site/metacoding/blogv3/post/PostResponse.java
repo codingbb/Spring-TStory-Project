@@ -71,6 +71,7 @@ public class PostResponse {
         @Data
         public static class ReplyDTO {
             private Integer userId;
+            private Integer replyId;
             private Integer postId;
             private String comment;
             private String username;
@@ -79,6 +80,7 @@ public class PostResponse {
 
             public ReplyDTO(Reply reply, User sessionUser) {
                 this.userId = reply.getUser().getId();
+                this.replyId = reply.getId();
                 this.postId = reply.getPost().getId();
                 this.comment = reply.getComment();
                 this.username = reply.getUser().getUsername();
