@@ -84,7 +84,7 @@
 
         }).done((res) => {
             //swal - 비동기적으로 작동. 그래서 자꾸 alert창 안뜨고 바로 /로 넘어간다
-            swal({
+            Swal.fire({
                 text: "회원정보 변경이 완료되었습니다.",
                 icon: "success",
                 button: "확인"
@@ -95,7 +95,7 @@
             });
 
         }).fail((res) => {
-            swal({
+            Swal.fire({
                 // text: "동일한 비밀번호로는 변경할 수 없습니다.",
                 //res에서 msg 빼오고, apiException 만들어야하는데 exception 아직 하지 말라고 하셔서 패스
                 text: "비밀번호를 확인해주세요",

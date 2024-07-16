@@ -131,7 +131,7 @@
     // 카테고리가 없으면 alret창 뜨게
     let noCategory = {{noCategory}};
     if (noCategory) {
-        swal({
+        Swal.fire({
             text: "카테고리를 먼저 등록해주세요",
             icon: "warning",
             button: "확인"
@@ -227,7 +227,7 @@
             type: 'POST'
 
         }).done((res) => {
-            swal({
+            Swal.fire({
                 text: "게시글 등록이 완료되었습니다.",
                 icon: "success",
                 button: "확인"
@@ -236,7 +236,7 @@
             });
 
         }).fail((res) => {
-            swal({
+            Swal.fire({
                 text: "게시글 등록 실패",
                 icon: "warning",
                 button: "확인"
@@ -255,7 +255,7 @@
             let ext = fileCheck.split(`.`).pop().toLowerCase();
             if ($.inArray(ext, ['jpg', 'jpeg', 'png']) == -1) {
                 // alert("dff");
-                swal({
+                Swal.fire({
                     text: "jpg, jpeg, png 파일만 업로드할 수 있습니다.",
                     icon: "warning",
                     button: "확인"

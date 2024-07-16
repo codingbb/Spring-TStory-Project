@@ -117,7 +117,7 @@
 
         }).done((res)=>{
             if (res.body) {
-                swal({
+                Swal.fire({
                     text: "인증이 완료되었습니다.",
                     icon: "success",
                     button: "확인"
@@ -126,7 +126,7 @@
                 isEmailConfirmed = true;
 
             } else {
-                swal({
+                Swal.fire({
                     text: "인증번호를 확인해주세요",
                     icon: "warning",
                     button: "확인"
@@ -250,7 +250,7 @@
         }).done((res)=>{
             console.log("4");
 
-            swal({
+            Swal.fire({
                 text: "회원가입이 완료되었습니다.",
                 icon: "success",
                 button: "확인"
@@ -261,7 +261,7 @@
         }).fail((res)=>{
             console.log("5");
 
-            swal({
+            Swal.fire({
                 text: "이메일 인증을 해주세요",
                 icon: "warning",
                 button: "확인"
@@ -318,7 +318,7 @@
         // console.log("확인용 = " + confirmPassword);
 
         if (password !== confirmPassword) {
-            swal({
+            Swal.fire({
                 text: "비밀번호를 확인해주세요",
                 icon: "warning",
                 button: "확인"
@@ -327,7 +327,7 @@
             return false;
 
         } else if (confirmPassword === "") {
-            swal({
+            Swal.fire({
                 text: "비밀번호를 확인해주세요",
                 icon: "warning",
                 button: "확인"

@@ -27,6 +27,20 @@ public class PostService {
     private final CategoryJPARepository categoryRepo;
     private final UserJPARepository userRepo;
 
+
+    @Transactional
+    public void delete(Integer postId, User user) {
+        Post post = postRepo.findById(postId).orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
+
+        if (user.getId() != post.getUser().getId()) {
+            throw new RuntimeException("게시글 삭제 권한이 없습니다.");
+        }
+
+        postRepo.deleteById(postId);
+
+    }
+
+
     @Transactional
     public PostResponse.WriteFormDTO writeForm(Integer sessionUserId) {
         User sessionUser = userRepo.findById(sessionUserId)
@@ -47,7 +61,7 @@ public class PostService {
                 .orElseThrow(() -> new RuntimeException("회원 정보가 존재하지 않습니다."));
 
         Category category = categoryRepo.findById(requestDTO.getCategoryId())
-                        .orElseThrow(() -> new RuntimeException("카테고리가 존재하지 않습니다"));
+                .orElseThrow(() -> new RuntimeException("카테고리가 존재하지 않습니다"));
 
 
         //1. 퀼 에디터로 작성된 내용을 Jsoup을 사용하여 파싱
@@ -127,4 +141,5 @@ public class PostService {
         return postDetail;
 
     }
+
 }

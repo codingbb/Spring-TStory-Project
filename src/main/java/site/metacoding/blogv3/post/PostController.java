@@ -28,6 +28,14 @@ public class PostController {
     private final PostService postService;
     private final HttpSession session;
 
+    @PostMapping("/post/delete/{postId}")
+    public String delete(@PathVariable Integer postId) {
+        User user = (User) session.getAttribute("sessionUser");
+        postService.delete(postId, user);
+
+        return "redirect:/post/list";
+    }
+
 
     @PostMapping("/post/save")
     public String save(@ModelAttribute PostRequest.SaveDTO requestDTO) {
