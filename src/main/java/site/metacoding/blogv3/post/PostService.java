@@ -102,12 +102,12 @@ public class PostService {
         return postLists;
     }
 
-//    public List<PostResponse.ListDTO> postList(Integer sessionUserId) {
-//        List<PostResponse.ListDTO> postLists = postRepo.findByPostList(sessionUserId);
-//        System.out.println("postLists = " + postLists);
-//
-//        return postLists;
-//    }
+    public List<PostResponse.ListDTO> postList(Integer sessionUserId) {
+        List<PostResponse.ListDTO> postLists = postRepo.findByPostList(sessionUserId);
+        System.out.println("postLists = " + postLists);
+
+        return postLists;
+    }
 
     public PostResponse.DetailDTO postDetail(Integer postId, User sessionUserId) {
 

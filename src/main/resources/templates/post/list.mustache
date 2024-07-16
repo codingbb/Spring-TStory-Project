@@ -21,22 +21,9 @@
     </div>
 
     <div class="my_post_list">
-
         <!--        append 할 부분 -->
         <div id="postList"></div>
 
-        <div class="my_paging d-flex justify-content-center align-items-center my_mb_lg_1">
-            <a class="my_atag_none my_mr_sm_1" href="/user/post?page=">
-                <i class="fa-solid fa-angle-left"></i>
-            </a>
-            <a class="my_atag_none" href="/user/post?page=">
-                <div class="my_paging_number_box my_mr_sm_1">
-                </div>
-            </a>
-            <a class="my_atag_none my_ml_sm_1" href="/user/post?page=">
-                <i class="fa-solid fa-angle-right"></i>
-            </a>
-        </div>
     </div>
 
 </div>
@@ -44,72 +31,93 @@
 
 <script>
 
-    alert("ffff");
-    console.log("ddddddddd");
-    //
-    // //     AJAX로 게시글 로드하기
-    // let page = 0;
-    //
-    // function pageLoad() {
-    //     console.log("실행됨");
-    //     alert("Ddd");
-    //
-    //     $.ajax({
-    //         // 쿼리스트링 형식으로
-    //         url: `/post/list?page=${page}`,
-    //         // 서버에서 보내준 데이터가 JSON 형식이라는 것을 알려줌
-    //         dataType: 'json'
-    //
-    //     }).done((res) => {
-    //         console.log("성공", res);
-    //         res.body.content.forEach((post) => {
-    //             let postItem = getPostItem(post);
-    //             $("#postList").append(postItem);
-    //         });
-    //
-    //     }).fail((res) => {
-    //         console.log("실패", res);
-    //     });
-    // }
-    //
-    // pageLoad()
-    //
-    // //
-    // // function getPostItem(post) {
-    // //     let item = `<div class="my_post_list_item">
-    // //             <div class="my_post_list_item_left">
-    // //                 <img src="/upload/${post.content.thumbnailFile}" width="170" height="190">
-    // //                 <!--                <div class="my_fakeimg"> </div>-->
-    // //             </div>
-    // //             <div class="my_post_list_item_right my_ellipsis">
-    // //                 <div class="my_text_title my_ellipsis">
-    // //                     ${post.content.title}
-    // //                 </div>
-    // //                 <div class="my_text_body_sm">
-    // //                     ${post.content.createdAt}
-    // //                 </div>
-    // //                 <div class="content-wrapper">
-    // //                     ${post.content.content}
-    // //                 </div>
-    // //                 <div class="my_mt_md_1">
-    // //                     <a href="/post/detail/{${post.content.postId}" class="my_success_btn">Read More</a>
-    // //                 </div>
-    // //             </div>
-    // //         </div>`
-    // //
-    // //     return item;
-    // //
-    // // }
-    //
-    //
-    // // text-overflow에서 이미지 제외
-    // $(".content-wrapper").each(function () {
-    //     let contentHtml = $(this).html();
-    //     contentHtml = contentHtml.replace(/<img[^>]+>/g, '');
-    //     contentHtml = contentHtml.replace(/<iframe[^>]+>/g, '');
-    //     $(this).html(contentHtml);
-    // });
-    // // text-overflow에서 이미지 제외
+    $(window).scroll(() => {
+        // let checkScroll = $(window).scrollTop() - ($(document).height() - $(window).height());
+        // console.log("checkScroll " + checkScroll);
+
+        let documentHeight = $(document).height();
+        let windowHeight = $(window).height();
+        let scrollTop = $(window).scrollTop();
+
+        let scrollPercentage = (scrollTop / (documentHeight - windowHeight)) * 100;
+        console.log("scrollPercentage " + scrollPercentage);
+
+        // 0일때 끝이다 -> 0과 가까운 값이다
+        if (scrollPercentage >= 80) {
+            page++;
+            pageLoad();
+        }
+
+    });
+
+    //    alert("ffff");
+    //    console.log("ddddddddd");
+
+    //     AJAX로 게시글 로드하기
+    let page = 0;
+
+    function pageLoad() {
+        // console.log("실행됨");
+        // alert("Ddd");
+
+        $.ajax({
+            // 쿼리스트링 형식으로
+            url: `/api/post/list?page=${page}`,
+            // 서버에서 보내준 데이터가 JSON 형식이라는 것을 알려줌
+            dataType: 'json'
+
+        }).done((res) => {
+            console.log("성공", res);
+            res.body.content.forEach((post) => {
+                let postItem = getPostItem(post);
+                $("#postList").append(postItem);
+            });
+
+        }).fail((res) => {
+            console.log("실패", res);
+        });
+    }
+
+    pageLoad();
+
+    // append시 해당 디자인 추가
+    function getPostItem(post) {
+        let item = `<div class="my_post_list_item">
+                <div class="my_post_list_item_left">
+                    <img src="/upload/${post.thumbnailFile}" width="170" height="190">
+                    <!--                <div class="my_fakeimg"> </div>-->
+                </div>
+                <div class="my_post_list_item_right my_ellipsis">
+                    <div class="my_text_title my_ellipsis">
+                        ${post.title}
+                    </div>
+                    <div class="my_text_body_sm">
+                        ${post.createdAt}
+                    </div>
+                    <div class="content-wrapper">
+                        ${post.content}
+                    </div>
+                    <div class="my_mt_md_1">
+                        <a href="/post/detail/${post.postId}" class="my_success_btn">Read More</a>
+                    </div>
+                </div>
+            </div>`
+
+        // text-overflow에서 이미지 제외
+        $(".content-wrapper").each(function () {
+            let contentHtml = $(this).html();
+            contentHtml = contentHtml.replace(/<img[^>]+>/g, '');
+            contentHtml = contentHtml.replace(/<iframe[^>]+>/g, '');
+            $(this).html(contentHtml);
+        });
+        // text-overflow에서 이미지 제외
+
+        return item;
+
+    }
+
+    // append시 해당 디자인 추가
+
 
 </script>
 

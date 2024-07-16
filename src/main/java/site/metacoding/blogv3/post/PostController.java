@@ -51,7 +51,7 @@ public class PostController {
         return "post/detail";
     }
 
-    @GetMapping("/post/list")
+    @GetMapping("/api/post/list")
     public ResponseEntity<?> postList(@PageableDefault(size = 5) Pageable pageable) {
         User user = (User) session.getAttribute("sessionUser");
         Page<PostResponse.ListDTO> listDTOs = postService.postList(user.getId(), pageable);
@@ -61,14 +61,14 @@ public class PostController {
         return ResponseEntity.ok(new ApiUtil<>(listDTOs));
     }
 
-//    @GetMapping("/post/list")
-//    public String postList(HttpServletRequest request) {
-//        User user = (User) session.getAttribute("sessionUser");
-//        List<PostResponse.ListDTO> listDTOs = postService.postList(user.getId());
-//
-//        request.setAttribute("model", listDTOs);
-//        return "post/list";
-//    }
+    @GetMapping("/post/list")
+    public String postList(HttpServletRequest request) {
+        User user = (User) session.getAttribute("sessionUser");
+        List<PostResponse.ListDTO> listDTOs = postService.postList(user.getId());
+
+        request.setAttribute("model", listDTOs);
+        return "post/list";
+    }
 
     @GetMapping("/post/write-form")
     public String postWriteForm(HttpServletRequest request) {
