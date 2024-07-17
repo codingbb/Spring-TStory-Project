@@ -64,74 +64,30 @@
         </div>
         <div class="list-group">
             <div id="replyList"></div>
-            <!--            여기 원래 머스태치들 -->
         </div>
         <!--       댓글 아이템  -->
     </div>
 
+    <!--        댓글 페이징-->
+    <br>
+    <div class="my_paging d-flex justify-content-center align-items-center my_mb_lg_1">
+<!--        애가 <<< -->
+        <a class="my_atag_none my_mr_sm_1" href="/">
+            <i class="fa-solid fa-angle-left"></i>
+        </a>
+<!--        애가 숫자 -->
+        <a class="my_atag_none" href="/">
+            <div class="my_paging_number_box my_mr_sm_1">
+            </div>
+        </a>
+<!--        애가 >>> -->
+        <a class="my_atag_none my_ml_sm_1" href="/">
+            <i class="fa-solid fa-angle-right"></i>
+        </a>
+    </div>
+    <!--        페이징 끝-->
+
     <br><br>
-
-    <script>
-
-    </script>
-
-
-    <script>
-        <!-- replyId 가져오기 -->
-        $(".replyUpdateBtn").click(function () {
-            let replyId = $(this).attr('id').replace('reply-', '');
-            console.log("reply " + replyId);
-
-            // 이전에 생성된 수정 폼 제거
-            $(`#newShowReplyUpdateForm-${replyId}`).remove();
-
-            let username = $("#username-" + replyId).data('username');
-            console.log("username " + username);
-
-            // let comment = $("#comment-" + replyId).data('reply');
-            let comment = $("#comment-" + replyId).text();
-            console.log("comment " + comment);
-
-            let postId = $("#postId").val();
-            console.log("postId " + postId);
-
-            let newElement = `<!--    댓글 수정 뷰 -->
-                        <form action="/reply/update/${replyId}" method="POST">
-                            <input type="hidden" name="postId" value="${postId}">
-                            <input type="hidden" name="userId" value="{{model.userId}}">
-                            <div id="newShowReplyUpdateForm-${replyId}" class="list-group-item justify-content-between align-items-center reply-wrapper">
-                                <div class="d-flex">
-                                    <div class="px-1 me-1 text-white rounded" style="margin-right: 10px; background-color: #1EB49F">
-                                        ${username}
-                                    </div>
-                                    <textarea class="form-control" rows="3" name="comment" id="reply-comment-${replyId}"
-                                         style="width: 100%; height: 80px;">${comment}</textarea>
-                                </div>
-                                <div class="d-flex justify-content-end" style="margin-top: 5px;">
-                                    <button class="btn-sm btn-success">완료</button>
-                                    <button class="btn-sm btn-danger replyUpdateCancelBtn" data-reply-id="${replyId}">취소</button>
-                                </div>
-                            </div>
-                        </form>
-                            <!--    댓글 수정 뷰 -->`;
-
-            $("#showReplyUpdateForm-" + replyId).hide();
-            $("#showReplyUpdateForm-" + replyId).after(newElement);
-
-
-        });
-
-        // 취소 버튼 클릭 시 수정 폼 숨기기
-        // replyUpdateCancelBtn가 동적으로 생성되기 때문에 바로 click 쓰면 안되고 on 사용해야함
-        $(document).on("click", ".replyUpdateCancelBtn", function () {
-            let replyId = $(this).data('reply-id');
-            console.log("리플리 아이디 " + replyId);
-
-            $("#showReplyUpdateForm-" + replyId).show();
-            $("#newShowReplyUpdateForm-" + replyId).remove();
-        });
-
-    </script>
 
 
     <!-- 댓글수정 -->
@@ -186,8 +142,9 @@
 
         // 댓글 페이징
         let page = 0;
+        let totalPages = 0;
 
-        pageLoad();
+        replyLoad();
 
         function getReplyItem(reply) {
             let isReplyOwner = reply.isReplyOwner; // 댓글 소유자 여부 확인
@@ -219,6 +176,101 @@
 
 
         // 댓글 페이징 끝
+
+        <!-- replyId 가져오기 -->
+        $(document).on('click', '.replyUpdateBtn', function() {
+            let replyId = $(this).attr('id').replace('reply-', '');
+            console.log("reply " + replyId);
+
+            // 이전에 생성된 수정 폼 제거
+            $(`#newShowReplyUpdateForm-${replyId}`).remove();
+
+            let username = $("#username-" + replyId).data('username');
+            console.log("username " + username);
+
+            // let comment = $("#comment-" + replyId).data('reply');
+            let comment = $("#comment-" + replyId).text();
+            console.log("comment " + comment);
+
+            let postId = $("#postId").val();
+            console.log("postId " + postId);
+
+            let newElement = `<!--    댓글 수정 뷰 -->
+                            <input id="userId" type="hidden" name="userId" value="{{model.userId}}">
+                            <div id="newShowReplyUpdateForm-${replyId}" class="list-group-item justify-content-between align-items-center reply-wrapper">
+                                <div class="d-flex">
+                                    <div class="px-1 me-1 text-white rounded" style="margin-right: 10px; background-color: #1EB49F">
+                                        ${username}
+                                    </div>
+                                    <textarea class="form-control" rows="3" name="comment" id="reply-comment-${replyId}"
+                                         style="width: 100%; height: 80px;">${comment}</textarea>
+                                </div>
+                                <div class="d-flex justify-content-end" style="margin-top: 5px;">
+                                    <button class="btn-sm btn-success replyUpdateCompleteBtn" data-reply-id="${replyId}">완료</button>
+                                    <button class="btn-sm btn-danger replyUpdateCancelBtn" data-reply-id="${replyId}">취소</button>
+                                </div>
+                            </div>
+                            <!--    댓글 수정 뷰 -->`;
+
+            $("#showReplyUpdateForm-" + replyId).hide();
+            $("#showReplyUpdateForm-" + replyId).after(newElement);
+
+        });
+
+        // reply update ajax 시작
+        $(document).on("click", ".replyUpdateCompleteBtn", function () {
+            let replyId = $(this).data('reply-id');
+            console.log("리플리 아이디 " + replyId);
+
+            let postId = $("#postId").val();
+            console.log("postId " + postId);
+
+            let userId = $("#userId").val();
+            console.log("userId " + userId);
+
+            let updateComment = $("#reply-comment-" + replyId).val();
+            console.log("updateComment " + updateComment);
+
+            let replyUpdateData = {
+                postId: postId,
+                userId: userId,
+                comment: updateComment
+            };
+
+
+            $.ajax({
+                url: '/reply/update/' + replyId,
+                data: JSON.stringify(replyUpdateData),
+                contentType: 'application/json; charset=utf-8',
+                type: 'POST'
+
+            }).done((res) => {
+                console.log("성공", res);
+                $("#newShowReplyUpdateForm-" + replyId).remove();
+                let reply = res.body;
+                let updateReplyItem = getReplyItem(reply);
+
+                // 기존 댓글 아이템을 새로 생성된 댓글 아이템으로 교체
+                $("#showReplyUpdateForm-" + replyId).replaceWith(updateReplyItem);
+
+            }).fail((res) => {
+                console.log("실패", res);
+            });
+
+        });
+
+
+        // 취소 버튼 클릭 시 수정 폼 숨기기
+        // replyUpdateCancelBtn가 동적으로 생성되기 때문에 바로 click 쓰면 안되고 on 사용해야함
+        $(document).on("click", ".replyUpdateCancelBtn", function () {
+            let replyId = $(this).data('reply-id');
+            console.log("리플리 아이디 " + replyId);
+
+            $("#showReplyUpdateForm-" + replyId).show();
+            $("#newShowReplyUpdateForm-" + replyId).remove();
+        });
+
+
 
         // 댓글 삭제 - 서버 사이드 랜더링
         $("#btn-delete").click(function (e) {
@@ -257,7 +309,7 @@
          // 댓글 삭제
 
         // 페이징 함수 따로 빼기
-        function pageLoad() {
+        function replyLoad() {
             // alert("dd");
             let postId = $("#postId").val(); // 현재 게시글의 ID 가져오기
 
@@ -270,16 +322,27 @@
             }).done((res) => {
                 console.log("성공", res);
 
+                // $("#replyList").empty();
+
                 res.body.content.forEach((reply) => {
                     let replyItem = getReplyItem(reply);
                     $("#replyList").append(replyItem);
                 });
+
+                totalPages = res.body.totalPages;
+                // console.log("totalPages " + totalPages);
+                page = res.body.number;
+                // console.log("page " + page);
 
             }).fail((res) => {
                 console.log("실패", res);
             });
         }
         // 페이징 함수 따로 빼기
+
+    </script>
+
+    <script>
 
     </script>
 

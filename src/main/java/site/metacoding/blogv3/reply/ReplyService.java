@@ -33,7 +33,7 @@ public class ReplyService {
 
 
     @Transactional
-    public void replyUpdate(User user, Integer replyId, ReplyRequest.UpdateDTO requestDTO) {
+    public ReplyResponse.UpdateDTO replyUpdate(User user, Integer replyId, ReplyRequest.UpdateDTO requestDTO) {
         Reply reply = replyRepo.findById(replyId).orElseThrow(() -> new RuntimeException("존재하지 않는 댓글입니다"));
         Post post = postRepo.findById(requestDTO.getPostId()).orElseThrow(()
                 -> new RuntimeException("게시글이 존재하지 않습니다."));
@@ -42,7 +42,11 @@ public class ReplyService {
             throw new RuntimeException("댓글 수정 권한이 없습니다");
         }
 
+
         reply.setComment(requestDTO.getComment());
+
+
+        return new ReplyResponse.UpdateDTO(reply, user);
 
     }
 

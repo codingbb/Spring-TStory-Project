@@ -36,12 +36,14 @@ public class ReplyController {
     }
 
     @PostMapping("/reply/update/{replyId}")
-    public String update(@PathVariable Integer replyId, ReplyRequest.UpdateDTO requestDTO) {
+    public ResponseEntity<?> update(@PathVariable Integer replyId, @RequestBody ReplyRequest.UpdateDTO requestDTO) {
         System.out.println("코멘트!! = " + requestDTO);
         User user = (User) session.getAttribute("sessionUser");
-        replyService.replyUpdate(user, replyId, requestDTO);
+        ReplyResponse.UpdateDTO reply = replyService.replyUpdate(user, replyId, requestDTO);
+        System.out.println("reply = " + reply);
 
-        return "redirect:/post/detail/" + requestDTO.getPostId();
+        return ResponseEntity.ok(new ApiUtil<>(reply));
+//        return "redirect:/post/detail/" + requestDTO.getPostId();
     }
 
     @PostMapping("/reply/save")
