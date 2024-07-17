@@ -12,7 +12,7 @@ VALUES ('cindy', '1234', 'cindy@nate.com', now());
 INSERT INTO user_tb (username, password, email, created_at)
 VALUES ('mango', '1234', 'mango@nate.com', now());
 INSERT INTO user_tb (username, password, email, created_at)
-VALUES ('kia1234', '1234', 'kia1234@nate.com', now());
+VALUES ('kia12', '1234', 'kia12@nate.com', now());
 -- 유저 더미 끝
 
 -- 카테고리 더미 (it도 넣기)
@@ -157,3 +157,12 @@ VALUES ('저도 여행 가고 싶어요! 너무 피곤하니까 힐링 여행~',
        ('고생하셨어요~~', 1, 5, NOW()),
        ('여름에 가셔서 고생하셨겠어요 ㅋㅋㅋㅋ 일본 여름은 진짜 덥던데', 5, 6, NOW()),
        ('일본여행!!!! 가까워서 좋지여ㅎ 대만은 가보셧나요ㅋ', 6, 6, NOW());
+
+INSERT INTO subscribe_tb (subscriber_id, target_id, created_at)
+VALUES (2, 1, NOW()),
+       (3, 1, NOW()),
+       (6, 1, NOW()),
+       (7, 1, NOW()),
+       (1, 2, NOW()),
+       (1, 4, NOW()),
+       (1, 3, NOW());
