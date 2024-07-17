@@ -172,10 +172,11 @@ public class PostService {
 //        게시글 부분
 
 //        댓글 부분
-        List<Reply> replies = replyRepo.findByPostId(postId);
+//        List<Reply> replies = replyRepo.findByPostId(postId);
 //        post.setReplyList(replies);
 
-        PostResponse.DetailDTO detailDTO = new PostResponse.DetailDTO(post, replies, sessionUser);
+//        PostResponse.DetailDTO detailDTO = new PostResponse.DetailDTO(post, replies, sessionUser);
+        PostResponse.DetailDTO detailDTO = new PostResponse.DetailDTO(post, sessionUser);
 
         return detailDTO;
 

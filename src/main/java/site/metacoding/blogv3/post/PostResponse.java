@@ -56,16 +56,16 @@ public class PostResponse {
         private String createdAt;
         private Boolean isPostOwner;
 
-        private List<ReplyDTO> replyDTOs;
+//        private List<ReplyDTO> replyDTOs;
 
-        public DetailDTO(Post post, List<Reply> replies, User sessionUser) {
+        public DetailDTO(Post post, User sessionUser) {
             this.postId = post.getId();
             this.title = post.getTitle();
             this.content = post.getContent();
             this.userId = post.getUser().getId();
             this.username = post.getUser().getUsername();
             this.createdAt = post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd (HH:mm)"));
-            this.replyDTOs = replies.stream().map(reply -> new ReplyDTO(reply, sessionUser)).toList();
+//            this.replyDTOs = replies.stream().map(reply -> new ReplyDTO(reply, sessionUser)).toList();
 
             isPostOwner = false;
             if (sessionUser != null) {
@@ -75,34 +75,34 @@ public class PostResponse {
             }
         }
 
-        @Data
-        public static class ReplyDTO {
-            private Integer userId;
-            private Integer replyId;
-            private Integer postId;
-            private String comment;
-            private String username;
-            private LocalDateTime createdAt;
-            private Boolean isReplyOwner;
-
-            public ReplyDTO(Reply reply, User sessionUser) {
-                this.userId = reply.getUser().getId();
-                this.replyId = reply.getId();
-                this.postId = reply.getPost().getId();
-                this.comment = reply.getComment();
-                this.username = reply.getUser().getUsername();
-                this.createdAt = reply.getCreatedAt();
-
-                isReplyOwner = false;
-                if (sessionUser != null) {
-                    if (sessionUser.getId() == reply.getUser().getId()) {
-                        isReplyOwner = true;
-                    }
-                }
-            }
-
-
-        }
+//        @Data
+//        public static class ReplyDTO {
+//            private Integer userId;
+//            private Integer replyId;
+//            private Integer postId;
+//            private String comment;
+//            private String username;
+//            private LocalDateTime createdAt;
+//            private Boolean isReplyOwner;
+//
+//            public ReplyDTO(Reply reply, User sessionUser) {
+//                this.userId = reply.getUser().getId();
+//                this.replyId = reply.getId();
+//                this.postId = reply.getPost().getId();
+//                this.comment = reply.getComment();
+//                this.username = reply.getUser().getUsername();
+//                this.createdAt = reply.getCreatedAt();
+//
+//                isReplyOwner = false;
+//                if (sessionUser != null) {
+//                    if (sessionUser.getId() == reply.getUser().getId()) {
+//                        isReplyOwner = true;
+//                    }
+//                }
+//            }
+//
+//
+//        }
 
     }
 
