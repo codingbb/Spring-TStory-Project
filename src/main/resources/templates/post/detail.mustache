@@ -75,7 +75,9 @@
                     {{#isReplyOwner}}
                         <div>
                             <button class="btn-sm btn-success replyUpdateBtn" id="reply-{{replyId}}">수정</button>
-                            <form action="/board/delete" method="post" class="d-inline-block">
+                            <form action="/reply/delete/{{replyId}}" method="post" class="d-inline-block">
+                                <input id="postId" type="hidden" name="postId" value="{{model.postId}}">
+                                <input type="hidden" name="userId" value="{{model.userId}}">
                                 <button class="btn">🗑</button>
                             </form>
                         </div>

@@ -39,4 +39,18 @@ public class ReplyService {
         reply.setComment(requestDTO.getComment());
 
     }
+
+    @Transactional
+    public void replyDelete(User user, Integer replyId, ReplyRequest.DeleteDTO requestDTO) {
+        Reply reply = replyRepo.findById(replyId).orElseThrow(() -> new RuntimeException("존재하지 않는 댓글입니다"));
+        Post post = postRepo.findById(requestDTO.getPostId()).orElseThrow(()
+                -> new RuntimeException("게시글이 존재하지 않습니다."));
+
+        if (user.getId() != requestDTO.getUserId()) {
+            throw new RuntimeException("댓글 삭제 권한이 없습니다");
+        }
+
+        replyRepo.deleteById(replyId);
+
+    }
 }
