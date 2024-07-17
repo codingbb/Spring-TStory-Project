@@ -1,11 +1,15 @@
 package site.metacoding.blogv3.reply;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import site.metacoding.blogv3._core.util.ApiUtil;
 import site.metacoding.blogv3.user.User;
 
 @RequiredArgsConstructor
@@ -14,6 +18,13 @@ public class ReplyController {
     private final ReplyService replyService;
     private final HttpSession session;
 
+    @GetMapping("/api/reply/list")
+    public ResponseEntity<?> replyList(@RequestParam Integer postId, @PageableDefault(size = 3) Pageable pageable) {
+        User user = (User) session.getAttribute("sessionUser");
+        Page<ReplyResponse.ListDTO> replies = replyService.replyList(user, postId, pageable);
+
+        return ResponseEntity.ok(new ApiUtil<>(replies));
+    }
 
     @PostMapping("/reply/delete/{replyId}")
     public String delete(@PathVariable Integer replyId, ReplyRequest.DeleteDTO requestDTO) {
@@ -23,7 +34,6 @@ public class ReplyController {
 
         return "redirect:/post/detail/" + requestDTO.getPostId();
     }
-
 
     @PostMapping("/reply/update/{replyId}")
     public String update(@PathVariable Integer replyId, ReplyRequest.UpdateDTO requestDTO) {
@@ -35,13 +45,12 @@ public class ReplyController {
     }
 
     @PostMapping("/reply/save")
-    public String save(ReplyRequest.SaveDTO requestDTO) {
+    public ResponseEntity<?> save(@RequestBody ReplyRequest.SaveDTO requestDTO) {
         System.out.println("requestDTO = " + requestDTO);
         User user = (User) session.getAttribute("sessionUser");
-        replyService.replySave(user.getId(), requestDTO);
-
+        ReplyResponse.SaveDTO reply = replyService.replySave(user.getId(), requestDTO);
 //        postid 붙여서 하기
-        return "redirect:/post/detail/" + requestDTO.getPostId();
+        return ResponseEntity.ok(new ApiUtil<>(reply));
     }
 
 }

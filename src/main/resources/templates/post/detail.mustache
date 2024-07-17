@@ -47,47 +47,122 @@
     <div class="card mt-3">
         <!-- 댓글등록 -->
         <div class="card-body">
-            <form action="/reply/save" method="post">
+<!--            <form action="/reply/save" method="post">-->
                 <input id="postId" type="hidden" name="postId" value="{{model.postId}}">
-                <textarea class="form-control" rows="2" name="comment"></textarea>
+                <textarea id="comment" class="form-control" rows="2" name="comment"></textarea>
                 <div class="d-flex justify-content-end">
-                    <button type="submit" class="btn btn-outline-success mt-1">댓글등록</button>
+                    <button type="button" class="btn btn-outline-success mt-1" onclick="replySave()">
+                        댓글등록</button>
                 </div>
-            </form>
+<!--            </form>-->
         </div>
+
+        <script>
+            function replySave() {
+                let comment = $("#comment").val();
+                console.log("commentSave " + comment);
+                let postId = $("#postId").val();
+                console.log("postId " + postId);
+
+                let commentSave = {
+                    comment: comment,
+                    postId: postId
+                };
+
+                $.ajax({
+                    url: '/reply/save',
+                    data: JSON.stringify(commentSave),
+                    contentType: 'application/json; charset=utf-8',
+                    type: 'POST'
+
+                }).done((res)=>{
+                    console.log("res = " + JSON.stringify(res));
+                    let reply = res.body;
+                    let replyItem = getReplyItem(reply);
+                    $("#replyList").prepend(replyItem);
+                    $("#comment").val('');
+
+                }).fail((res)=>{
+                    alert("오류");
+
+                });
+            }
+
+
+        </script>
 
         <!-- 댓글목록 -->
         <div class="card-footer">
             <b>댓글리스트</b>
         </div>
         <div class="list-group">
-            {{#model.replyDTOs}}
-                <!-- 댓글아이템 -->
-                <div id="showReplyUpdateForm-{{replyId}}"
-                     class="list-group-item d-flex justify-content-between align-items-center">
-                    <div class="d-flex">
-                        <div id="username-{{replyId}}" data-username = "{{username}}"
-                             class="px-1 me-1 text-white rounded" style="margin-right: 10px; background-color: #1EB49F">
-                            {{username}}
-                        </div>
-                        <div id="comment-{{replyId}}">{{comment}}</div>
-                    </div>
-                    {{#isReplyOwner}}
-                        <div>
-                            <button class="btn-sm btn-success replyUpdateBtn" id="reply-{{replyId}}">수정</button>
-                            <form action="/reply/delete/{{replyId}}" method="post" class="d-inline-block">
-                                <input id="postId" type="hidden" name="postId" value="{{model.postId}}">
-                                <input type="hidden" name="userId" value="{{model.userId}}">
-                                <button class="btn">🗑</button>
-                            </form>
-                        </div>
-                    {{/isReplyOwner}}
-                </div>
-            {{/model.replyDTOs}}
+            <div id="replyList"></div>
+<!--            여기 원래 머스태치들 -->
         </div>
+<!--       댓글 아이템  -->
     </div>
 
     <br><br>
+
+    <script>
+        let page = 0;
+
+        function pageLoad() {
+            // alert("dd");
+            let postId = $("#postId").val(); // 현재 게시글의 ID 가져오기
+
+            $.ajax({
+                // postId를 쿼리스트링 형식으로 보내버리면 해당하는 게시글에 있는 댓글만 나오게 할 수 있음
+                url: `/api/reply/list?postId=${postId}&page=${page}`,
+                // 서버에서 보내준 데이터가 JSON 형식이라는 것을 알려줌
+                dataType: 'json'
+
+            }).done((res) => {
+                console.log("성공", res);
+
+                res.body.content.forEach((reply) => {
+                    let replyItem = getReplyItem(reply);
+                    $("#replyList").append(replyItem);
+                });
+
+            }).fail((res) => {
+                console.log("실패", res);
+            });
+        }
+
+        pageLoad();
+
+
+        function getReplyItem(reply) {
+            let isReplyOwner = reply.isReplyOwner; // 댓글 소유자 여부 확인
+            let buttons = '';
+
+            if (isReplyOwner) {
+                buttons = `<div>
+                    <button class="btn-sm btn-success replyUpdateBtn" id="reply-${reply.id}">수정</button>
+                    <form action="/reply/delete/${reply.id}" method="post" class="d-inline-block">
+                        <input id="postId" type="hidden" name="postId" value="${reply.postId}">
+                        <input type="hidden" name="userId" value="${reply.userId}">
+                        <button class="btn">🗑</button>
+                    </form>
+                </div>`;
+            }
+
+            let item = `<div id="showReplyUpdateForm-${reply.id}" class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="d-flex">
+                            <div id="username-${reply.id}" data-username="${reply.username}" class="px-1 me-1 text-white rounded" style="margin-right: 10px; background-color: #1EB49F">
+                                ${reply.username}
+                            </div>
+                            <div id="comment-${reply.id}">${reply.comment}</div>
+                        </div>
+                            ${buttons}
+                        </div>`;
+
+                return item;
+        }
+
+    </script>
+
 
     <script>
         <!--        replyId 가져오기 -->

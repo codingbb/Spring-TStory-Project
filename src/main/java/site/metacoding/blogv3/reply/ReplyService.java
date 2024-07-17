@@ -1,12 +1,16 @@
 package site.metacoding.blogv3.reply;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.metacoding.blogv3.post.Post;
 import site.metacoding.blogv3.post.PostJPARepository;
 import site.metacoding.blogv3.user.User;
 import site.metacoding.blogv3.user.UserJPARepository;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -16,13 +20,15 @@ public class ReplyService {
     private final PostJPARepository postRepo;
 
     @Transactional
-    public void replySave(Integer sessionUserId, ReplyRequest.SaveDTO requestDTO) {
+    public ReplyResponse.SaveDTO replySave(Integer sessionUserId, ReplyRequest.SaveDTO requestDTO) {
         User sessionUser = userRepo.findById(sessionUserId)
                 .orElseThrow(() -> new RuntimeException("회원 정보가 존재하지 않습니다."));
         Post post = postRepo.findById(requestDTO.getPostId()).orElseThrow(()
                 -> new RuntimeException("게시글이 존재하지 않습니다."));
 
-        replyRepo.save(requestDTO.toEntity(sessionUser, post, requestDTO.getComment()));
+        Reply reply = replyRepo.save(requestDTO.toEntity(sessionUser, post, requestDTO.getComment()));
+
+        return new ReplyResponse.SaveDTO(sessionUser, reply);
     }
 
 
@@ -52,5 +58,16 @@ public class ReplyService {
 
         replyRepo.deleteById(replyId);
 
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ReplyResponse.ListDTO> replyList(User user, Integer postId, Pageable pageable) {
+        Page<ReplyResponse.ListDTO> replies = replyRepo.findAllReply(postId, pageable);
+
+        replies.forEach(reply -> {
+            reply.setIsReplyOwner(user != null && user.getId() == reply.getUserId());
+        });
+
+        return replies;
     }
 }
