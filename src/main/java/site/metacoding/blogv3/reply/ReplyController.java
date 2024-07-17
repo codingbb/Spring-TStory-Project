@@ -27,12 +27,13 @@ public class ReplyController {
     }
 
     @PostMapping("/reply/delete/{replyId}")
-    public String delete(@PathVariable Integer replyId, ReplyRequest.DeleteDTO requestDTO) {
+    public ResponseEntity<?> delete(@PathVariable Integer replyId, @RequestBody ReplyRequest.DeleteDTO requestDTO) {
         System.out.println("requestDTO = " + requestDTO);
         User user = (User) session.getAttribute("sessionUser");
         replyService.replyDelete(user, replyId, requestDTO);
 
-        return "redirect:/post/detail/" + requestDTO.getPostId();
+        return ResponseEntity.ok(new ApiUtil<>(true));
+//        return "redirect:/post/detail/" + requestDTO.getPostId();
     }
 
     @PostMapping("/reply/update/{replyId}")

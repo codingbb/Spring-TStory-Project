@@ -42,9 +42,7 @@ public class ReplyService {
             throw new RuntimeException("댓글 수정 권한이 없습니다");
         }
 
-
         reply.setComment(requestDTO.getComment());
-
 
         return new ReplyResponse.UpdateDTO(reply, user);
 

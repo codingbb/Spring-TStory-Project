@@ -89,29 +89,17 @@
 
     <br><br>
 
-
-    <!-- 댓글수정 -->
-    <!--    <div class="card mt-3" id="reply-update-form">-->
-    <!--        <div class="card-body">-->
-    <!--            <form action="/reply/update" method="post">-->
-    <!--                <input type="hidden" name="replyId" id="reply-id">-->
-    <!--                <textarea class="form-control" rows="2" name="comment" id="reply-comment"></textarea>-->
-    <!--                <div class="d-flex justify-content-end">-->
-    <!--                    <button type="submit" class="btn btn-outline-success mt-1">댓글수정</button>-->
-    <!--                </div>-->
-    <!--            </form>-->
-    <!--        </div>-->
-    <!--    </div>-->
-
-
-
     <script>
+<!--        게시글 id는 전역변수 -->
+        const postId = $("#postId").val();
+        console.log("postId 전역 = " + postId);
+
         <!--        댓글 작성 -->
         function replySave() {
             let comment = $("#comment").val();
             console.log("commentSave " + comment);
-            let postId = $("#postId").val();
-            console.log("postId " + postId);
+            // let postId = $("#postId").val();
+            // console.log("postId " + postId);
 
             let commentSave = {
                 comment: comment,
@@ -130,6 +118,7 @@
                 let replyItem = getReplyItem(reply);
                 $("#replyList").prepend(replyItem);
                 $("#comment").val('');
+                replyLoad();
 
             }).fail((res) => {
                 alert("오류");
@@ -146,6 +135,7 @@
 
         replyLoad();
 
+        // 댓글 csr으로 가져오기
         function getReplyItem(reply) {
             let isReplyOwner = reply.isReplyOwner; // 댓글 소유자 여부 확인
             let buttons = '';
@@ -153,11 +143,11 @@
             if (isReplyOwner) {
                 buttons = `<div>
                     <button class="btn-sm btn-success replyUpdateBtn" id="reply-${reply.id}">수정</button>
-                    <form action="/reply/delete/${reply.id}" method="post" class="d-inline-block">
+                    <div class="d-inline-block">
                         <input id="postId" type="hidden" name="postId" value="${reply.postId}">
-                        <input type="hidden" name="userId" value="${reply.userId}">
-                        <button class="btn">🗑</button>
-                    </form>
+                        <input type="hidden" id="userId" name="userId" value="${reply.userId}">
+                        <button class="btn replyDeleteBtn" data-reply-id="${reply.id}" onclick="replyDelete()">🗑</button>
+                    </div>
                 </div>`;
             }
 
@@ -173,11 +163,43 @@
 
             return item;
         }
-
-
         // 댓글 페이징 끝
 
-        <!-- replyId 가져오기 -->
+
+        // 댓글 csr 삭제
+        function replyDelete() {
+            let replyId = $(".replyDeleteBtn").data('reply-id');
+            console.log("replyId " + replyId);
+
+            let userId = $("#userId").val();
+            console.log("userId " + userId);
+
+            let replyDelete = {
+                userId: userId,
+                postId: postId
+            };
+
+            $.ajax({
+                url: '/reply/delete/' + replyId,
+                data: JSON.stringify(replyDelete),
+                contentType: 'application/json; charset=utf-8',
+                type: 'POST'
+
+            }).done((res) => {
+                console.log("성공", res);
+                $("#showReplyUpdateForm-" + replyId).remove();
+                replyLoad();
+
+            }).fail((res) => {
+                console.log("실패", res);
+            });
+        }
+
+        // 댓글 삭제
+
+
+
+        <!-- 댓글 수정 뷰 띄우기 -->
         $(document).on('click', '.replyUpdateBtn', function() {
             let replyId = $(this).attr('id').replace('reply-', '');
             console.log("reply " + replyId);
@@ -192,7 +214,7 @@
             let comment = $("#comment-" + replyId).text();
             console.log("comment " + comment);
 
-            let postId = $("#postId").val();
+            // let postId = $("#postId").val();
             console.log("postId " + postId);
 
             let newElement = `<!--    댓글 수정 뷰 -->
@@ -216,13 +238,15 @@
             $("#showReplyUpdateForm-" + replyId).after(newElement);
 
         });
+        // 댓글 수정 뷰 띄우기 끝
+
 
         // reply update ajax 시작
         $(document).on("click", ".replyUpdateCompleteBtn", function () {
             let replyId = $(this).data('reply-id');
             console.log("리플리 아이디 " + replyId);
 
-            let postId = $("#postId").val();
+            // let postId = $("#postId").val();
             console.log("postId " + postId);
 
             let userId = $("#userId").val();
@@ -271,8 +295,7 @@
         });
 
 
-
-        // 댓글 삭제 - 서버 사이드 랜더링
+        // 게시글 삭제
         $("#btn-delete").click(function (e) {
 
             Swal.fire({
@@ -306,12 +329,12 @@
                          }
                      });
               });
-         // 댓글 삭제
+         // 게시글 삭제
 
         // 페이징 함수 따로 빼기
         function replyLoad() {
             // alert("dd");
-            let postId = $("#postId").val(); // 현재 게시글의 ID 가져오기
+            // let postId = $("#postId").val(); // 현재 게시글의 ID 가져오기
 
             $.ajax({
                 // postId를 쿼리스트링 형식으로 보내버리면 해당하는 게시글에 있는 댓글만 나오게 할 수 있음
@@ -322,7 +345,7 @@
             }).done((res) => {
                 console.log("성공", res);
 
-                // $("#replyList").empty();
+                $("#replyList").empty();
 
                 res.body.content.forEach((reply) => {
                     let replyItem = getReplyItem(reply);
@@ -339,10 +362,6 @@
             });
         }
         // 페이징 함수 따로 빼기
-
-    </script>
-
-    <script>
 
     </script>
 
