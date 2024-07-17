@@ -32,6 +32,10 @@ public class ReplyService {
         Post post = postRepo.findById(requestDTO.getPostId()).orElseThrow(()
                 -> new RuntimeException("게시글이 존재하지 않습니다."));
 
+        if (user.getId() != requestDTO.getUserId()) {
+            throw new RuntimeException("댓글 수정 권한이 없습니다");
+        }
+
         reply.setComment(requestDTO.getComment());
 
     }

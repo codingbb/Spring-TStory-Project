@@ -9,6 +9,7 @@ public class ReplyRequest {
     @Data
     public static class UpdateDTO {
         private Integer postId;
+        private Integer userId;
         private String comment;
     }
 

@@ -66,6 +66,13 @@ public class PostResponse {
             this.username = post.getUser().getUsername();
             this.createdAt = post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd (HH:mm)"));
             this.replyDTOs = replies.stream().map(reply -> new ReplyDTO(reply, sessionUser)).toList();
+
+            isPostOwner = false;
+            if (sessionUser != null) {
+                if (sessionUser.getId() == post.getUser().getId()) {
+                    isPostOwner = true;
+                }
+            }
         }
 
         @Data

@@ -33,12 +33,12 @@
         </div>
     </div>
 
-    #model.isPostOwner}}
+    {{#model.isPostOwner}}
         <div class="my_mt_md_1">
             <a class="btn btn-outline-success" href="/post/update-form/{{model.postId}}">수정</a>
             <button id="btn-delete" class="btn btn-outline-danger">삭제</button>
         </div>
-    /model.isPostOwner}}
+    {{/model.isPostOwner}}
 
     <br/>
     <hr>
@@ -93,6 +93,9 @@
             let replyId = $(this).attr('id').replace('reply-', '');
             console.log("reply " + replyId);
 
+            // 이전에 생성된 수정 폼 제거
+            $(`#newShowReplyUpdateForm-${replyId}`).remove();
+
             let username = $("#username-" + replyId).data('username');
             console.log("username " + username);
 
@@ -106,6 +109,7 @@
             let newElement = `<!--    댓글 수정 뷰 -->
                         <form action="/reply/update/${replyId}" method="POST">
                             <input type="hidden" name="postId" value="${postId}">
+                            <input type="hidden" name="userId" value="{{model.userId}}">
                             <div id="newShowReplyUpdateForm-${replyId}" class="list-group-item justify-content-between align-items-center reply-wrapper">
                                 <div class="d-flex">
                                     <div class="px-1 me-1 text-white rounded" style="margin-right: 10px; background-color: #1EB49F">

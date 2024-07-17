@@ -169,14 +169,6 @@ public class PostService {
         Post post = postRepo.findById(postId)
                 .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
 //        System.out.println("postDetail = " + postDetail);
-
-        Boolean isPostOwner = false;
-        if (sessionUser != null) {
-            if (sessionUser.getId() == post.getUser().getId()) {
-                isPostOwner = true;
-            }
-        }
-        post.setIsPostOwner(isPostOwner);
 //        게시글 부분
 
 //        댓글 부분
