@@ -24,4 +24,15 @@ public class ReplyService {
 
         replyRepo.save(requestDTO.toEntity(sessionUser, post, requestDTO.getComment()));
     }
+
+
+    @Transactional
+    public void replyUpdate(User user, Integer replyId, ReplyRequest.UpdateDTO requestDTO) {
+        Reply reply = replyRepo.findById(replyId).orElseThrow(() -> new RuntimeException("존재하지 않는 댓글입니다"));
+        Post post = postRepo.findById(requestDTO.getPostId()).orElseThrow(()
+                -> new RuntimeException("게시글이 존재하지 않습니다."));
+
+        reply.setComment(requestDTO.getComment());
+
+    }
 }

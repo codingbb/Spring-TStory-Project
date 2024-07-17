@@ -7,6 +7,13 @@ import site.metacoding.blogv3.user.User;
 public class ReplyRequest {
 
     @Data
+    public static class UpdateDTO {
+        private Integer postId;
+        private String comment;
+    }
+
+
+    @Data
     public static class SaveDTO {
         private String comment;
         private Integer postId;

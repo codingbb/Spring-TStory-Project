@@ -33,12 +33,12 @@
         </div>
     </div>
 
-    {{#model.isPostOwner}}
+    #model.isPostOwner}}
         <div class="my_mt_md_1">
             <a class="btn btn-outline-success" href="/post/update-form/{{model.postId}}">수정</a>
             <button id="btn-delete" class="btn btn-outline-danger">삭제</button>
         </div>
-    {{/model.isPostOwner}}
+    /model.isPostOwner}}
 
     <br/>
     <hr>
@@ -48,7 +48,7 @@
         <!-- 댓글등록 -->
         <div class="card-body">
             <form action="/reply/save" method="post">
-                <input type="hidden" name="postId" value="{{model.postId}}">
+                <input id="postId" type="hidden" name="postId" value="{{model.postId}}">
                 <textarea class="form-control" rows="2" name="comment"></textarea>
                 <div class="d-flex justify-content-end">
                     <button type="submit" class="btn btn-outline-success mt-1">댓글등록</button>
@@ -63,9 +63,11 @@
         <div class="list-group">
             {{#model.replyDTOs}}
                 <!-- 댓글아이템 -->
-                <div id="showReplyUpdateForm-{{replyId}}" class="list-group-item d-flex justify-content-between align-items-center">
+                <div id="showReplyUpdateForm-{{replyId}}"
+                     class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="d-flex">
-                        <div class="px-1 me-1 text-white rounded" style="margin-right: 10px; background-color: #1EB49F">
+                        <div id="username-{{replyId}}" data-username = "{{username}}"
+                             class="px-1 me-1 text-white rounded" style="margin-right: 10px; background-color: #1EB49F">
                             {{username}}
                         </div>
                         <div id="comment-{{replyId}}">{{comment}}</div>
@@ -91,38 +93,50 @@
             let replyId = $(this).attr('id').replace('reply-', '');
             console.log("reply " + replyId);
 
+            let username = $("#username-" + replyId).data('username');
+            console.log("username " + username);
+
             // let comment = $("#comment-" + replyId).data('reply');
             let comment = $("#comment-" + replyId).text();
             console.log("comment " + comment);
 
+            let postId = $("#postId").val();
+            console.log("postId " + postId);
+
             let newElement = `<!--    댓글 수정 뷰 -->
+                        <form action="/reply/update/${replyId}" method="POST">
+                            <input type="hidden" name="postId" value="${postId}">
                             <div id="newShowReplyUpdateForm-${replyId}" class="list-group-item justify-content-between align-items-center reply-wrapper">
                                 <div class="d-flex">
                                     <div class="px-1 me-1 text-white rounded" style="margin-right: 10px; background-color: #1EB49F">
-                                        유저네임
+                                        ${username}
                                     </div>
                                     <textarea class="form-control" rows="3" name="comment" id="reply-comment-${replyId}"
                                          style="width: 100%; height: 80px;">${comment}</textarea>
                                 </div>
                                 <div class="d-flex justify-content-end" style="margin-top: 5px;">
-                                    <a class="btn-sm btn-success" href="/reply/update/${replyId}">수정</a>
+                                    <button class="btn-sm btn-success">완료</button>
                                     <button class="btn-sm btn-danger replyUpdateCancelBtn" data-reply-id="${replyId}">취소</button>
                                 </div>
                             </div>
+                        </form>
                             <!--    댓글 수정 뷰 -->`;
 
-            $("#showReplyUpdateForm-" + replyId).css('display', 'none');
-            $("#showReplyUpdateForm-" + replyId).html(newElement);
+            $("#showReplyUpdateForm-" + replyId).hide();
+            $("#showReplyUpdateForm-" + replyId).after(newElement);
 
 
         });
 
         // 취소 버튼 클릭 시 수정 폼 숨기기
-        $(document).on("click", ".replyUpdateCancelBtn", function() {
-            let replyId = $(this).data("reply-id");
-            $("#showReplyUpdateForm-" + replyId).toggle();
-        });
+        // replyUpdateCancelBtn가 동적으로 생성되기 때문에 바로 click 쓰면 안되고 on 사용해야함
+        $(document).on("click", ".replyUpdateCancelBtn", function () {
+            let replyId = $(this).data('reply-id');
+            console.log("리플리 아이디 " + replyId);
 
+            $("#showReplyUpdateForm-" + replyId).show();
+            $("#newShowReplyUpdateForm-" + replyId).remove();
+        });
 
     </script>
 
