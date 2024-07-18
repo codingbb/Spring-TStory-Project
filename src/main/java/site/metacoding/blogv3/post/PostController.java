@@ -108,10 +108,13 @@ public class PostController {
 
 
     //    유저들의 블로그 post list 보기
+    //  여기있는 userId랑 세션유저를 비교했을 때, 불일치하면 isBlogOwner false
     @GetMapping("/user/{userId}/post")
     public String userPost(@PathVariable Integer userId, HttpServletRequest request) {
-        List<PostResponse.UserBlogListDTO> postList = postService.userBlogList(userId);
-        System.out.println("postList = " + postList);
+//        System.out.println("userId = " + userId);
+        User user = (User) session.getAttribute("sessionUser");
+        PostResponse.UserBlogListDTO postList = postService.userBlogList(userId, user);
+//        System.out.println("postList = " + postList);
         request.setAttribute("model", postList);
 
         return "/post/list";

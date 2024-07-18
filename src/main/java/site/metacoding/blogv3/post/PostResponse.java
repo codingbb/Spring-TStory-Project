@@ -13,19 +13,37 @@ public class PostResponse {
 
     @Data
     public static class UserBlogListDTO {
-        private Integer postId;
-        private String thumbnailFile;
-        private String title;
-        private String content;
-        private String createdAt;
+        private List<PostDTO> postDTOs;
+        private Boolean isBlogOwner;
 
-        public UserBlogListDTO(Post post) {
-            this.postId = post.getId();
-            this.thumbnailFile = post.getThumbnailFile();
-            this.title = post.getTitle();
-            this.content = post.getContent();
-            this.createdAt = post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd (HH:mm)"));
+        public UserBlogListDTO(List<PostDTO> postDTOs, Integer userId, User user) {
+            this.postDTOs = postDTOs;
+            isBlogOwner = false;
+            if (user != null) {
+                if (userId.equals(user.getId())) {
+                    isBlogOwner = true;
+                }
+            }
         }
+
+        @Data
+        public static class PostDTO {
+            private Integer postId;
+            private String thumbnailFile;
+            private String title;
+            private String content;
+            private String createdAt;
+
+            public PostDTO(Post post) {
+                this.postId = post.getId();
+                this.thumbnailFile = post.getThumbnailFile();
+                this.title = post.getTitle();
+                this.content = post.getContent();
+                this.createdAt = post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd (HH:mm)"));
+            }
+        }
+
+
     }
 
 

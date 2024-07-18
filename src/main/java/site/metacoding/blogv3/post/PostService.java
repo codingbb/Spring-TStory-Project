@@ -193,10 +193,12 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public List<PostResponse.UserBlogListDTO> userBlogList(Integer userId) {
+    public PostResponse.UserBlogListDTO userBlogList(Integer userId, User user) {
         List<Post> postList = postRepo.findAllUserPostList(userId);
+        List<PostResponse.UserBlogListDTO.PostDTO> postDTOs = postList.stream().map(post ->
+                new PostResponse.UserBlogListDTO.PostDTO(post)).toList();
 
-        List<PostResponse.UserBlogListDTO> blogListDTOs = postList.stream().map(post -> new PostResponse.UserBlogListDTO(post)).toList();
+        PostResponse.UserBlogListDTO blogListDTOs = new PostResponse.UserBlogListDTO(postDTOs, userId, user);
 
         return blogListDTOs;
     }
