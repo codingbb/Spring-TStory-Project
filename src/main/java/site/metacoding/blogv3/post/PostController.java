@@ -102,6 +102,7 @@ public class PostController {
     public String postList(HttpServletRequest request) {
         User user = (User) session.getAttribute("sessionUser");
         PostResponse.ListDTO listDTOs = postService.postList(user);
+        System.out.println("listDTOs11111111 = " + listDTOs);
         request.setAttribute("model", listDTOs);
         return "post/list";
     }

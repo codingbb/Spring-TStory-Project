@@ -14,15 +14,20 @@
 
 <div class="container">
     <div class="d-flex justify-content-end my_mb_sm_1">
+        {{#sessionUser}}
+            <input type="hidden" name="userId" value="{{model.userId}}">
+        {{/sessionUser}}
         {{^model.isBlogOwner}}
-            <button class="btn-sm my_success_btn" style="width: 150px">구독하기</button>
-            <button class="btn-sm my_success_btn" style="width: 150px; background-color: #888888; display: none">
+            <button class="btn-sm my_success_btn subscribe" style="width: 150px">구독하기</button>
+            <button class="btn-sm my_success_btn subscribeCancel"
+                    style="width: 150px; background-color: #888888; display: none">
                 구독완료
             </button>
         {{/model.isBlogOwner}}
         {{#model.isBlogOwner}}
             <a href="/post/write-form" class="my_atag_none">
-                <div class="my_icon_rounded_btn d-flex justify-content-center align-items-center" style="background-color: #1EB49F;">
+                <div class="my_icon_rounded_btn d-flex justify-content-center align-items-center"
+                     style="background-color: #1EB49F;">
                     <i class="fa-solid fa-pencil" style="color:white;"></i></div>
             </a>
         {{/model.isBlogOwner}}

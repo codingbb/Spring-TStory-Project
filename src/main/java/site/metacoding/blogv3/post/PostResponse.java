@@ -15,9 +15,11 @@ public class PostResponse {
     public static class ListDTO {
         private List<PostDTO> postDTOs;
         private Boolean isBlogOwner;
+        private Integer userId;
 
         public ListDTO(List<PostDTO> postDTOs, User sessionUser) {
             this.postDTOs = postDTOs;
+            this.userId = sessionUser.getId();
             isBlogOwner = false;
             if (sessionUser != null) {
                 if (sessionUser.getId() == postDTOs.get(0).getUserId()) {
@@ -46,7 +48,7 @@ public class PostResponse {
                 this.createdAt = createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd (HH:mm)"));
             }
 
-//            기본용  
+//            기본용
             public PostDTO(Post post) {
                 this.postId = post.getId();
                 this.userId = post.getUser().getId();
@@ -63,6 +65,7 @@ public class PostResponse {
     public static class UserBlogListDTO {
         private List<PostDTO> postDTOs;
         private Boolean isBlogOwner;
+        private Integer userId;
 
         public UserBlogListDTO(List<PostDTO> postDTOs, Integer userId, User user) {
             this.postDTOs = postDTOs;
@@ -71,6 +74,7 @@ public class PostResponse {
                 if (userId.equals(user.getId())) {
                     isBlogOwner = true;
                 }
+                this.userId = user.getId();
             }
         }
 
