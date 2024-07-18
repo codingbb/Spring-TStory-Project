@@ -13,6 +13,20 @@
 .my_auth_form_box_link {
     display: flex;
     justify-content: space-between;
+    text-decoration-line: none;
+}
+
+.my_auth_form_box_link a {
+    text-decoration: none;
+    color: inherit;
+    font-weight: bold;
+}
+
+.my_auth_form_box_link a:hover {
+    text-decoration: none;
+    color: #1EB49F;
+    font-weight: bold;
+
 }
 
 .my_auth_form_box_title {

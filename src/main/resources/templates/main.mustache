@@ -16,7 +16,7 @@
     <div class="row">
         {{#model}}
             <div class="col-md-3 my-3">
-                <div class="card">
+                <div class="card card_item">
                     <a href="/post/detail/{{postId}}" class="my_atag_none">
                         <img src="/upload/{{thumbnailFile}}" class="card-img-top" style="width: 250px; height: 170px">
                         <div class="card-body content-wrapper">
@@ -32,7 +32,7 @@
                         </div>
                     </a>
                     <a href="/user/{{userId}}/post" class="my_atag_none">
-                        <div class="card-footer">
+                        <div class="card-footer card_footer_hover">
                             <span>by </span>
                             <b>{{username}}</b>
                         </div>

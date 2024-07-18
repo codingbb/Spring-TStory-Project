@@ -109,6 +109,10 @@
     margin: 5px 0;
 }
 
+.my_secondary_btn:hover {
+    background-color: #1EB49F;
+}
+
 .my_success_btn {
     display: flex;
     justify-content: center;
@@ -121,6 +125,12 @@
     background-color: rgb(30, 180, 159);
     color: white;
     margin: 5px 0;
+}
+
+.my_success_btn:hover {
+    text-decoration: none; /* 마우스 오버 시 링크 밑줄 제거 */
+    background-color: #148171;
+    color: white;
 }
 
 .my_active_btn {
@@ -151,6 +161,8 @@
     overflow:hidden;
     text-overflow:ellipsis;
 }
+
+
 
 @media (max-width : 420px) { 
     .my_post_list_item {

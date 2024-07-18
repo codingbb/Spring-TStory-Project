@@ -114,7 +114,7 @@ public class PostController {
 //        System.out.println("userId = " + userId);
         User user = (User) session.getAttribute("sessionUser");
         PostResponse.UserBlogListDTO postList = postService.userBlogList(userId, user);
-//        System.out.println("postList = " + postList);
+        System.out.println("postList = " + postList);
         request.setAttribute("model", postList);
 
         return "/post/list";
