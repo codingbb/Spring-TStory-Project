@@ -97,11 +97,11 @@ public class PostController {
         return ResponseEntity.ok(new ApiUtil<>(listDTOs));
     }
 
+//    로그인 한 유저가 자기 게시글을 볼때
     @GetMapping("/post/list")
     public String postList(HttpServletRequest request) {
         User user = (User) session.getAttribute("sessionUser");
-        List<PostResponse.ListDTO> listDTOs = postService.postList(user.getId());
-
+        List<PostResponse.ListDTO> listDTOs = postService.postList(user);
         request.setAttribute("model", listDTOs);
         return "post/list";
     }
@@ -109,14 +109,24 @@ public class PostController {
 
     //    유저들의 블로그 post list 보기
     @GetMapping("/user/{userId}/post")
-    public String userPost(@PathVariable Integer userId) {
+    public String userPost(@PathVariable Integer userId, HttpServletRequest request) {
         List<PostResponse.UserBlogListDTO> postList = postService.userBlogList(userId);
         System.out.println("postList = " + postList);
+        request.setAttribute("model", postList);
 
-//        return "redirect:/";
         return "/post/list";
 
     }
+
+    @GetMapping("/api/{userId}/post/list")
+    public ResponseEntity<?> userPost(@PageableDefault(size = 5) Pageable pageable, @PathVariable Integer userId) {
+        Page<PostResponse.ListDTO> listDTOs = postService.postList(userId, pageable);
+//        System.out.println("listDTOs = " + listDTOs);
+
+//        request.setAttribute("model", listDTOs);
+        return ResponseEntity.ok(new ApiUtil<>(listDTOs));
+    }
+
 
 
     @GetMapping("/post/write-form")

@@ -58,6 +58,13 @@
     //    alert("ffff");
     //    console.log("ddddddddd");
 
+
+    // 현재 URL에서 유저 아이디를 추출
+    const pathname = window.location.pathname;
+    const userIdMatch = pathname.match(/\/user\/(\d+)\/post/);
+    const userId = userIdMatch ? userIdMatch[1] : null;
+
+
     //     AJAX로 게시글 로드하기
     let page = 0;
 
@@ -65,22 +72,44 @@
         // console.log("실행됨");
         // alert("Ddd");
 
-        $.ajax({
-            // 쿼리스트링 형식으로
-            url: `/api/post/list?page=${page}`,
-            // 서버에서 보내준 데이터가 JSON 형식이라는 것을 알려줌
-            dataType: 'json'
+        if (userId != null) {
+            $.ajax({
+                // 쿼리스트링 형식으로
+                url: `/api/${userId}/post/list?page=${page}`,
+                // url: `/api/post/list?page=${page}`,
+                // 서버에서 보내준 데이터가 JSON 형식이라는 것을 알려줌
+                dataType: 'json'
 
-        }).done((res) => {
-            console.log("성공", res);
-            res.body.content.forEach((post) => {
-                let postItem = getPostItem(post);
-                $("#postList").append(postItem);
+            }).done((res) => {
+                console.log("성공", res);
+                res.body.content.forEach((post) => {
+                    let postItem = getPostItem(post);
+                    $("#postList").append(postItem);
+                });
+
+            }).fail((res) => {
+                console.log("실패", res);
             });
+        } else {
+            $.ajax({
+                // 쿼리스트링 형식으로
+                url: `/api/post/list?page=${page}`,
+                // 서버에서 보내준 데이터가 JSON 형식이라는 것을 알려줌
+                dataType: 'json'
 
-        }).fail((res) => {
-            console.log("실패", res);
-        });
+            }).done((res) => {
+                console.log("성공", res);
+                res.body.content.forEach((post) => {
+                    let postItem = getPostItem(post);
+                    $("#postList").append(postItem);
+                });
+
+            }).fail((res) => {
+                console.log("실패", res);
+            });
+        }
+
+
     }
 
     pageLoad();

@@ -147,7 +147,7 @@ public class PostService {
     }
 
 
-    // readOnly를 하면 DB에 반영을 하지 않게 되어 프로그램이 더 깔끔해진다
+    // readOnly를 하면 DB에 반영을 하지 않게 되어 프로그램이 더 깔끔해진다 (페이징)
     @Transactional(readOnly = true)
     public Page<PostResponse.ListDTO> postList(Integer sessionUserId, Pageable pageable) {
         Page<PostResponse.ListDTO> postLists = postRepo.findByPostList(sessionUserId, pageable);
@@ -156,8 +156,9 @@ public class PostService {
         return postLists;
     }
 
-    public List<PostResponse.ListDTO> postList(Integer sessionUserId) {
-        List<PostResponse.ListDTO> postLists = postRepo.findByPostList(sessionUserId);
+//    페이징 xx
+    public List<PostResponse.ListDTO> postList(User sessionUser) {
+        List<PostResponse.ListDTO> postLists = postRepo.findByPostList(sessionUser.getId());
 //        System.out.println("postLists = " + postLists);
 
         return postLists;
