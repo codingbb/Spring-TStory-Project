@@ -13,12 +13,17 @@ public class SubscribeController {
     private final SubscribeService subscribeService;
     private final HttpSession session;
 
-    @GetMapping("/sub/list")
+    @GetMapping("/sub/subscribers-list")
     public String list() {
 
-        return "/subscribe/subscribeList";
+        return "subscribe/subscribersList";
     }
 
+    @GetMapping("/sub/subscribe")
+    public String myList() {
+
+        return "subscribe/subscribeList";
+    }
 
     @PostMapping("/sub/save")
     public String save() {
