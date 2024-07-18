@@ -17,10 +17,13 @@ public class SubscribeService {
 
     }
 
-    public List<SubscribeResponse.ListDTO> subscribeList(User user) {
+    public SubscribeResponse.ListDTO subscribeList(User user) {
         List<Subscribe> subscribeList = subscribeRepo.findSubscribeList(user.getId());
-        List<SubscribeResponse.ListDTO> listDTOs = subscribeList.stream().map(subscribe
-                -> new SubscribeResponse.ListDTO(subscribe)).toList();
-        return listDTOs;
+        List<SubscribeResponse.ListDTO.SubDTO> listDTOs = subscribeList.stream().map(subscribe
+                -> new SubscribeResponse.ListDTO.SubDTO(subscribe)).toList();
+
+        SubscribeResponse.ListDTO listDTO = new SubscribeResponse.ListDTO(listDTOs);
+
+        return listDTO;
     }
 }

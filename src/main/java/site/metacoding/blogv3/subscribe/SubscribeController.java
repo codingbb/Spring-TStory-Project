@@ -27,7 +27,7 @@ public class SubscribeController {
     @GetMapping("/sub/subscribe")
     public String myList(HttpServletRequest request) {
         User user = (User) session.getAttribute("sessionUser");
-        List<SubscribeResponse.ListDTO> listDTOs = subscribeService.subscribeList(user);
+        SubscribeResponse.ListDTO listDTOs = subscribeService.subscribeList(user);
 //        System.out.println("listDTOs = " + listDTOs);
         request.setAttribute("model", listDTOs);
         return "subscribe/subscribeList";
