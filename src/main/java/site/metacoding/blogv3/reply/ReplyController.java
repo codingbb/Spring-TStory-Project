@@ -19,7 +19,7 @@ public class ReplyController {
     private final HttpSession session;
 
     @GetMapping("/api/reply/list")
-    public ResponseEntity<?> replyList(@RequestParam Integer postId, @PageableDefault(size = 3) Pageable pageable) {
+    public ResponseEntity<?> replyList(@RequestParam Integer postId, @PageableDefault(size = 5) Pageable pageable) {
         User user = (User) session.getAttribute("sessionUser");
         Page<ReplyResponse.ListDTO> replies = replyService.replyList(user, postId, pageable);
 

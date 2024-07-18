@@ -12,6 +12,24 @@ import java.util.List;
 public class PostResponse {
 
     @Data
+    public static class UserBlogListDTO {
+        private Integer postId;
+        private String thumbnailFile;
+        private String title;
+        private String content;
+        private String createdAt;
+
+        public UserBlogListDTO(Post post) {
+            this.postId = post.getId();
+            this.thumbnailFile = post.getThumbnailFile();
+            this.title = post.getTitle();
+            this.content = post.getContent();
+            this.createdAt = post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd (HH:mm)"));
+        }
+    }
+
+
+    @Data
     public static class IndexDTO {
         private Integer postId;
         private String title;

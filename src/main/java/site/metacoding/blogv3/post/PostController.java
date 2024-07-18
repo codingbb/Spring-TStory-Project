@@ -106,6 +106,19 @@ public class PostController {
         return "post/list";
     }
 
+
+    //    유저들의 블로그 post list 보기
+    @GetMapping("/user/{userId}/post")
+    public String userPost(@PathVariable Integer userId) {
+        List<PostResponse.UserBlogListDTO> postList = postService.userBlogList(userId);
+        System.out.println("postList = " + postList);
+
+//        return "redirect:/";
+        return "/post/list";
+
+    }
+
+
     @GetMapping("/post/write-form")
     public String postWriteForm(HttpServletRequest request) {
         User user = (User) session.getAttribute("sessionUser");

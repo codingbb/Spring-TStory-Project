@@ -190,4 +190,13 @@ public class PostService {
 
         return indexDTOs;
     }
+
+    @Transactional(readOnly = true)
+    public List<PostResponse.UserBlogListDTO> userBlogList(Integer userId) {
+        List<Post> postList = postRepo.findAllUserPostList(userId);
+
+        List<PostResponse.UserBlogListDTO> blogListDTOs = postList.stream().map(post -> new PostResponse.UserBlogListDTO(post)).toList();
+
+        return blogListDTOs;
+    }
 }
