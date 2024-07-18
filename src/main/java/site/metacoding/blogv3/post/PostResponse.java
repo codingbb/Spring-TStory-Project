@@ -36,6 +36,7 @@ public class PostResponse {
             private String content;
             private String createdAt;
 
+//            api용
             public PostDTO(Integer postId, Integer userId, String thumbnailFile, String title, String content, LocalDateTime createdAt) {
                 this.postId = postId;
                 this.userId = userId;
@@ -45,6 +46,7 @@ public class PostResponse {
                 this.createdAt = createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd (HH:mm)"));
             }
 
+//            기본용  
             public PostDTO(Post post) {
                 this.postId = post.getId();
                 this.userId = post.getUser().getId();

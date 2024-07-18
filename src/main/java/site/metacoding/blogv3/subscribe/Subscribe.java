@@ -1,6 +1,7 @@
 package site.metacoding.blogv3.subscribe;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -19,13 +20,20 @@ public class Subscribe {
 
     @JoinColumn(name = "subscriber_id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private User subscriber; // 구독하는 사용자
+    private User subscriber; // (남이 나를 구독 - 구독자)
 
-    @JoinColumn(name = "target_id")
+    @JoinColumn(name = "subscribe_id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private User target; // 구독 당하는 사람
+    private User user; // (내가 남을 구독)
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    @Builder
+    public Subscribe(Integer id, User subscriber, User user, LocalDateTime createdAt) {
+        this.id = id;
+        this.subscriber = subscriber;
+        this.user = user;
+        this.createdAt = createdAt;
+    }
 }
