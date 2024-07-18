@@ -11,10 +11,10 @@ import java.util.Optional;
 public interface PostJPARepository extends JpaRepository<Post, Integer> {
 
 
-    @Query("select new site.metacoding.blogv3.post.PostResponse$ListDTO(p.id, p.thumbnailFile, p.title, p.content, p.createdAt) " +
+    @Query("select new site.metacoding.blogv3.post.PostResponse$ListDTO$PostDTO(p.id, p.user.id, p.thumbnailFile, p.title, p.content, p.createdAt) " +
             "from Post p where p.user.id = :sessionUserId order by p.id desc")
     // 스프링이 알아서 페이징 처리를 해줌
-    Page<PostResponse.ListDTO> findByPostList(Integer sessionUserId, Pageable pageable);
+    Page<PostResponse.ListDTO.PostDTO> findByPostList(Integer sessionUserId, Pageable pageable);
 
     @Query("select new site.metacoding.blogv3.post.PostResponse$ListDTO(p.id, p.thumbnailFile, p.title, p.content, p.createdAt) " +
             "from Post p where p.user.id = :sessionUserId order by p.id desc")
@@ -29,4 +29,7 @@ public interface PostJPARepository extends JpaRepository<Post, Integer> {
 
     @Query("select p from Post p where p.user.id = :userId order by p.id desc")
     List<Post> findAllUserPostList(Integer userId);
+
+    @Query("select p from Post p where p.user.id = :sessionUserId order by p.id desc")
+    List<Post> findAllPostList(Integer sessionUserId);
 }

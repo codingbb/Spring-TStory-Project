@@ -149,19 +149,23 @@ public class PostService {
 
     // readOnly를 하면 DB에 반영을 하지 않게 되어 프로그램이 더 깔끔해진다 (페이징)
     @Transactional(readOnly = true)
-    public Page<PostResponse.ListDTO> postList(Integer sessionUserId, Pageable pageable) {
-        Page<PostResponse.ListDTO> postLists = postRepo.findByPostList(sessionUserId, pageable);
+    public Page<PostResponse.ListDTO.PostDTO> postList(Integer sessionUserId, Pageable pageable) {
+        Page<PostResponse.ListDTO.PostDTO> postLists = postRepo.findByPostList(sessionUserId, pageable);
 //        System.out.println("postLists = " + postLists);
 
         return postLists;
     }
 
 //    페이징 xx
-    public List<PostResponse.ListDTO> postList(User sessionUser) {
-        List<PostResponse.ListDTO> postLists = postRepo.findByPostList(sessionUser.getId());
-//        System.out.println("postLists = " + postLists);
+    public PostResponse.ListDTO postList(User sessionUser) {
+        List<Post> postList = postRepo.findAllPostList(sessionUser.getId());
+//        List<PostResponse.ListDTO> postLists = postRepo.findByPostList(sessionUser.getId());
+        List<PostResponse.ListDTO.PostDTO> postDTOs = postList.stream().map(post
+                -> new PostResponse.ListDTO.PostDTO(post)).toList();
 
-        return postLists;
+        PostResponse.ListDTO listDTO = new PostResponse.ListDTO(postDTOs, sessionUser);
+
+        return listDTO;
     }
 
     @Transactional(readOnly = true)
@@ -169,13 +173,6 @@ public class PostService {
 //        게시글 부분
         Post post = postRepo.findById(postId)
                 .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
-//        System.out.println("postDetail = " + postDetail);
-//        게시글 부분
-
-//        댓글 부분
-//        List<Reply> replies = replyRepo.findByPostId(postId);
-//        post.setReplyList(replies);
-
 //        PostResponse.DetailDTO detailDTO = new PostResponse.DetailDTO(post, replies, sessionUser);
         PostResponse.DetailDTO detailDTO = new PostResponse.DetailDTO(post, sessionUser);
 

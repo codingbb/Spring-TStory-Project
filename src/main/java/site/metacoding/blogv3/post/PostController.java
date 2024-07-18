@@ -90,7 +90,7 @@ public class PostController {
     @GetMapping("/api/post/list")
     public ResponseEntity<?> postList(@PageableDefault(size = 5) Pageable pageable) {
         User user = (User) session.getAttribute("sessionUser");
-        Page<PostResponse.ListDTO> listDTOs = postService.postList(user.getId(), pageable);
+        Page<PostResponse.ListDTO.PostDTO> listDTOs = postService.postList(user.getId(), pageable);
 //        System.out.println("listDTOs = " + listDTOs);
 
 //        request.setAttribute("model", listDTOs);
@@ -101,7 +101,7 @@ public class PostController {
     @GetMapping("/post/list")
     public String postList(HttpServletRequest request) {
         User user = (User) session.getAttribute("sessionUser");
-        List<PostResponse.ListDTO> listDTOs = postService.postList(user);
+        PostResponse.ListDTO listDTOs = postService.postList(user);
         request.setAttribute("model", listDTOs);
         return "post/list";
     }
@@ -123,7 +123,7 @@ public class PostController {
 
     @GetMapping("/api/{userId}/post/list")
     public ResponseEntity<?> userPost(@PageableDefault(size = 5) Pageable pageable, @PathVariable Integer userId) {
-        Page<PostResponse.ListDTO> listDTOs = postService.postList(userId, pageable);
+        Page<PostResponse.ListDTO.PostDTO> listDTOs = postService.postList(userId, pageable);
 //        System.out.println("listDTOs = " + listDTOs);
 
 //        request.setAttribute("model", listDTOs);

@@ -12,6 +12,52 @@ import java.util.List;
 public class PostResponse {
 
     @Data
+    public static class ListDTO {
+        private List<PostDTO> postDTOs;
+        private Boolean isBlogOwner;
+
+        public ListDTO(List<PostDTO> postDTOs, User sessionUser) {
+            this.postDTOs = postDTOs;
+            isBlogOwner = false;
+            if (sessionUser != null) {
+                if (sessionUser.getId() == postDTOs.get(0).getUserId()) {
+                    isBlogOwner = true;
+                }
+            }
+        }
+
+        @Data
+        public static class PostDTO {
+            //썸네일, 내용(flow건거), 제목, 생성날짜
+            private Integer postId;
+            private Integer userId;
+            private String thumbnailFile;
+            private String title;
+            private String content;
+            private String createdAt;
+
+            public PostDTO(Integer postId, Integer userId, String thumbnailFile, String title, String content, LocalDateTime createdAt) {
+                this.postId = postId;
+                this.userId = userId;
+                this.thumbnailFile = thumbnailFile;
+                this.title = title;
+                this.content = content;
+                this.createdAt = createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd (HH:mm)"));
+            }
+
+            public PostDTO(Post post) {
+                this.postId = post.getId();
+                this.userId = post.getUser().getId();
+                this.thumbnailFile = post.getThumbnailFile();
+                this.title = post.getTitle();
+                this.content = post.getContent();
+                this.createdAt = post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd (HH:mm)"));
+            }
+        }
+
+    }
+
+    @Data
     public static class UserBlogListDTO {
         private List<PostDTO> postDTOs;
         private Boolean isBlogOwner;
@@ -133,58 +179,7 @@ public class PostResponse {
                 }
             }
         }
-
-//        @Data
-//        public static class ReplyDTO {
-//            private Integer userId;
-//            private Integer replyId;
-//            private Integer postId;
-//            private String comment;
-//            private String username;
-//            private LocalDateTime createdAt;
-//            private Boolean isReplyOwner;
-//
-//            public ReplyDTO(Reply reply, User sessionUser) {
-//                this.userId = reply.getUser().getId();
-//                this.replyId = reply.getId();
-//                this.postId = reply.getPost().getId();
-//                this.comment = reply.getComment();
-//                this.username = reply.getUser().getUsername();
-//                this.createdAt = reply.getCreatedAt();
-//
-//                isReplyOwner = false;
-//                if (sessionUser != null) {
-//                    if (sessionUser.getId() == reply.getUser().getId()) {
-//                        isReplyOwner = true;
-//                    }
-//                }
-//            }
-//
-//
-//        }
-
     }
-
-
-    @Data
-    public static class ListDTO {
-        //썸네일, 내용(flow건거), 제목, 생성날짜
-        private Integer postId;
-        private String thumbnailFile;
-        private String title;
-        private String content;
-        private String createdAt;
-
-        public ListDTO(Integer postId, String thumbnailFile, String title, String content, LocalDateTime createdAt) {
-            this.postId = postId;
-            this.thumbnailFile = thumbnailFile;
-            this.title = title;
-            this.content = content;
-            this.createdAt = createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd (HH:mm)"));
-
-        }
-    }
-
 
     @Data
     public static class WriteFormDTO {
