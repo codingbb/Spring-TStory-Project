@@ -24,4 +24,6 @@ public interface PostJPARepository extends JpaRepository<Post, Integer> {
             "from Post p where p.id = :postId")
     Optional<PostResponse.DetailDTO> findByPostId(Integer postId);
 
+    @Query("select p from Post p ORDER BY rand() limit 8")
+    List<Post> findAllRandom();
 }

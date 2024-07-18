@@ -28,6 +28,13 @@ public class PostController {
     private final PostService postService;
     private final HttpSession session;
 
+    @GetMapping("/")
+    public String index(HttpServletRequest request) {
+        List<PostResponse.IndexDTO> postList = postService.indexPostAll();
+        request.setAttribute("model", postList);
+        return "main";
+    }
+
 
     @GetMapping("/post/update-form/{postId}")
     public String updateForm(@PathVariable Integer postId, HttpServletRequest request) {

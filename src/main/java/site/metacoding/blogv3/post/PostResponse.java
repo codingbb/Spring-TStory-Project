@@ -12,6 +12,29 @@ import java.util.List;
 public class PostResponse {
 
     @Data
+    public static class IndexDTO {
+        private Integer postId;
+        private String title;
+        private String content;
+        private String thumbnailFile;
+        private String createdAt;
+        private Integer userId;
+        private String username;
+
+        public IndexDTO(Post post) {
+            this.postId = post.getId();
+            this.title = post.getTitle();
+            this.content = post.getContent();
+            this.thumbnailFile = post.getThumbnailFile();
+            this.createdAt = post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd (HH:mm)"));
+            this.userId = post.getUser().getId();
+            this.username = post.getUser().getUsername();
+        }
+    }
+
+
+
+    @Data
     public static class UpdateFormDTO {
         //        게시글  //제목, 내용, 썸네일(유지), postId
         private Integer postId;

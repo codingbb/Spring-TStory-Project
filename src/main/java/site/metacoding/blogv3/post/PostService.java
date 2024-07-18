@@ -183,5 +183,11 @@ public class PostService {
     }
 
 
+    @Transactional(readOnly = true)
+    public List<PostResponse.IndexDTO> indexPostAll() {
+        List<Post> postList = postRepo.findAllRandom();
+        List<PostResponse.IndexDTO> indexDTOs = postList.stream().map(post -> new PostResponse.IndexDTO(post)).toList();
 
+        return indexDTOs;
+    }
 }
