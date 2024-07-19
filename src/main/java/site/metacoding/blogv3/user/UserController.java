@@ -86,13 +86,14 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(UserRequest.LoginDTO requestDTO) {
-//        System.out.println("requestDTO 1 = " + requestDTO);
+    public ResponseEntity<?> login(@RequestBody UserRequest.LoginDTO requestDTO) {
+        System.out.println("requestDTO 1 = " + requestDTO);
 
         User sessionUser = userService.login(requestDTO);
         session.setAttribute("sessionUser", sessionUser);
 
-        return "redirect:/";
+        return ResponseEntity.ok(new ApiUtil<>(sessionUser));
+//        return "redirect:/";
     }
 
     @GetMapping("/user/password-reset-form")

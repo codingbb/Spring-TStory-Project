@@ -97,6 +97,10 @@
 
     function subscribe() {
         if (sessionUserId === undefined) {
+            // 페이지 저장
+            localStorage.setItem("redirectAfterLogin", window.location.href);
+            console.log("redirectAfterLogin " + localStorage.getItem("redirectAfterLogin"));
+
             window.location.href = "/login-form";
             return;
         }

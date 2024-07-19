@@ -6,11 +6,11 @@
             <div class="my_auth_form_box_title d-flex justify-content-center">
                 <img src="/upload/newLogo.png" style="width: 250px; height: 100px">
             </div>
-            <form action="/login" method="POST">
-                <input class="my_auth_form_box_input" type="text" name="username" placeholder="유저네임" value="ssar" />
-                <input class="my_auth_form_box_input" type="password" name="password" placeholder="비밀번호" value="1234" />
-                <button type="submit" class="my_secondary_btn">로그인</button>
-            </form>
+<!--            <form action="/login" method="POST">-->
+                <input class="my_auth_form_box_input" type="text" id="username" name="username" placeholder="유저네임" value="ssar" />
+                <input class="my_auth_form_box_input" type="password" id="password" name="password" placeholder="비밀번호" value="1234" />
+                <button type="button" class="my_secondary_btn" onclick="handleLogin()">로그인</button>
+<!--            </form>-->
             <div class="my_auth_form_box_link">
                 <div><a href="/join-form">회원가입</a></div>
                 <div><a href="/user/password-reset-form">비밀번호 찾기</a></div>
@@ -19,5 +19,60 @@
     </div>
     <br />
 </div>
+
+<script>
+    function handleLogin() {
+
+        let redirectAfterLogin = localStorage.getItem("redirectAfterLogin");
+
+        let username = $("#username").val();
+        console.log("username " + username);
+        let password = $("#password").val();
+        console.log("password " + password);
+
+        let loginUser = {
+            username: username,
+            password: password
+        }
+
+        $.ajax({
+            url: '/login',
+            data: JSON.stringify(loginUser),
+            contentType: 'application/json; charset=utf-8',
+            type: 'POST'
+
+        }).done((res) => {
+            // alert("dd");
+            console.log("성공", res);
+
+            if (redirectAfterLogin) {
+                // alert("1111");
+                localStorage.removeItem("redirectAfterLogin");
+                window.location.href = redirectAfterLogin;
+
+            } else {
+                // alert("2222222");
+                window.location.href = "/";
+                // window.location.reload();
+            }
+
+        }).fail((res) => {
+            console.log("실패", res);
+            Swal.fire({
+                title: "아이디 혹은 비밀번호를 확인해주세요",
+                icon: "warning",
+                button: "확인"
+            });
+
+        });
+
+    }
+
+
+
+
+
+
+</script>
 
 {{>/layout/footer}}
