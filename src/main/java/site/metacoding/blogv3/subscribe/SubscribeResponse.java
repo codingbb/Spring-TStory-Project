@@ -16,14 +16,14 @@ public class SubscribeResponse {
 
         @Data
         public static class SubDTO {
-            private Integer userId;
+            private Integer toUser;
             private Integer subscribeId;    // 내가 구독
             private String username;
 
             public SubDTO(Subscribe subscribe) {
-                this.userId = subscribe.getSubscribe().getId();
+                this.toUser = subscribe.getToUser().getId();
                 this.subscribeId = subscribe.getId();
-                this.username = subscribe.getSubscribe().getUsername();
+                this.username = subscribe.getToUser().getUsername();
             }
         }
     }

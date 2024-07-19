@@ -194,7 +194,7 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public PostResponse.UserBlogListDTO userBlogList(Integer userId, User user) {
+    public PostResponse.UserBlogListDTO userBlogList(Integer userId, User sessionUser) {
         List<Post> postList = postRepo.findAllUserPostList(userId);
         List<PostResponse.UserBlogListDTO.PostDTO> postDTOs = postList.stream().map(post ->
                 new PostResponse.UserBlogListDTO.PostDTO(post)).toList();
@@ -202,9 +202,9 @@ public class PostService {
         boolean isSubCheck = false;
 //        System.out.println("isSubCheck 111111= " + isSubCheck);
 
-        if (user != null) {
+        if (sessionUser != null) {
             // true - 구독 중, false - 구독 x
-            Subscribe subscribe = subscribeRepo.existsBySubId(user.getId(), userId);
+            Subscribe subscribe = subscribeRepo.existsBySubId(sessionUser.getId(), userId);
             if (subscribe != null) {
                 isSubCheck = true;
             }
@@ -212,7 +212,7 @@ public class PostService {
 
 //        System.out.println("isSubCheck222222222 = " + isSubCheck);
 
-        PostResponse.UserBlogListDTO blogListDTOs = new PostResponse.UserBlogListDTO(postDTOs, userId, user, isSubCheck);
+        PostResponse.UserBlogListDTO blogListDTOs = new PostResponse.UserBlogListDTO(postDTOs, userId, sessionUser, isSubCheck);
 //        System.out.println("blogListDTOs 3333333 = " + blogListDTOs);
 
         return blogListDTOs;

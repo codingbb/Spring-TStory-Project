@@ -9,10 +9,10 @@ public class SubscribeRequest {
     public static class SaveDTO {
         private Integer subscribeId;    //구독하려는 블로그 주인
 
-        public Subscribe toEntity(User subscriberUser, User subscribeUser) {
+        public Subscribe toEntity(User fromUser, User toUser) {
             return Subscribe.builder()
-                    .subscriber(subscriberUser)
-                    .subscribe(subscribeUser)
+                    .fromUser(fromUser)
+                    .toUser(toUser)
                     .build();
         }
 

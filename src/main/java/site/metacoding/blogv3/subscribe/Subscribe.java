@@ -18,26 +18,22 @@ public class Subscribe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @JoinColumn(name = "subscriber_id")
+    @JoinColumn(name = "from_user_id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private User subscriber; // (구독자)
+    private User fromUser; // (구독자) - 세션
 
-    @JoinColumn(name = "subscribe_id")
+    @JoinColumn(name = "to_user_id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private User subscribe; // (구독)
+    private User toUser; // (구독)
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Transient
-    private boolean isSubCheck;
-
     @Builder
-    public Subscribe(Integer id, User subscriber, User subscribe, LocalDateTime createdAt, boolean isSubCheck) {
+    public Subscribe(Integer id, User fromUser, User toUser, LocalDateTime createdAt) {
         this.id = id;
-        this.subscriber = subscriber;
-        this.subscribe = subscribe;
+        this.fromUser = fromUser;
+        this.toUser = toUser;
         this.createdAt = createdAt;
-        this.isSubCheck = isSubCheck;
     }
 }

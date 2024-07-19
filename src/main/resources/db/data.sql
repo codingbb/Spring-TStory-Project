@@ -207,7 +207,7 @@ VALUES ('좋은 정보 감사합니다!', 3, 33, NOW()),
        ('만드느라 고생하셨겠네요 ~~~ ㅎㅎㅎ 초밥 정말 맛있어 보여요^^', 7, 19, NOW());
 
 
-INSERT INTO subscribe_tb (subscriber_id, subscribe_id, created_at)
+INSERT INTO subscribe_tb (from_user_id, to_user_id, created_at)
 VALUES (2, 1, NOW()),
        (3, 1, NOW()),
        (6, 1, NOW()),

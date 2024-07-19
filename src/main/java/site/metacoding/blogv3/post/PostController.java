@@ -113,8 +113,8 @@ public class PostController {
     @GetMapping("/user/{userId}/post")
     public String userPost(@PathVariable Integer userId, HttpServletRequest request) {
 //        System.out.println("userId = " + userId);
-        User user = (User) session.getAttribute("sessionUser");
-        PostResponse.UserBlogListDTO postList = postService.userBlogList(userId, user);
+        User sessionUser = (User) session.getAttribute("sessionUser");
+        PostResponse.UserBlogListDTO postList = postService.userBlogList(userId, sessionUser);
         System.out.println("postList = " + postList);
         request.setAttribute("model", postList);
 
