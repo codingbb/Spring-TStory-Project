@@ -160,6 +160,7 @@ public class PostService {
     }
 
     //    페이징 xx
+    @Transactional(readOnly = true)
     public PostResponse.ListDTO postList(User sessionUser) {
         List<Post> postList = postRepo.findAllPostList(sessionUser.getId());
 //        List<PostResponse.ListDTO> postLists = postRepo.findByPostList(sessionUser.getId());

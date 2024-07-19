@@ -16,10 +16,12 @@ public class PostResponse {
         private List<PostDTO> postDTOs;
         private Boolean isBlogOwner;
         private Integer userId;
+        private String username;
 
         public ListDTO(List<PostDTO> postDTOs, User sessionUser) {
             this.postDTOs = postDTOs;
             this.userId = sessionUser.getId();
+            this.username = sessionUser.getUsername();
             isBlogOwner = false;
             if (sessionUser != null) {
                 if (sessionUser.getId() == postDTOs.get(0).getUserId()) {
@@ -37,6 +39,7 @@ public class PostResponse {
             private String title;
             private String content;
             private String createdAt;
+            private String username;
 
 //            api용
             public PostDTO(Integer postId, Integer userId, String thumbnailFile, String title, String content, LocalDateTime createdAt) {
@@ -56,6 +59,7 @@ public class PostResponse {
                 this.title = post.getTitle();
                 this.content = post.getContent();
                 this.createdAt = post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd (HH:mm)"));
+                this.username = post.getUser().getUsername();
             }
         }
 
@@ -66,10 +70,12 @@ public class PostResponse {
         private List<PostDTO> postDTOs;
         private Boolean isBlogOwner;
         private Integer userId;
+        private String username;        //여기 추가 되어야함
         private boolean isSubCheck;
 
         public UserBlogListDTO(List<PostDTO> postDTOs, Integer userId, User user, boolean isSubCheck) {
             this.postDTOs = postDTOs;
+            this.username = postDTOs.getLast().getUsername();
             isBlogOwner = false;
             if (user != null) {
                 if (userId.equals(user.getId())) {
@@ -87,6 +93,7 @@ public class PostResponse {
             private String title;
             private String content;
             private String createdAt;
+            private String username;
 
             public PostDTO(Post post) {
                 this.postId = post.getId();
@@ -94,6 +101,7 @@ public class PostResponse {
                 this.title = post.getTitle();
                 this.content = post.getContent();
                 this.createdAt = post.getCreatedAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd (HH:mm)"));
+                this.username = post.getUser().getUsername();
             }
         }
 

@@ -25,6 +25,8 @@
 </style>
 
 <div class="container">
+    <p style="font-size: 35px"><b> {{model.username}}'s Blog</b></p>
+
     <div class="d-flex justify-content-end my_mb_sm_1">
         {{#sessionUser}}
             <input type="hidden" name="userId" value="{{model.userId}}">
@@ -230,7 +232,7 @@
                     <!--                <div class="my_fakeimg"> </div>-->
                 </div>
                 <div class="my_post_list_item_right my_ellipsis">
-                    <div class="my_text_title my_ellipsis">
+                    <div class="my_text_title my_ellipsis" style="font-size: 25px">
                         ${post.title}
                     </div>
                     <div class="my_text_body_sm">
