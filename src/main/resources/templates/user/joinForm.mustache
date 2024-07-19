@@ -3,11 +3,22 @@
 <head>
     <link rel="stylesheet" href="/css/join-form.css">
 </head>
+<style>
+    .btn-outline-info {
+        border: 1px solid #1EB49F;
+        color: #1EB49F;
+    }
+    .btn-outline-info:hover {
+        background-color: #1EB49F;
+    }
+</style>
 
 <div class="container">
     <div class="my_auth_box">
         <div class="my_auth_form_box">
-            <div class="my_auth_form_box_title">JStory</div>
+            <div class="my_auth_form_box_title d-flex justify-content-center">
+                <img src="/upload/newLogo.png" style="width: 250px; height: 100px">
+            </div>
             <div class="my_error_box my_hidden">
 
             </div>
@@ -29,7 +40,7 @@
                     <input class="my_auth_form_box_input" id="email" type="email" name="email" placeholder="이메일"
                            maxlength="60"
                            value="codingstory2@gmail.com" required/>
-                    <button class="btn btn-outline-success btn-sm" type="button" id="emailAuthButton">인증하기</button>
+                    <button class="btn btn-outline-info btn-sm" type="button" id="emailAuthButton">인증하기</button>
                 </div>
 
                 <button type="submit" id="joinBtn" class="my_secondary_btn">회원가입</button>
