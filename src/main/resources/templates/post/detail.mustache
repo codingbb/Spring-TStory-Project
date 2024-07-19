@@ -1,7 +1,9 @@
 {{>/layout/main-header}}
 
 <style>
-
+.btn-outline-info:hover {
+    background-color: #1EB49F;
+}
 </style>
 
 <div class="container">
@@ -35,7 +37,7 @@
 
     {{#model.isPostOwner}}
         <div class="my_mt_md_1">
-            <a class="btn btn-outline-success" href="/post/update-form/{{model.postId}}">수정</a>
+            <a class="btn btn-outline-info" href="/post/update-form/{{model.postId}}">수정</a>
             <button id="btn-delete" class="btn btn-outline-danger">삭제</button>
         </div>
     {{/model.isPostOwner}}
@@ -51,7 +53,7 @@
             <input id="postId" type="hidden" name="postId" value="{{model.postId}}">
             <textarea id="comment" class="form-control" rows="2" name="comment"></textarea>
             <div class="d-flex justify-content-end">
-                <button type="button" class="btn btn-outline-success mt-1" onclick="replySave()">
+                <button type="button" class="btn btn-outline-info mt-1" onclick="replySave()">
                     댓글등록
                 </button>
             </div>
@@ -142,7 +144,7 @@
 
             if (isReplyOwner) {
                 buttons = `<div>
-                    <button class="btn-sm btn-success replyUpdateBtn" id="reply-${reply.id}">수정</button>
+                    <button class="btn-sm btn-info replyUpdateBtn" id="reply-${reply.id}">수정</button>
                     <div class="d-inline-block">
                         <input id="postId" type="hidden" name="postId" value="${reply.postId}">
                         <input type="hidden" id="userId" name="userId" value="${reply.userId}">

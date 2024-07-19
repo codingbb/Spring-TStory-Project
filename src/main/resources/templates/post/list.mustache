@@ -14,6 +14,14 @@
         display: none;
     }
 
+    .subscribeCancel {
+        background-color: #888888;
+    }
+
+    .subscribeCancel:hover {
+        background-color: #636262;
+    }
+
 </style>
 
 <div class="container">
@@ -30,8 +38,8 @@
             {{/model.isSubCheck}}
             {{#model.isSubCheck}}
                 <button class="btn-sm my_success_btn subscribeCancel"
-                        style="width: 150px; background-color: #888888" onclick="subscribeCancel()">
-                    구독완료
+                        style="width: 150px;" onclick="subscribeCancel()">
+                    구독취소
                 </button>
             {{/model.isSubCheck}}
         {{/model.isBlogOwner}}
@@ -154,23 +162,6 @@
 
     }
 
-    function hiddenSubBtn() {
-        $(".subscribe").addClass("displayNone");
-    }
-
-    function hiddenCancelSubBtn() {
-        $(".subscribeCancel").addClass("displayNone");
-    }
-
-    function showSubBtn() {
-        $(".subscribe").removeClass("displayNone");
-    }
-
-    function showCancelSubBtn() {
-        $(".subscribeCancel").removeClass("displayNone");
-    }
-
-
     //     AJAX로 게시글 로드하기
     let page = 0;
 
@@ -257,6 +248,23 @@
     }
 
     // append시 해당 디자인 추가
+
+
+    function hiddenSubBtn() {
+        $(".subscribe").addClass("displayNone");
+    }
+
+    function hiddenCancelSubBtn() {
+        $(".subscribeCancel").addClass("displayNone");
+    }
+
+    function showSubBtn() {
+        $(".subscribe").removeClass("displayNone");
+    }
+
+    function showCancelSubBtn() {
+        $(".subscribeCancel").removeClass("displayNone");
+    }
 
 
 </script>
