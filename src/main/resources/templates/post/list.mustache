@@ -91,9 +91,16 @@
     const pathname = window.location.pathname;
     const userIdMatch = pathname.match(/\/user\/(\d+)\/post/);
     const userId = userIdMatch ? userIdMatch[1] : null;
+    const sessionUserId = $("#userId").val();
+    console.log("sessionUserId " + sessionUserId);
 
 
     function subscribe() {
+        if (sessionUserId === undefined) {
+            window.location.href = "/login-form";
+            return;
+        }
+
         let subscribeSave = {
             subscribeId: userId
         }
