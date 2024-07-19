@@ -10,6 +10,10 @@
         text-overflow: ellipsis;
     }
 
+    .displayNone {
+        display: none;
+    }
+
 </style>
 
 <div class="container">
@@ -17,13 +21,21 @@
         {{#sessionUser}}
             <input type="hidden" name="userId" value="{{model.userId}}">
         {{/sessionUser}}
+
         {{^model.isBlogOwner}}
-            <button class="btn-sm my_success_btn subscribe" style="width: 150px">구독하기</button>
-            <button class="btn-sm my_success_btn subscribeCancel"
-                    style="width: 150px; background-color: #888888; display: none">
-                구독완료
-            </button>
+            {{^model.isSubCheck}}
+                <button class="btn-sm my_success_btn subscribe" style="width: 150px" onclick="subscribe()">
+                    구독하기
+                </button>
+            {{/model.isSubCheck}}
+            {{#model.isSubCheck}}
+                <button class="btn-sm my_success_btn subscribeCancel"
+                        style="width: 150px; background-color: #888888" onclick="subscribeCancel()">
+                    구독완료
+                </button>
+            {{/model.isSubCheck}}
         {{/model.isBlogOwner}}
+
         {{#model.isBlogOwner}}
             <a href="/post/write-form" class="my_atag_none">
                 <div class="my_icon_rounded_btn d-flex justify-content-center align-items-center"
@@ -71,6 +83,92 @@
     const pathname = window.location.pathname;
     const userIdMatch = pathname.match(/\/user\/(\d+)\/post/);
     const userId = userIdMatch ? userIdMatch[1] : null;
+
+
+    function subscribe() {
+        let subscribeSave = {
+            subscribeId: userId
+        }
+        console.log(JSON.stringify(subscribeSave));
+
+        $.ajax({
+            url: '/sub/save',
+            data: JSON.stringify(subscribeSave),
+            contentType: 'application/json; charset=utf-8',
+            type: 'POST'
+
+        }).done((res) => {
+            // alert("gg");
+            // console.log("성공", res);
+            Swal.fire({
+                title: "구독 완료",
+                icon: "success",
+                button: "확인"
+
+            }).then(() => {
+                hiddenSubBtn();
+                showCancelSubBtn();
+                // window.location.href = "/user/" + userId + "/post";
+
+            });
+
+        }).fail((res) => {
+            console.log("실패", res);
+
+        });
+
+    }
+
+
+    function subscribeCancel() {
+        let subscribeSave = {
+            subscribeId: userId
+        }
+        console.log(JSON.stringify(subscribeSave));
+
+        $.ajax({
+            url: '/sub/cancel',
+            data: JSON.stringify(subscribeSave),
+            contentType: 'application/json; charset=utf-8',
+            type: 'POST'
+
+        }).done((res) => {
+            // alert("gg");
+            // console.log("성공", res);
+            Swal.fire({
+                title: "구독 취소 완료",
+                icon: "success",
+                button: "확인"
+
+            }).then(() => {
+                hiddenCancelSubBtn();
+                showSubBtn();
+                // window.location.href = "/user/" + userId + "/post";
+
+            });
+
+        }).fail((res) => {
+            console.log("실패", res);
+
+        });
+
+    }
+
+    function hiddenSubBtn() {
+        $(".subscribe").addClass("displayNone");
+    }
+
+    function hiddenCancelSubBtn() {
+        $(".subscribeCancel").addClass("displayNone");
+    }
+
+    function showSubBtn() {
+        $(".subscribe").removeClass("displayNone");
+    }
+
+    function showCancelSubBtn() {
+        $(".subscribeCancel").removeClass("displayNone");
+    }
 
 
     //     AJAX로 게시글 로드하기

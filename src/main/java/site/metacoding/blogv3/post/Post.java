@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import site.metacoding.blogv3._core.util.ImageUtil;
 import site.metacoding.blogv3.category.Category;
-import site.metacoding.blogv3.image.Image;
 import site.metacoding.blogv3.reply.Reply;
 import site.metacoding.blogv3.user.User;
 

@@ -21,9 +21,9 @@ public class SubscribeResponse {
             private String username;
 
             public SubDTO(Subscribe subscribe) {
-                this.userId = subscribe.getUser().getId();
+                this.userId = subscribe.getSubscribe().getId();
                 this.subscribeId = subscribe.getId();
-                this.username = subscribe.getUser().getUsername();
+                this.username = subscribe.getSubscribe().getUsername();
             }
         }
     }

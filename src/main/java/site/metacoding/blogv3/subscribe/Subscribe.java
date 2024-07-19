@@ -20,20 +20,24 @@ public class Subscribe {
 
     @JoinColumn(name = "subscriber_id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private User subscriber; // (남이 나를 구독 - 구독자)
+    private User subscriber; // (구독자)
 
     @JoinColumn(name = "subscribe_id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private User user; // (내가 남을 구독)
+    private User subscribe; // (구독)
 
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    @Transient
+    private boolean isSubCheck;
+
     @Builder
-    public Subscribe(Integer id, User subscriber, User user, LocalDateTime createdAt) {
+    public Subscribe(Integer id, User subscriber, User subscribe, LocalDateTime createdAt, boolean isSubCheck) {
         this.id = id;
         this.subscriber = subscriber;
-        this.user = user;
+        this.subscribe = subscribe;
         this.createdAt = createdAt;
+        this.isSubCheck = isSubCheck;
     }
 }

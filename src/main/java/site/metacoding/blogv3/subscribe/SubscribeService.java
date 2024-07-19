@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.metacoding.blogv3.user.User;
+import site.metacoding.blogv3.user.UserJPARepository;
 
 import java.util.List;
 
@@ -11,9 +12,27 @@ import java.util.List;
 @Service
 public class SubscribeService {
     private final SubscribeJPARepository subscribeRepo;
+    private final UserJPARepository userRepo;
+
 
     @Transactional
-    public void save() {
+    public void cancel(User sessionUser, SubscribeRequest.SaveDTO requestDTO) {
+        User user = userRepo.findById(requestDTO.getSubscribeId())
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 블로그입니다."));
+
+        subscribeRepo.deleteSubscribe(sessionUser.getId(), requestDTO.getSubscribeId());
+
+    }
+
+    @Transactional
+    public void save(User sessionUser, SubscribeRequest.SaveDTO requestDTO) {
+        User user = userRepo.findById(requestDTO.getSubscribeId())
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 블로그입니다."));
+
+        // 구독하려는 사람(구독자), 구독대상자
+//        subscribeRepo.existsBySubId(sessionUser.getId(), requestDTO.getSubscribeId());
+
+        subscribeRepo.save(requestDTO.toEntity(sessionUser, user));
 
     }
 
@@ -26,4 +45,5 @@ public class SubscribeService {
 
         return listDTO;
     }
+
 }

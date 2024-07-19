@@ -66,8 +66,9 @@ public class PostResponse {
         private List<PostDTO> postDTOs;
         private Boolean isBlogOwner;
         private Integer userId;
+        private boolean isSubCheck;
 
-        public UserBlogListDTO(List<PostDTO> postDTOs, Integer userId, User user) {
+        public UserBlogListDTO(List<PostDTO> postDTOs, Integer userId, User user, boolean isSubCheck) {
             this.postDTOs = postDTOs;
             isBlogOwner = false;
             if (user != null) {
@@ -75,6 +76,7 @@ public class PostResponse {
                     isBlogOwner = true;
                 }
                 this.userId = user.getId();
+                this.isSubCheck = isSubCheck;
             }
         }
 

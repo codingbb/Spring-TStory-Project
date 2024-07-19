@@ -14,6 +14,8 @@ import site.metacoding.blogv3.category.CategoryJPARepository;
 import site.metacoding.blogv3.category.CategoryResponse;
 import site.metacoding.blogv3.reply.Reply;
 import site.metacoding.blogv3.reply.ReplyJPARepository;
+import site.metacoding.blogv3.subscribe.Subscribe;
+import site.metacoding.blogv3.subscribe.SubscribeJPARepository;
 import site.metacoding.blogv3.user.User;
 import site.metacoding.blogv3.user.UserJPARepository;
 
@@ -29,6 +31,7 @@ public class PostService {
     private final CategoryJPARepository categoryRepo;
     private final UserJPARepository userRepo;
     private final ReplyJPARepository replyRepo;
+    private final SubscribeJPARepository subscribeRepo;
 
     @Transactional
     public void postUpdate(Integer postId, Integer sessionUserId, PostRequest.UpdateDTO requestDTO) {
@@ -63,7 +66,7 @@ public class PostService {
         PostResponse.UpdateFormDTO updateFormDTO = new PostResponse.UpdateFormDTO(post, categoryNameDTOS);
 //        System.out.println("updateFormDTO = " + updateFormDTO);
 
-    return updateFormDTO;
+        return updateFormDTO;
 
     }
 
@@ -156,7 +159,7 @@ public class PostService {
         return postLists;
     }
 
-//    페이징 xx
+    //    페이징 xx
     public PostResponse.ListDTO postList(User sessionUser) {
         List<Post> postList = postRepo.findAllPostList(sessionUser.getId());
 //        List<PostResponse.ListDTO> postLists = postRepo.findByPostList(sessionUser.getId());
@@ -195,7 +198,21 @@ public class PostService {
         List<PostResponse.UserBlogListDTO.PostDTO> postDTOs = postList.stream().map(post ->
                 new PostResponse.UserBlogListDTO.PostDTO(post)).toList();
 
-        PostResponse.UserBlogListDTO blogListDTOs = new PostResponse.UserBlogListDTO(postDTOs, userId, user);
+        boolean isSubCheck = false;
+//        System.out.println("isSubCheck 111111= " + isSubCheck);
+
+        if (user != null) {
+            // true - 구독 중, false - 구독 x
+            Subscribe subscribe = subscribeRepo.existsBySubId(user.getId(), userId);
+            if (subscribe != null) {
+                isSubCheck = true;
+            }
+        }
+
+//        System.out.println("isSubCheck222222222 = " + isSubCheck);
+
+        PostResponse.UserBlogListDTO blogListDTOs = new PostResponse.UserBlogListDTO(postDTOs, userId, user, isSubCheck);
+//        System.out.println("blogListDTOs 3333333 = " + blogListDTOs);
 
         return blogListDTOs;
     }
