@@ -17,12 +17,12 @@ public class SubscribeResponse {
         @Data
         public static class SubDTO {
             private Integer toUser;
-            private Integer subscribeId;    // pk
+            private Integer fromUser;    // pk
             private String username;
 
             public SubDTO(Subscribe subscribe) {
                 this.toUser = subscribe.getToUser().getId();
-                this.subscribeId = subscribe.getId();
+                this.fromUser = subscribe.getFromUser().getId();
                 this.username = subscribe.getToUser().getUsername();
             }
         }
