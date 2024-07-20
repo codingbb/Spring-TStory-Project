@@ -152,8 +152,8 @@ public class PostService {
 
     // readOnly를 하면 DB에 반영을 하지 않게 되어 프로그램이 더 깔끔해진다 (페이징)
     @Transactional(readOnly = true)
-    public Page<PostResponse.ListDTO.PostDTO> postList(Integer sessionUserId, Pageable pageable) {
-        Page<PostResponse.ListDTO.PostDTO> postLists = postRepo.findByPostList(sessionUserId, pageable);
+    public Page<PostResponse.ListDTO.PostDTO> postList(Integer blogUserId, Pageable pageable) {
+        Page<PostResponse.ListDTO.PostDTO> postLists = postRepo.findByPostList(blogUserId, pageable);
 //        System.out.println("postLists = " + postLists);
 
         return postLists;
@@ -194,8 +194,8 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public PostResponse.UserBlogListDTO userBlogList(Integer userId, User sessionUser) {
-        List<Post> postList = postRepo.findAllUserPostList(userId);
+    public PostResponse.UserBlogListDTO userBlogList(Integer blogUserId, User sessionUser) {
+        List<Post> postList = postRepo.findAllUserPostList(blogUserId);
         List<PostResponse.UserBlogListDTO.PostDTO> postDTOs = postList.stream().map(post ->
                 new PostResponse.UserBlogListDTO.PostDTO(post)).toList();
 
@@ -204,7 +204,7 @@ public class PostService {
 
         if (sessionUser != null) {
             // true - 구독 중, false - 구독 x
-            Subscribe subscribe = subscribeRepo.existsBySubId(sessionUser.getId(), userId);
+            Subscribe subscribe = subscribeRepo.existsBySubId(sessionUser.getId(), blogUserId);
             if (subscribe != null) {
                 isSubCheck = true;
             }
@@ -212,7 +212,7 @@ public class PostService {
 
 //        System.out.println("isSubCheck222222222 = " + isSubCheck);
 
-        PostResponse.UserBlogListDTO blogListDTOs = new PostResponse.UserBlogListDTO(postDTOs, userId, sessionUser, isSubCheck);
+        PostResponse.UserBlogListDTO blogListDTOs = new PostResponse.UserBlogListDTO(postDTOs, blogUserId, sessionUser, isSubCheck);
 //        System.out.println("blogListDTOs 3333333 = " + blogListDTOs);
 
         return blogListDTOs;

@@ -12,9 +12,9 @@ public interface PostJPARepository extends JpaRepository<Post, Integer> {
 
 
     @Query("select new site.metacoding.blogv3.post.PostResponse$ListDTO$PostDTO(p.id, p.user.id, p.thumbnailFile, p.title, p.content, p.createdAt) " +
-            "from Post p where p.user.id = :sessionUserId order by p.id desc")
+            "from Post p where p.user.id = :blogUserId order by p.id desc")
     // 스프링이 알아서 페이징 처리를 해줌
-    Page<PostResponse.ListDTO.PostDTO> findByPostList(Integer sessionUserId, Pageable pageable);
+    Page<PostResponse.ListDTO.PostDTO> findByPostList(Integer blogUserId, Pageable pageable);
 
     @Query("select new site.metacoding.blogv3.post.PostResponse$ListDTO(p.id, p.thumbnailFile, p.title, p.content, p.createdAt) " +
             "from Post p where p.user.id = :sessionUserId order by p.id desc")

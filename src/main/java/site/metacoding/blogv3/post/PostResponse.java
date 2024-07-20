@@ -34,7 +34,7 @@ public class PostResponse {
         public static class PostDTO {
             //썸네일, 내용(flow건거), 제목, 생성날짜
             private Integer postId;
-            private Integer userId;
+            private Integer userId; // = blogUserId and userId
             private String thumbnailFile;
             private String title;
             private String content;
@@ -73,12 +73,12 @@ public class PostResponse {
         private String username;        //여기 추가 되어야함
         private boolean isSubCheck;
 
-        public UserBlogListDTO(List<PostDTO> postDTOs, Integer userId, User user, boolean isSubCheck) {
+        public UserBlogListDTO(List<PostDTO> postDTOs, Integer blogUserId, User user, boolean isSubCheck) {
             this.postDTOs = postDTOs;
             this.username = postDTOs.getLast().getUsername();
             isBlogOwner = false;
             if (user != null) {
-                if (userId.equals(user.getId())) {
+                if (blogUserId.equals(user.getId())) {
                     isBlogOwner = true;
                 }
                 this.userId = user.getId();

@@ -17,7 +17,7 @@ public class SubscribeResponse {
         @Data
         public static class SubDTO {
             private Integer toUser;
-            private Integer subscribeId;    // 내가 구독
+            private Integer subscribeId;    // pk
             private String username;
 
             public SubDTO(Subscribe subscribe) {

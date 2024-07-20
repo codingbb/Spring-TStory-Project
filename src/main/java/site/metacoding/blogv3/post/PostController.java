@@ -110,11 +110,11 @@ public class PostController {
 
     //    유저들의 블로그 post list 보기
     //  여기있는 userId랑 세션유저를 비교했을 때, 불일치하면 isBlogOwner false
-    @GetMapping("/user/{userId}/post")
-    public String userPost(@PathVariable Integer userId, HttpServletRequest request) {
+    @GetMapping("/user/{blogUserId}/post")
+    public String userPost(@PathVariable Integer blogUserId, HttpServletRequest request) {
 //        System.out.println("userId = " + userId);
         User sessionUser = (User) session.getAttribute("sessionUser");
-        PostResponse.UserBlogListDTO postList = postService.userBlogList(userId, sessionUser);
+        PostResponse.UserBlogListDTO postList = postService.userBlogList(blogUserId, sessionUser);
         System.out.println("postList = " + postList);
         request.setAttribute("model", postList);
 
@@ -122,9 +122,9 @@ public class PostController {
 
     }
 
-    @GetMapping("/api/{userId}/post/list")
-    public ResponseEntity<?> userPost(@PageableDefault(size = 5) Pageable pageable, @PathVariable Integer userId) {
-        Page<PostResponse.ListDTO.PostDTO> listDTOs = postService.postList(userId, pageable);
+    @GetMapping("/api/{blogUserId}/post/list")
+    public ResponseEntity<?> userPost(@PageableDefault(size = 5) Pageable pageable, @PathVariable Integer blogUserId) {
+        Page<PostResponse.ListDTO.PostDTO> listDTOs = postService.postList(blogUserId, pageable);
 //        System.out.println("listDTOs = " + listDTOs);
 
 //        request.setAttribute("model", listDTOs);
