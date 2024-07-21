@@ -14,8 +14,8 @@ public interface SubscribeJPARepository extends JpaRepository<Subscribe, Integer
 
 //    select u.id, s.subscriber_id, u.username, s.subscribe_id from subscribe_tb s
 //    inner join user_tb u on u.id = s.subscribe_id where  s.subscriber_id = 1;
-    @Query("select s from Subscribe s join fetch s.toUser u where s.fromUser.id = :fromUser")
-    List<Subscribe> findSubscribeList(Integer fromUser);
+//    @Query("select s from Subscribe s join fetch s.toUser u where s.fromUser.id = :fromUser")
+//    List<Subscribe> findSubscribeList(Integer fromUser);
 
     @Modifying
     @Query("delete from Subscribe s where s.fromUser.id= :fromUser and s.toUser.id = :toUser")

@@ -24,6 +24,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class PostService {
@@ -151,7 +152,6 @@ public class PostService {
 
 
     // readOnly를 하면 DB에 반영을 하지 않게 되어 프로그램이 더 깔끔해진다 (페이징)
-    @Transactional(readOnly = true)
     public Page<PostResponse.ListDTO.PostDTO> postList(Integer blogUserId, Pageable pageable) {
         Page<PostResponse.ListDTO.PostDTO> postLists = postRepo.findByPostList(blogUserId, pageable);
 //        System.out.println("postLists = " + postLists);
@@ -160,7 +160,6 @@ public class PostService {
     }
 
     //    페이징 xx
-    @Transactional(readOnly = true)
     public PostResponse.ListDTO postList(User sessionUser) {
         List<Post> postList = postRepo.findAllPostList(sessionUser.getId());
 //        List<PostResponse.ListDTO> postLists = postRepo.findByPostList(sessionUser.getId());
@@ -172,7 +171,7 @@ public class PostService {
         return listDTO;
     }
 
-    @Transactional(readOnly = true)
+
     public PostResponse.DetailDTO postDetail(Integer postId, User sessionUser) {
 //        게시글 부분
         Post post = postRepo.findById(postId)
@@ -185,7 +184,7 @@ public class PostService {
     }
 
 
-    @Transactional(readOnly = true)
+
     public List<PostResponse.IndexDTO> indexPostAll() {
         List<Post> postList = postRepo.findAllRandom();
         List<PostResponse.IndexDTO> indexDTOs = postList.stream().map(post -> new PostResponse.IndexDTO(post)).toList();
@@ -193,7 +192,7 @@ public class PostService {
         return indexDTOs;
     }
 
-    @Transactional(readOnly = true)
+
     public PostResponse.UserBlogListDTO userBlogList(Integer blogUserId, User sessionUser) {
         List<Post> postList = postRepo.findAllUserPostList(blogUserId);
         List<PostResponse.UserBlogListDTO.PostDTO> postDTOs = postList.stream().map(post ->

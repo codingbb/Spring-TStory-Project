@@ -6,13 +6,17 @@ import org.springframework.transaction.annotation.Transactional;
 import site.metacoding.blogv3.user.User;
 import site.metacoding.blogv3.user.UserJPARepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class SubscribeService {
     private final SubscribeJPARepository subscribeRepo;
     private final UserJPARepository userRepo;
+    private final SubscribeQueryRepository subscribeQueryRepo;
 
 
     @Transactional
@@ -36,14 +40,13 @@ public class SubscribeService {
 
     }
 
-    public SubscribeResponse.ListDTO subscribeList(User sessionUser) {
-        List<Subscribe> subscribeList = subscribeRepo.findSubscribeList(sessionUser.getId());
-        List<SubscribeResponse.ListDTO.SubDTO> listDTOs = subscribeList.stream().map(subscribe
-                -> new SubscribeResponse.ListDTO.SubDTO(subscribe)).toList();
-
-        SubscribeResponse.ListDTO listDTO = new SubscribeResponse.ListDTO(listDTOs);
-
-        return listDTO;
+    public SubscribeResponse.ListDTO subscribeList(User fromUserId) {
+//        fromUserId = SessionUsrId
+        List<SubscribeResponse.ListDTO> subscribeListDTO = subscribeQueryRepo.subscribeList(fromUserId.getId());
+        System.out.println("subscribeListDTO = " + subscribeListDTO);
+//        SubscribeResponse.ListDTO listDTO = new SubscribeResponse.ListDTO();
+//        System.out.println("listDTO = " + listDTO);
+        return null;
     }
 
 }

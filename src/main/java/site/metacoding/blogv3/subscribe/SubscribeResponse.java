@@ -1,5 +1,6 @@
 package site.metacoding.blogv3.subscribe;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
@@ -8,24 +9,33 @@ public class SubscribeResponse {
 
     @Data
     public static class ListDTO {
-        private List<SubDTO> subDTOs;
+        //        post_id, title, user_id, username 을 List로
+        private Integer toUserId;
+        private Integer fromUserId;
+        private String username;
+        private List<PostDTO> postDTOs;
 
-        public ListDTO(List<SubDTO> subDTOs) {
-            this.subDTOs = subDTOs;
+        @Builder
+        public ListDTO(Integer toUserId, Integer fromUserId, String username, List<PostDTO> postDTOs) {
+            this.toUserId = toUserId;
+            this.fromUserId = fromUserId;
+            this.username = username;
+            this.postDTOs = postDTOs;
         }
 
         @Data
-        public static class SubDTO {
-            private Integer toUser;
-            private Integer fromUser;    // pk
-            private String username;
+        public static class PostDTO {
+            private Integer postId;
+            private String title;
 
-            public SubDTO(Subscribe subscribe) {
-                this.toUser = subscribe.getToUser().getId();
-                this.fromUser = subscribe.getFromUser().getId();
-                this.username = subscribe.getToUser().getUsername();
+            @Builder
+            public PostDTO(Integer postId, String title) {
+                this.postId = postId;
+                this.title = title;
             }
         }
     }
 
 }
+
+
