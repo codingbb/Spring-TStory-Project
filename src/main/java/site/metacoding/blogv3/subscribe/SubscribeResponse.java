@@ -14,32 +14,28 @@ public class SubscribeResponse {
         private Integer toUserId;
         private Integer fromUserId;
         private String username;
-        private Integer postId;
-        private String title;
-//        private List<PostDTO> postDTOs;
-
+        private List<PostDTO> postDTOs;
 
         @Builder
-        public ListDTO(Integer toUserId, Integer fromUserId, String username, Integer postId, String title) {
+        public ListDTO(Integer toUserId, Integer fromUserId, String username, List<PostDTO> postDTOs) {
             this.toUserId = toUserId;
             this.fromUserId = fromUserId;
             this.username = username;
-            this.postId = postId;
-            this.title = title;
+            this.postDTOs = postDTOs;
         }
 
 
-//        @Data
-//        public static class PostDTO {
-//            private Integer postId;
-//            private String title;
-//
-//            @Builder
-//            public PostDTO(Integer postId, String title) {
-//                this.postId = postId;
-//                this.title = title;
-//            }
-//        }
+        @Data
+        public static class PostDTO {
+            private Integer postId;
+            private String title;
+
+            @Builder
+            public PostDTO(Integer postId, String title) {
+                this.postId = postId;
+                this.title = title;
+            }
+        }
     }
 
 }

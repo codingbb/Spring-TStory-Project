@@ -1,5 +1,29 @@
 {{>/layout/post-header}}
 
+<style>
+    .newPost {
+        text-decoration: none;
+        color: black;
+    }
+
+    .newPost:hover {
+        text-decoration: none;
+        color: #148171;
+        font-weight: bold;
+    }
+
+    .toUserBlog {
+        text-decoration: none;
+        color: black;
+    }
+
+    .toUserBlog:hover {
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+</style>
+
 <div class="container">
     <p style="font-size: large"><b>구독 중인 블로그</b></p>
     <hr>
@@ -9,13 +33,24 @@
             <div class="col-md-6 mb-4">
                 <div class="card">
                     <div class="card-body d-flex justify-content-between align-items-center">
-                        <p style="font-size: large"><b>{{username}}</b> 블로그</p>
-                        <input type="hidden" id="userId" name="userId" value="{{toUserId}}">
+                        <a href="/user/{{toUserId}}/post" class="toUserBlog">
+                            <p style="font-size: 22px"><b>{{username}}</b> 블로그</p>
+                            <input type="hidden" id="userId" name="userId" value="{{toUserId}}">
+                        </a>
                         <div>
-                            <button class="btn btn-sm btn-danger" style="width: 130px;" onclick="subscribeCancel()">구독취소</button>
+                            <button class="btn btn-sm btn-danger" style="width: 130px;" onclick="subscribeCancel()">
+                                구독취소
+                            </button>
                         </div>
                     </div>
-                    <div style="margin-left: 28px; margin-bottom: 5px">{{title}}</div>
+                    {{#postDTOs}}
+                        <a href="/post/detail/{{postId}}" class="newPost">
+                            <div style="margin-left: 28px; margin-bottom: 5px">
+                                <span style="color: #dc0000">[최신글] </span>
+                                {{title}}
+                            </div>
+                        </a>
+                    {{/postDTOs}}
                 </div>
             </div>
         {{/model}}
