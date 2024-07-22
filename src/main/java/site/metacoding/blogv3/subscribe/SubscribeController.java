@@ -30,7 +30,7 @@ public class SubscribeController {
     @GetMapping("/sub/subscribe")
     public String myList(HttpServletRequest request) {
         User sessionUser = (User) session.getAttribute("sessionUser");
-        SubscribeResponse.ListDTO listDTOs = subscribeService.subscribeList(sessionUser);
+        List<SubscribeResponse.ListDTO> listDTOs = subscribeService.subscribeList(sessionUser);
 //        System.out.println("listDTOs = " + listDTOs);
         request.setAttribute("model", listDTOs);
         return "subscribe/subscribeList";

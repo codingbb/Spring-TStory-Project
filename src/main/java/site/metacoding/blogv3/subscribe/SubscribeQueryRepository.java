@@ -44,8 +44,8 @@ public class SubscribeQueryRepository {
             String username = (String) row[3];
 
             SubscribeResponse.ListDTO subscribeListDTO = SubscribeResponse.ListDTO.builder()
-//                    .postId(postId)
-//                    .title(title)
+                    .postId(postId)
+                    .title(title)
                     .toUserId(toUser)
                     .username(username)
                     .build();

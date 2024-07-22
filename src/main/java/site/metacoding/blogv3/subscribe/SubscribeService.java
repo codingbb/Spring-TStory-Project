@@ -40,13 +40,13 @@ public class SubscribeService {
 
     }
 
-    public SubscribeResponse.ListDTO subscribeList(User fromUserId) {
+    public List<SubscribeResponse.ListDTO> subscribeList(User fromUserId) {
 //        fromUserId = SessionUsrId
         List<SubscribeResponse.ListDTO> subscribeListDTO = subscribeQueryRepo.subscribeList(fromUserId.getId());
         System.out.println("subscribeListDTO = " + subscribeListDTO);
-//        SubscribeResponse.ListDTO listDTO = new SubscribeResponse.ListDTO();
+//        SubscribeResponse.ListDTO listDTO = new SubscribeResponse.ListDTO(subscribeListDTO, fromUserId.getId());
 //        System.out.println("listDTO = " + listDTO);
-        return null;
+        return subscribeListDTO;
     }
 
 }
