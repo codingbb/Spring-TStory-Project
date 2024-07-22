@@ -63,11 +63,11 @@ public class ReplyService {
     }
 
     @Transactional(readOnly = true)
-    public Page<ReplyResponse.ListDTO> replyList(User user, Integer postId, Pageable pageable) {
+    public Page<ReplyResponse.ListDTO> replyList(User sessionUser, Integer postId, Pageable pageable) {
         Page<ReplyResponse.ListDTO> replies = replyRepo.findAllReply(postId, pageable);
 
         replies.forEach(reply -> {
-            reply.setIsReplyOwner(user != null && user.getId() == reply.getUserId());
+            reply.setIsReplyOwner(sessionUser != null && sessionUser.getId() == reply.getUserId());
         });
 
         return replies;

@@ -5,6 +5,7 @@
         border: 1px solid #1EB49F;
         color: #1EB49F;
     }
+
     .btn-outline-info:hover {
         background-color: #1EB49F;
     }
@@ -85,27 +86,36 @@
 
     <!--        댓글 페이징-->
     <br>
-    <div class="my_paging d-flex justify-content-center align-items-center my_mb_lg_1">
-<!--        애가 <<< -->
-        <a class="my_atag_none my_mr_sm_1" href="/">
-            <i class="fa-solid fa-angle-left"></i>
-        </a>
-<!--        애가 숫자 -->
-        <a class="my_atag_none" href="/">
-            <div class="my_paging_number_box my_mr_sm_1">
-            </div>
-        </a>
-<!--        애가 >>> -->
-        <a class="my_atag_none my_ml_sm_1" href="/">
-            <i class="fa-solid fa-angle-right"></i>
-        </a>
+
+    <div style="display: flex; justify-content: center;">
+        <button type="button" class="btn btn-outline-info mt-1 replyPageLoad">
+            +
+        </button>
     </div>
+
+
+    <!--    <div class="my_paging d-flex justify-content-center align-items-center my_mb_lg_1">-->
+    <!--&lt;!&ndash;        애가 <<< &ndash;&gt;-->
+    <!--        <a class="my_atag_none my_mr_sm_1" href="/">-->
+    <!--            <i class="fa-solid fa-angle-left"></i>-->
+    <!--        </a>-->
+    <!--&lt;!&ndash;        애가 숫자 &ndash;&gt;-->
+    <!--        <a class="my_atag_none" href="/">-->
+    <!--            <div class="my_paging_number_box my_mr_sm_1">-->
+    <!--            </div>-->
+    <!--        </a>-->
+    <!--&lt;!&ndash;        애가 >>> &ndash;&gt;-->
+    <!--        <a class="my_atag_none my_ml_sm_1" href="/">-->
+    <!--            <i class="fa-solid fa-angle-right"></i>-->
+    <!--        </a>-->
+    <!--    </div>-->
     <!--        페이징 끝-->
 
     <br><br>
 
     <script>
-<!--        게시글 id는 전역변수 -->
+
+<!--        게시글 id는 전역변수-->
         const postId = $("#postId").val();
         console.log("postId 전역 = " + postId);
 
@@ -150,7 +160,59 @@
 
         replyLoad();
 
-        // 댓글 csr으로 가져오기
+        $(".replyPageLoad").on('click', function () {
+            // alert("dddd");
+
+            if (page < totalPages - 1) {    // 더 이상 페이지가 없을 때까지
+                page++;
+                replyLoad();
+            } else {
+                Swal.fire({
+                    title: "더 이상 댓글이 없습니다.",
+                    icon: "warning",
+                    button: "확인"
+                });
+            }
+        });
+
+
+        // 페이징 함수 따로 빼기
+        function replyLoad() {
+            // alert("dd");
+            // let postId = $("#postId").val(); // 현재 게시글의 ID 가져오기
+
+            $.ajax({
+                // postId를 쿼리스트링 형식으로 보내버리면 해당하는 게시글에 있는 댓글만 나오게 할 수 있음
+                url: `/api/reply/list?postId=${postId}&page=${page}`,
+                // 서버에서 보내준 데이터가 JSON 형식이라는 것을 알려줌
+                dataType: 'json'
+
+            }).done((res) => {
+                console.log("성공", res);
+
+                if (page === 0) {
+                    $("#replyList").empty();
+                }
+
+                res.body.content.forEach((reply) => {
+                    let replyItem = getReplyItem(reply);
+                    $("#replyList").append(replyItem);
+                });
+
+                totalPages = res.body.totalPages;
+                // console.log("totalPages " + totalPages);
+                page = res.body.number;
+                // console.log("page " + page);
+
+            }).fail((res) => {
+                console.log("실패", res);
+            });
+        }
+
+        // 페이징 함수 따로 빼기
+
+
+        // 댓글 리스트 csr으로 가져오기
         function getReplyItem(reply) {
             let isReplyOwner = reply.isReplyOwner; // 댓글 소유자 여부 확인
             let buttons = '';
@@ -178,7 +240,8 @@
 
             return item;
         }
-        // 댓글 페이징 끝
+
+        // 댓글 리스트 csr으로 가져오기
 
 
         // 댓글 csr 삭제
@@ -213,9 +276,8 @@
         // 댓글 삭제
 
 
-
         <!-- 댓글 수정 뷰 띄우기 -->
-        $(document).on('click', '.replyUpdateBtn', function() {
+        $(document).on('click', '.replyUpdateBtn', function () {
             let replyId = $(this).attr('id').replace('reply-', '');
             console.log("reply " + replyId);
 
@@ -341,42 +403,11 @@
                                 });
 
                             });
-                         }
-                     });
-              });
-         // 게시글 삭제
-
-        // 페이징 함수 따로 빼기
-        function replyLoad() {
-            // alert("dd");
-            // let postId = $("#postId").val(); // 현재 게시글의 ID 가져오기
-
-            $.ajax({
-                // postId를 쿼리스트링 형식으로 보내버리면 해당하는 게시글에 있는 댓글만 나오게 할 수 있음
-                url: `/api/reply/list?postId=${postId}&page=${page}`,
-                // 서버에서 보내준 데이터가 JSON 형식이라는 것을 알려줌
-                dataType: 'json'
-
-            }).done((res) => {
-                console.log("성공", res);
-
-                $("#replyList").empty();
-
-                res.body.content.forEach((reply) => {
-                    let replyItem = getReplyItem(reply);
-                    $("#replyList").append(replyItem);
-                });
-
-                totalPages = res.body.totalPages;
-                // console.log("totalPages " + totalPages);
-                page = res.body.number;
-                // console.log("page " + page);
-
-            }).fail((res) => {
-                console.log("실패", res);
+                }
             });
-        }
-        // 페이징 함수 따로 빼기
+        });
+        // 게시글 삭제
+
 
     </script>
 
