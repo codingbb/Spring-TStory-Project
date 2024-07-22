@@ -12,6 +12,7 @@ import site.metacoding.blogv3.user.UserJPARepository;
 
 import java.util.List;
 
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class ReplyService {
@@ -62,7 +63,6 @@ public class ReplyService {
 
     }
 
-    @Transactional(readOnly = true)
     public Page<ReplyResponse.ListDTO> replyList(User sessionUser, Integer postId, Pageable pageable) {
         Page<ReplyResponse.ListDTO> replies = replyRepo.findAllReply(postId, pageable);
 
