@@ -114,6 +114,7 @@ public class UserController {
 
     @PutMapping("/user/update")
     public ResponseEntity<?> update(@RequestBody UserRequest.UpdateDTO requestDTO) {
+        System.out.println("requestDTO22222 = " + requestDTO);
 //        System.out.println("비번 확인용 = " + requestDTO);
         User sessionUser = (User) session.getAttribute("sessionUser");
         userService.userUpdate(sessionUser.getId(), requestDTO);

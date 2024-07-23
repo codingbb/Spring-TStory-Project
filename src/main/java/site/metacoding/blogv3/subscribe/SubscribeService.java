@@ -3,6 +3,7 @@ package site.metacoding.blogv3.subscribe;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.metacoding.blogv3._core.exception.Exception404;
 import site.metacoding.blogv3.user.User;
 import site.metacoding.blogv3.user.UserJPARepository;
 
@@ -22,7 +23,7 @@ public class SubscribeService {
     @Transactional
     public void cancel(User sessionUser, SubscribeRequest.SaveDTO requestDTO) {
         User user = userRepo.findById(requestDTO.getSubscribeId())
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 블로그입니다."));
+                .orElseThrow(() -> new Exception404("존재하지 않는 블로그입니다."));
 
         subscribeRepo.deleteSubscribe(sessionUser.getId(), requestDTO.getSubscribeId());
 
@@ -31,7 +32,7 @@ public class SubscribeService {
     @Transactional
     public void save(User sessionUser, SubscribeRequest.SaveDTO requestDTO) {
         User userOP = userRepo.findById(requestDTO.getSubscribeId())
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 블로그입니다."));
+                .orElseThrow(() -> new Exception404("존재하지 않는 블로그입니다."));
 
         // 구독하려는 사람(구독자), 구독대상자
 //        subscribeRepo.existsBySubId(sessionUser.getId(), requestDTO.getSubscribeId());

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.metacoding.blogv3._core.errors.exception.LoginFailException;
+import site.metacoding.blogv3._core.exception.ApiException400;
 import site.metacoding.blogv3._core.util.EmailUtil;
 
 import java.io.UnsupportedEncodingException;
@@ -95,14 +96,15 @@ public class UserService {
         //먼저 조회
         User user = userRepo.findById(sessionUserId)
                 .orElseThrow(() -> new RuntimeException());
+        System.out.println("user = " + user);
 
         if (requestDTO.getNewPassword().equals(user.getPassword())) {
             //
-            throw new RuntimeException("동일한 비밀번호로는 변경할 수 없습니다.");
+            throw new ApiException400("동일한 비밀번호로는 변경할 수 없습니다.");
         }
 
         if (!requestDTO.getPassword().equals(user.getPassword())) {
-            throw new RuntimeException("기존 비밀번호가 일치하지 않습니다.");
+            throw new ApiException400("기존 비밀번호가 일치하지 않습니다.");
         }
 
         user.setPassword(requestDTO.getNewPassword());
