@@ -5,6 +5,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.metacoding.blogv3._core.exception.ApiException404;
+import site.metacoding.blogv3._core.exception.Exception403;
+import site.metacoding.blogv3._core.exception.Exception404;
 import site.metacoding.blogv3.post.Post;
 import site.metacoding.blogv3.post.PostJPARepository;
 import site.metacoding.blogv3.user.User;
@@ -23,9 +26,9 @@ public class ReplyService {
     @Transactional
     public ReplyResponse.SaveDTO replySave(Integer sessionUserId, ReplyRequest.SaveDTO requestDTO) {
         User sessionUser = userRepo.findById(sessionUserId)
-                .orElseThrow(() -> new RuntimeException("회원 정보가 존재하지 않습니다."));
+                .orElseThrow(() -> new Exception404("회원 정보가 존재하지 않습니다."));
         Post post = postRepo.findById(requestDTO.getPostId()).orElseThrow(()
-                -> new RuntimeException("게시글이 존재하지 않습니다."));
+                -> new Exception404("게시글이 존재하지 않습니다."));
 
         Reply reply = replyRepo.save(requestDTO.toEntity(sessionUser, post, requestDTO.getComment()));
 
@@ -35,12 +38,12 @@ public class ReplyService {
 
     @Transactional
     public ReplyResponse.UpdateDTO replyUpdate(User user, Integer replyId, ReplyRequest.UpdateDTO requestDTO) {
-        Reply reply = replyRepo.findById(replyId).orElseThrow(() -> new RuntimeException("존재하지 않는 댓글입니다"));
+        Reply reply = replyRepo.findById(replyId).orElseThrow(() -> new ApiException404("존재하지 않는 댓글입니다"));
         Post post = postRepo.findById(requestDTO.getPostId()).orElseThrow(()
-                -> new RuntimeException("게시글이 존재하지 않습니다."));
+                -> new Exception404("게시글이 존재하지 않습니다."));
 
         if (user.getId() != requestDTO.getUserId()) {
-            throw new RuntimeException("댓글 수정 권한이 없습니다");
+            throw new Exception403("댓글 수정 권한이 없습니다");
         }
 
         reply.setComment(requestDTO.getComment());
@@ -51,12 +54,12 @@ public class ReplyService {
 
     @Transactional
     public void replyDelete(User user, Integer replyId, ReplyRequest.DeleteDTO requestDTO) {
-        Reply reply = replyRepo.findById(replyId).orElseThrow(() -> new RuntimeException("존재하지 않는 댓글입니다"));
+        Reply reply = replyRepo.findById(replyId).orElseThrow(() -> new ApiException404("존재하지 않는 댓글입니다"));
         Post post = postRepo.findById(requestDTO.getPostId()).orElseThrow(()
-                -> new RuntimeException("게시글이 존재하지 않습니다."));
+                -> new Exception404("게시글이 존재하지 않습니다."));
 
         if (user.getId() != requestDTO.getUserId()) {
-            throw new RuntimeException("댓글 삭제 권한이 없습니다");
+            throw new Exception403("댓글 삭제 권한이 없습니다");
         }
 
         replyRepo.deleteById(replyId);

@@ -269,6 +269,13 @@
                 replyLoad();
 
             }).fail((res) => {
+                if (res.responseJSON.status === 404) {
+                    Swal.fire({
+                        title: res.responseJSON.msg,
+                        icon: "warning",
+                        button: "확인"
+                    });
+                }
                 console.log("실패", res);
             });
         }
@@ -355,6 +362,13 @@
                 $("#showReplyUpdateForm-" + replyId).replaceWith(updateReplyItem);
 
             }).fail((res) => {
+                if (res.responseJSON.status === 404) {
+                    Swal.fire({
+                        title: res.responseJSON.msg,
+                        icon: "warning",
+                        button: "확인"
+                    });
+                }
                 console.log("실패", res);
             });
 
