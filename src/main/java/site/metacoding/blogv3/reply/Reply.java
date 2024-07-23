@@ -1,5 +1,6 @@
 package site.metacoding.blogv3.reply;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +10,7 @@ import site.metacoding.blogv3.post.Post;
 import site.metacoding.blogv3.user.User;
 
 import java.time.LocalDateTime;
+
 
 @Entity
 @NoArgsConstructor
@@ -25,6 +27,7 @@ public class Reply {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Post post;
 
     @CreationTimestamp
@@ -32,6 +35,10 @@ public class Reply {
 
     @Transient
     private Boolean isReplyOwner;
+
+    @Transient
+    private Integer postId;
+
 
     @Builder
     public Reply(Integer id, String comment, User user, Post post, LocalDateTime createdAt) {
@@ -41,4 +48,12 @@ public class Reply {
         this.post = post;
         this.createdAt = createdAt;
     }
+
+    public void setPost(Post post) {
+        this.post = post;
+        if (post != null) {
+            this.postId = post.getId();
+        }
+    }
+
 }

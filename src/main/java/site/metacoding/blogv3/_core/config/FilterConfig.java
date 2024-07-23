@@ -8,13 +8,13 @@ import site.metacoding.blogv3._core.filter.TrashFilter;
 
 @Configuration
 public class FilterConfig {
-//
-//    @Bean
-//    public FilterRegistrationBean<CorsFilter> corsFilter() {
-//        FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new TrashFilter());
-//        bean.addUrlPatterns("/reply/*");
-//        bean.setOrder(0); // 낮은 번호부터 실행됨.Ø
-//        return bean;
-//    }
+
+    @Bean
+    public FilterRegistrationBean<TrashFilter> trashFilter() {
+        FilterRegistrationBean<TrashFilter> bean = new FilterRegistrationBean<>(new TrashFilter());
+        bean.addUrlPatterns("/reply/*");
+        bean.setOrder(0); // 낮은 번호부터 실행됨.Ø
+        return bean;
+    }
 
 }
