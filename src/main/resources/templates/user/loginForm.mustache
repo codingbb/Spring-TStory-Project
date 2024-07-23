@@ -56,10 +56,12 @@
                 // window.location.reload();
             }
 
+
+
         }).fail((res) => {
             console.log("실패", res);
             Swal.fire({
-                title: "아이디 혹은 비밀번호를 확인해주세요",
+                title: res.responseJSON.msg,
                 icon: "warning",
                 button: "확인"
             });

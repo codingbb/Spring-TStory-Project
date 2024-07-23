@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.metacoding.blogv3._core.errors.exception.LoginFailException;
-import site.metacoding.blogv3._core.exception.ApiException400;
+import site.metacoding.blogv3._core.exception.*;
 import site.metacoding.blogv3._core.util.EmailUtil;
 
 import java.io.UnsupportedEncodingException;
@@ -60,7 +60,7 @@ public class UserService {
 
         //포함하면 true 반환 되어서 throw가 실행될 것임
         if (userOP.isPresent()) {
-            throw new RuntimeException("중복된 아이디입니다.");
+            throw new Exception400("중복된 아이디입니다.");
         }
 
         // 이메일 인증 여부 확인
@@ -76,15 +76,16 @@ public class UserService {
     }
 
     public User login(UserRequest.LoginDTO requestDTO) {
+        System.out.println("requestDTO4444 = " + requestDTO);
         User user = userRepo.findByUsernameAndPassword(requestDTO.getUsername(), requestDTO.getPassword())
-                .orElseThrow(() -> new RuntimeException("회원 정보가 존재하지 않습니다."));
+                .orElseThrow(() -> new ApiException401("아이디 혹은 비밀번호를 확인해주세요."));
 
         return user;
     }
 
     public UserResponse.UpdateDTO UpdateForm(Integer sessionUserId) {
         User user = userRepo.findById(sessionUserId)
-                .orElseThrow(() -> new RuntimeException("회원 정보가 존재하지 않습니다."));
+                .orElseThrow(() -> new ApiException404("회원 정보가 존재하지 않습니다."));
 
         return new UserResponse.UpdateDTO(user.getUsername(), user.getEmail());
 
