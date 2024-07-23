@@ -24,22 +24,22 @@
             </div>
             <form id="joinForm">
                 <input id="username" class="my_auth_form_box_input" type="text" name="username" placeholder="유저네임"
-                       maxlength="20" value="ssar1" required/>
+                       maxlength="20" value="" required/>
                 <div id="usernameDuplicatedText" class="my_hidden" style="color: red">중복된 아이디입니다.</div>
                 <div id="usernameNoDuplicatedText" class="my_hidden" style="color: green">사용 가능한 아이디입니다.</div>
 
                 <input id="password" class="my_auth_form_box_input" type="password" name="password" placeholder="비밀번호"
-                       maxlength="20" value="1234" required/>
+                       maxlength="20" value="" required/>
 
                 <input id="samePassword" class="my_auth_form_box_input" type="password" name="" placeholder="비밀번호 확인"
-                       maxlength="20" value="1234" required/>
+                       maxlength="20" value="" required/>
                 <div id="errorTextBox" style="color: red">비밀번호가 일치하지 않습니다.</div>
                 <div id="successTextBox" style="color: green">비밀번호가 일치합니다.</div>
 
                 <div class="email-container">
                     <input class="my_auth_form_box_input" id="email" type="email" name="email" placeholder="이메일"
                            maxlength="60"
-                           value="codingstory2@gmail.com" required/>
+                           value="" required/>
                     <button class="btn btn-outline-info btn-sm" type="button" id="emailAuthButton">인증하기</button>
                 </div>
 
@@ -47,7 +47,7 @@
             </form>
             <div class="my_auth_form_box_link">
                 <div><a href="/login-form">로그인</a></div>
-                <div><a href="/user/password-reset-form">비밀번호 찾기</a></div>
+<!--                <div><a href="/user/password-reset-form">비밀번호 찾기</a></div>-->
             </div>
         </div>
     </div>

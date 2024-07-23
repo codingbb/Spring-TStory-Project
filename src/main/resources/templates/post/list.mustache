@@ -224,43 +224,100 @@
 
     pageLoad();
 
+    // // append시 해당 디자인 추가
+    // function getPostItem(post) {
+    //     let item = `<div class="my_post_list_item">
+    //             <div class="my_post_list_item_left">
+    //                 <img src="/upload/${post.thumbnailFile}" width="170" height="190">
+    //                 <!--                <div class="my_fakeimg"> </div>-->
+    //             </div>
+    //             <div class="my_post_list_item_right my_ellipsis">
+    //                 <div class="my_text_title my_ellipsis" style="font-size: 25px">
+    //                     ${post.title}
+    //                 </div>
+    //                 <div class="my_text_body_sm">
+    //                     ${post.createdAt}
+    //                 </div>
+    //                 <div class="content-wrapper">
+    //                     ${post.content}
+    //                 </div>
+    //                 <div class="my_mt_md_1">
+    //                     <a href="/post/detail/${post.postId}" class="my_success_btn">Read More</a>
+    //                 </div>
+    //             </div>
+    //         </div>`;
+    //
+    //     // text-overflow에서 이미지 제외
+    //     $(".content-wrapper").each(function () {
+    //         let contentHtml = $(this).html();
+    //         contentHtml = contentHtml.replace(/<img[^>]+>/g, '');
+    //         contentHtml = contentHtml.replace(/<iframe[^>]+>/g, '');
+    //         $(this).html(contentHtml);
+    //     });
+    //     // text-overflow에서 이미지 제외
+    //
+    //     return item;
+    //
+    // }
+
+
+
     // append시 해당 디자인 추가
+
+
+    let isFirstItem = true;  // 처음 아이템인지 여부를 추적하는 변수
+
     function getPostItem(post) {
         let item = `<div class="my_post_list_item">
-                <div class="my_post_list_item_left">
-                    <img src="/upload/${post.thumbnailFile}" width="170" height="190">
-                    <!--                <div class="my_fakeimg"> </div>-->
+            <div class="my_post_list_item_left">
+                <img src="/upload/${post.thumbnailFile}" width="170" height="190">
+                <!--                <div class="my_fakeimg"> </div>-->
+            </div>
+            <div class="my_post_list_item_right my_ellipsis">
+                <div class="my_text_title my_ellipsis" style="font-size: 25px">
+                    ${post.title}
                 </div>
-                <div class="my_post_list_item_right my_ellipsis">
-                    <div class="my_text_title my_ellipsis" style="font-size: 25px">
-                        ${post.title}
-                    </div>
-                    <div class="my_text_body_sm">
-                        ${post.createdAt}
-                    </div>
-                    <div class="content-wrapper">
-                        ${post.content}
-                    </div>
-                    <div class="my_mt_md_1">
-                        <a href="/post/detail/${post.postId}" class="my_success_btn">Read More</a>
-                    </div>
+                <div class="my_text_body_sm">
+                    ${post.createdAt}
                 </div>
-            </div>`
+                <div class="content-wrapper">
+                    ${post.content}
+                </div>
+                <div class="my_mt_md_1">
+                    <a href="/post/detail/${post.postId}" class="my_success_btn">Read More</a>
+                </div>
+            </div>
+        </div>`;
+
+        // item을 숨긴 상태로 추가
+        let $item = $(item);
+
+        if (isFirstItem) {
+            $item.hide();
+            isFirstItem = false;  // 처음 아이템 처리 후 false로 변경
+        }
 
         // text-overflow에서 이미지 제외
-        $(".content-wrapper").each(function () {
+        $item.find(".content-wrapper").each(function () {
             let contentHtml = $(this).html();
             contentHtml = contentHtml.replace(/<img[^>]+>/g, '');
             contentHtml = contentHtml.replace(/<iframe[^>]+>/g, '');
             $(this).html(contentHtml);
         });
-        // text-overflow에서 이미지 제외
 
-        return item;
-
+        return $item;
     }
 
-    // append시 해당 디자인 추가
+    // 예를 들어, item을 특정 리스트에 추가할 때 사용
+    let postList = [/* your post objects */];
+    postList.forEach(post => {
+        let newItem = getPostItem(post);
+        $(".post-list").append(newItem);
+        if (!newItem.is(":hidden")) {  // 처음 아이템이 아닌 경우만 show()
+            newItem.show();
+        }
+    });
+
 
 
     function hiddenSubBtn() {

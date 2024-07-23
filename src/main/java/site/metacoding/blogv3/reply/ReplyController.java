@@ -26,7 +26,7 @@ public class ReplyController {
         return ResponseEntity.ok(new ApiUtil<>(replies));
     }
 
-    @PostMapping("/a/reply/delete/{replyId}")
+    @PostMapping("/i/reply/delete/{replyId}")
     public ResponseEntity<?> delete(@PathVariable Integer replyId, @RequestBody ReplyRequest.DeleteDTO requestDTO) {
         System.out.println("requestDTO = " + requestDTO);
         User user = (User) session.getAttribute("sessionUser");

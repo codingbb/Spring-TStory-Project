@@ -19,7 +19,7 @@ public class CategoryController {
         User user = (User) session.getAttribute("sessionUser");
         categoryService.save(categoryName, user.getId());
 
-        return "redirect:/category/write-form";
+        return "redirect:/s/category/write-form";
     }
 
     @GetMapping("/s/category/write-form")

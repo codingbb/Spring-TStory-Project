@@ -156,7 +156,7 @@ public class PostService {
     // readOnly를 하면 DB에 반영을 하지 않게 되어 프로그램이 더 깔끔해진다 (페이징)
     public Page<PostResponse.ListDTO.PostDTO> postList(Integer blogUserId, Pageable pageable) {
         Page<PostResponse.ListDTO.PostDTO> postLists = postRepo.findByPostList(blogUserId, pageable);
-//        System.out.println("postLists = " + postLists);
+        System.out.println("postLists = " + postLists);
 
         return postLists;
     }

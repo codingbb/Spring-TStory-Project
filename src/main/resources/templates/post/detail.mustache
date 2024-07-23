@@ -40,7 +40,7 @@
 
     <div class="my_post_info_box d-flex">
         <div class="my_post_info">
-            <i class="fa-solid fa-heart my_fake_like my_mr_sm_1" id="heart-1"></i>
+<!--            <i class="fa-solid fa-heart my_fake_like my_mr_sm_1" id="heart-1"></i>-->
             by <b>{{model.username}}</b> <span class="my_text_body_sm"></span>
 
             <!--            <i class="far fa-heart my_fake_un_like my_mr_sm_1" id="my-heart"></i>-->
@@ -262,7 +262,7 @@
             };
 
             $.ajax({
-                url: '/a/reply/delete/' + replyId,
+                url: '/i/reply/delete/' + replyId,
                 data: JSON.stringify(replyDelete),
                 contentType: 'application/json; charset=utf-8',
                 type: 'POST'
