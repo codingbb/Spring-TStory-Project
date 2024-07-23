@@ -12,7 +12,7 @@ public class FilterConfig {
     @Bean
     public FilterRegistrationBean<TrashFilter> trashFilter() {
         FilterRegistrationBean<TrashFilter> bean = new FilterRegistrationBean<>(new TrashFilter());
-        bean.addUrlPatterns("/reply/*");
+        bean.addUrlPatterns("/a/reply/*");
         bean.setOrder(0); // 낮은 번호부터 실행됨.Ø
         return bean;
     }

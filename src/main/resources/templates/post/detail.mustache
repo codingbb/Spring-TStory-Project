@@ -149,7 +149,7 @@
                     });
 
                 } else {
-                    alert("gsgsd");
+                    alert("에러");
                 }
 
             });
@@ -385,6 +385,19 @@
                 }
                 console.log("실패", res);
             });
+
+            if (res.status === 401) {
+                const response = JSON.parse(res.responseText);
+
+                Swal.fire({
+                    title: response.msg,
+                    icon: "warning",
+                    button: "확인"
+                });
+
+            } else {
+                alert("에러");
+            }
 
         });
 
