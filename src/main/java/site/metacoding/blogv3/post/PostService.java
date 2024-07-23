@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.metacoding.blogv3._core.exception.Exception403;
+import site.metacoding.blogv3._core.exception.Exception404;
 import site.metacoding.blogv3.category.Category;
 import site.metacoding.blogv3.category.CategoryJPARepository;
 import site.metacoding.blogv3.category.CategoryResponse;
@@ -36,9 +38,9 @@ public class PostService {
 
     @Transactional
     public void postUpdate(Integer postId, Integer sessionUserId, PostRequest.UpdateDTO requestDTO) {
-        Post post = postRepo.findById(postId).orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
+        Post post = postRepo.findById(postId).orElseThrow(() -> new Exception404("게시글이 존재하지 않습니다."));
         if (post.getUser().getId() != sessionUserId) {
-            throw new RuntimeException("수정 권한이 존재하지 않습니다");
+            throw new Exception403("수정 권한이 존재하지 않습니다");
         }
 
         if (!requestDTO.getThumbnailFile().isEmpty()) {
@@ -56,12 +58,12 @@ public class PostService {
     }
 
     public PostResponse.UpdateFormDTO updateForm(Integer postId, Integer sessionUserId) {
-        Post post = postRepo.findById(postId).orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
+        Post post = postRepo.findById(postId).orElseThrow(() -> new Exception404("게시글이 존재하지 않습니다."));
         List<PostResponse.UpdateFormDTO.CategoryNameDTO> categoryNameDTOS = categoryRepo.findByUserIdUpdate(sessionUserId);
 //        System.out.println("categoryNameDTOS = " + categoryNameDTOS);
 
         if (post.getUser().getId() != sessionUserId) {
-            throw new RuntimeException("수정 권한이 존재하지 않습니다");
+            throw new Exception403("수정 권한이 존재하지 않습니다");
         }
 
         PostResponse.UpdateFormDTO updateFormDTO = new PostResponse.UpdateFormDTO(post, categoryNameDTOS);
@@ -74,10 +76,10 @@ public class PostService {
 
     @Transactional
     public void delete(Integer postId, User user) {
-        Post post = postRepo.findById(postId).orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
+        Post post = postRepo.findById(postId).orElseThrow(() -> new Exception404("게시글이 존재하지 않습니다."));
 
         if (user.getId() != post.getUser().getId()) {
-            throw new RuntimeException("게시글 삭제 권한이 없습니다.");
+            throw new Exception403("게시글 삭제 권한이 없습니다.");
         }
 
         postRepo.deleteById(postId);
@@ -88,7 +90,7 @@ public class PostService {
     @Transactional
     public PostResponse.WriteFormDTO writeForm(Integer sessionUserId) {
         User sessionUser = userRepo.findById(sessionUserId)
-                .orElseThrow(() -> new RuntimeException("회원 정보가 존재하지 않습니다."));
+                .orElseThrow(() -> new Exception404("회원 정보가 존재하지 않습니다."));
 
         List<PostResponse.WriteFormDTO.CategoryNameDTO> categoryList = categoryRepo.findByUserId(sessionUser.getId());
 //        System.out.println("categoryList = " + categoryList);
@@ -102,10 +104,10 @@ public class PostService {
     @Transactional
     public void postSave(Integer sessionUserId, PostRequest.SaveDTO requestDTO) {
         User sessionUser = userRepo.findById(sessionUserId)
-                .orElseThrow(() -> new RuntimeException("회원 정보가 존재하지 않습니다."));
+                .orElseThrow(() -> new Exception404("회원 정보가 존재하지 않습니다."));
 
         Category category = categoryRepo.findById(requestDTO.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("카테고리가 존재하지 않습니다"));
+                .orElseThrow(() -> new Exception404("카테고리가 존재하지 않습니다"));
 
 
         //1. 퀼 에디터로 작성된 내용을 Jsoup을 사용하여 파싱
@@ -175,7 +177,7 @@ public class PostService {
     public PostResponse.DetailDTO postDetail(Integer postId, User sessionUser) {
 //        게시글 부분
         Post post = postRepo.findById(postId)
-                .orElseThrow(() -> new RuntimeException("게시글이 존재하지 않습니다."));
+                .orElseThrow(() -> new Exception404("게시글이 존재하지 않습니다."));
 //        PostResponse.DetailDTO detailDTO = new PostResponse.DetailDTO(post, replies, sessionUser);
         PostResponse.DetailDTO detailDTO = new PostResponse.DetailDTO(post, sessionUser);
 
