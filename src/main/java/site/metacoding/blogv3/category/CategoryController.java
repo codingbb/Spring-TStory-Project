@@ -13,7 +13,7 @@ public class CategoryController {
     private final CategoryService categoryService;
     private final HttpSession session;
 
-    @PostMapping("/category/save")
+    @PostMapping("/s/category/save")
     public String save(String categoryName) {
 //        System.out.println("categoryName = " + categoryName);
         User user = (User) session.getAttribute("sessionUser");
@@ -22,7 +22,7 @@ public class CategoryController {
         return "redirect:/category/write-form";
     }
 
-    @GetMapping("/category/write-form")
+    @GetMapping("/s/category/write-form")
     public String writeForm() {
 
         return "category/writeForm";

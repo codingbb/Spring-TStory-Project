@@ -51,7 +51,7 @@
 
     {{#model.isPostOwner}}
         <div class="my_mt_md_1">
-            <a class="btn btn-outline-info" href="/post/update-form/{{model.postId}}">수정</a>
+            <a class="btn btn-outline-info" href="/s/post/update-form/{{model.postId}}">수정</a>
             <button id="btn-delete" class="btn btn-outline-danger">삭제</button>
         </div>
     {{/model.isPostOwner}}
@@ -93,24 +93,6 @@
         </button>
     </div>
 
-
-    <!--    <div class="my_paging d-flex justify-content-center align-items-center my_mb_lg_1">-->
-    <!--&lt;!&ndash;        애가 <<< &ndash;&gt;-->
-    <!--        <a class="my_atag_none my_mr_sm_1" href="/">-->
-    <!--            <i class="fa-solid fa-angle-left"></i>-->
-    <!--        </a>-->
-    <!--&lt;!&ndash;        애가 숫자 &ndash;&gt;-->
-    <!--        <a class="my_atag_none" href="/">-->
-    <!--            <div class="my_paging_number_box my_mr_sm_1">-->
-    <!--            </div>-->
-    <!--        </a>-->
-    <!--&lt;!&ndash;        애가 >>> &ndash;&gt;-->
-    <!--        <a class="my_atag_none my_ml_sm_1" href="/">-->
-    <!--            <i class="fa-solid fa-angle-right"></i>-->
-    <!--        </a>-->
-    <!--    </div>-->
-    <!--        페이징 끝-->
-
     <br><br>
 
     <script>
@@ -122,7 +104,7 @@
         <!--        댓글 작성 -->
         function replySave() {
             let comment = $("#comment").val();
-            console.log("commentSave " + comment);
+            // console.log("commentSave " + comment);
             // let postId = $("#postId").val();
             // console.log("postId " + postId);
 
@@ -132,7 +114,7 @@
             };
 
             $.ajax({
-                url: '/reply/save',
+                url: '/a/reply/save',
                 data: JSON.stringify(commentSave),
                 contentType: 'application/json; charset=utf-8',
                 type: 'POST'
@@ -157,7 +139,18 @@
                 replyLoad();
 
             }).fail((res) => {
-                alert("오류");
+                if (res.status === 401) {
+                    const response = JSON.parse(res.responseText);
+
+                    Swal.fire({
+                        title: response.msg,
+                        icon: "warning",
+                        button: "확인"
+                    });
+
+                } else {
+                    alert("gsgsd");
+                }
 
             });
         }
@@ -269,7 +262,7 @@
             };
 
             $.ajax({
-                url: '/reply/delete/' + replyId,
+                url: '/a/reply/delete/' + replyId,
                 data: JSON.stringify(replyDelete),
                 contentType: 'application/json; charset=utf-8',
                 type: 'POST'
@@ -358,7 +351,7 @@
 
 
             $.ajax({
-                url: '/reply/update/' + replyId,
+                url: '/a/reply/update/' + replyId,
                 data: JSON.stringify(replyUpdateData),
                 contentType: 'application/json; charset=utf-8',
                 type: 'POST'
@@ -427,7 +420,7 @@
                             .then(() => {
                                 $.ajax({
                                     type: "POST",
-                                    url: "/post/delete/{{model.postId}}",
+                                    url: "/s/post/delete/{{model.postId}}",
 
                                 }).done((res) => {
                                     // alert("Ddd");

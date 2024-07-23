@@ -26,7 +26,7 @@ public class ReplyController {
         return ResponseEntity.ok(new ApiUtil<>(replies));
     }
 
-    @PostMapping("/reply/delete/{replyId}")
+    @PostMapping("/a/reply/delete/{replyId}")
     public ResponseEntity<?> delete(@PathVariable Integer replyId, @RequestBody ReplyRequest.DeleteDTO requestDTO) {
         System.out.println("requestDTO = " + requestDTO);
         User user = (User) session.getAttribute("sessionUser");
@@ -36,7 +36,7 @@ public class ReplyController {
 //        return "redirect:/post/detail/" + requestDTO.getPostId();
     }
 
-    @PostMapping("/reply/update/{replyId}")
+    @PostMapping("/a/reply/update/{replyId}")
     public ResponseEntity<?> update(@PathVariable Integer replyId, @RequestBody ReplyRequest.DTO requestDTO) {
         System.out.println("코멘트!! = " + requestDTO);
         User user = (User) session.getAttribute("sessionUser");
@@ -47,7 +47,7 @@ public class ReplyController {
 //        return "redirect:/post/detail/" + requestDTO.getPostId();
     }
 
-    @PostMapping("/reply/save")
+    @PostMapping("/a/reply/save")
     public ResponseEntity<?> save(@RequestBody ReplyRequest.DTO requestDTO) {
         System.out.println("requestDTO = " + requestDTO);
         User user = (User) session.getAttribute("sessionUser");

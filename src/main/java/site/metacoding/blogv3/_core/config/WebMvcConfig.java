@@ -1,12 +1,26 @@
 package site.metacoding.blogv3._core.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.resource.PathResourceResolver;
+import site.metacoding.blogv3._core.interceptor.LoginApiInterceptor;
+import site.metacoding.blogv3._core.interceptor.LoginInterceptor;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+//        WebMvcConfigurer.super.addInterceptors(registry);
+        registry.addInterceptor(new LoginInterceptor())
+                .addPathPatterns("/s/**");
+
+        registry.addInterceptor(new LoginApiInterceptor())
+                .addPathPatterns("/a/**");
+    }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         WebMvcConfigurer.super.addResourceHandlers(registry);

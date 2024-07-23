@@ -22,30 +22,30 @@ public class TrashFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
 
-        System.out.println("111 fdsaafdssssssssssssssss");
-        System.out.println("222 request.getMethod() : " + request.getMethod());
+//        System.out.println("111 fdsaafdssssssssssssssss");
+//        System.out.println("222 request.getMethod() : " + request.getMethod());
 
         CachedBodyHttpServletRequest cachedBodyHttpServletRequest = new CachedBodyHttpServletRequest(request);
 
         // comment, postId
         if (request.getMethod().equals("POST") || request.getMethod().equals("PUT")) {
             ObjectMapper om = new ObjectMapper();
-            System.out.println("333 되낭요>?>");
+//            System.out.println("333 되낭요>?>");
 
             //http request 에서 json 데이터 읽어오고 (ObjectMapper) ReplyRequest.SaveDTO 클래스 객체로 변환
 //            ReplyRequest.SaveDTO requestBody = om.readValue(request.getInputStream(), ReplyRequest.SaveDTO.class);
             ReplyRequest.DTO requestBody = om.readValue(cachedBodyHttpServletRequest.getInputStream(), ReplyRequest.DTO.class);
-            System.out.println("444 requestBody : " + requestBody);
+//            System.out.println("444 requestBody : " + requestBody);
 
             if (requestBody.getComment().contains("바보")) {
-                System.out.println("555 타니???????????????");
+//                System.out.println("555 타니???????????????");
 
                 response.setContentType("application/json; charset=utf-8");
                 ApiUtil apiUtil = new ApiUtil(400, "욕설 및 비하 발언은 허용되지 않습니다.");
-                System.out.println("666 apiUtil ㅠㅠ = " + apiUtil);
+//                System.out.println("666 apiUtil ㅠㅠ = " + apiUtil);
                 String responseBody = om.writeValueAsString(apiUtil);
 
-                System.out.println("777 responseBody 되나되나 = " + responseBody);
+//                System.out.println("777 responseBody 되나되나 = " + responseBody);
 
                 response.getWriter().println(responseBody);
                 return;
@@ -53,7 +53,7 @@ public class TrashFilter implements Filter {
 
         }
 
-        System.out.println("88888??");
+//        System.out.println("88888??");
 
         chain.doFilter(cachedBodyHttpServletRequest, response);
 
