@@ -20,6 +20,22 @@ public class ReplyRequest {
         private String comment;
     }
 
+    // 공통 dto
+    @Data
+    public static class DTO {
+        private Integer postId;
+        private Integer userId;
+        private String comment;
+
+        public Reply toEntity(User sessionUser, Post post, String comment) {
+            return Reply.builder()
+                    .comment(comment)
+                    .user(sessionUser)
+                    .post(post)
+                    .build();
+        }
+    }
+
 
     @Data
     public static class SaveDTO {

@@ -37,7 +37,7 @@ public class ReplyController {
     }
 
     @PostMapping("/reply/update/{replyId}")
-    public ResponseEntity<?> update(@PathVariable Integer replyId, @RequestBody ReplyRequest.UpdateDTO requestDTO) {
+    public ResponseEntity<?> update(@PathVariable Integer replyId, @RequestBody ReplyRequest.DTO requestDTO) {
         System.out.println("코멘트!! = " + requestDTO);
         User user = (User) session.getAttribute("sessionUser");
         ReplyResponse.UpdateDTO reply = replyService.replyUpdate(user, replyId, requestDTO);
@@ -48,7 +48,7 @@ public class ReplyController {
     }
 
     @PostMapping("/reply/save")
-    public ResponseEntity<?> save(@RequestBody ReplyRequest.SaveDTO requestDTO) {
+    public ResponseEntity<?> save(@RequestBody ReplyRequest.DTO requestDTO) {
         System.out.println("requestDTO = " + requestDTO);
         User user = (User) session.getAttribute("sessionUser");
         ReplyResponse.SaveDTO reply = replyService.replySave(user.getId(), requestDTO);

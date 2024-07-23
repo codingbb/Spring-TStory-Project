@@ -138,7 +138,18 @@
                 type: 'POST'
 
             }).done((res) => {
-                console.log("res = " + JSON.stringify(res));
+                console.log("res ddd = " + JSON.stringify(res));
+                console.log("msg = " + res.status);
+
+                if (res.status === 400) {
+                    Swal.fire({
+                        title: res.msg,
+                        icon: "warning",
+                        button: "확인"
+                    });
+                    return;
+                }
+
                 let reply = res.body;
                 let replyItem = getReplyItem(reply);
                 $("#replyList").prepend(replyItem);
@@ -354,6 +365,16 @@
 
             }).done((res) => {
                 console.log("성공", res);
+
+                if (res.status === 400) {
+                    Swal.fire({
+                        title: res.msg,
+                        icon: "warning",
+                        button: "확인"
+                    });
+                    return;
+                }
+
                 $("#newShowReplyUpdateForm-" + replyId).remove();
                 let reply = res.body;
                 let updateReplyItem = getReplyItem(reply);

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.Data;
 import site.metacoding.blogv3._core.util.ApiUtil;
 import site.metacoding.blogv3._core.util.CachedBodyHttpServletRequest;
 import site.metacoding.blogv3.reply.Reply;
@@ -33,7 +34,7 @@ public class TrashFilter implements Filter {
 
             //http request 에서 json 데이터 읽어오고 (ObjectMapper) ReplyRequest.SaveDTO 클래스 객체로 변환
 //            ReplyRequest.SaveDTO requestBody = om.readValue(request.getInputStream(), ReplyRequest.SaveDTO.class);
-            ReplyRequest.SaveDTO requestBody = om.readValue(cachedBodyHttpServletRequest.getInputStream(), ReplyRequest.SaveDTO.class);
+            ReplyRequest.DTO requestBody = om.readValue(cachedBodyHttpServletRequest.getInputStream(), ReplyRequest.DTO.class);
             System.out.println("444 requestBody : " + requestBody);
 
             if (requestBody.getComment().contains("바보")) {
@@ -49,6 +50,7 @@ public class TrashFilter implements Filter {
                 response.getWriter().println(responseBody);
                 return;
             }
+
         }
 
         System.out.println("88888??");

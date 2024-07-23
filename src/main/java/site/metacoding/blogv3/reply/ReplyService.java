@@ -24,7 +24,7 @@ public class ReplyService {
     private final PostJPARepository postRepo;
 
     @Transactional
-    public ReplyResponse.SaveDTO replySave(Integer sessionUserId, ReplyRequest.SaveDTO requestDTO) {
+    public ReplyResponse.SaveDTO replySave(Integer sessionUserId, ReplyRequest.DTO requestDTO) {
         User sessionUser = userRepo.findById(sessionUserId)
                 .orElseThrow(() -> new Exception404("회원 정보가 존재하지 않습니다."));
         Post post = postRepo.findById(requestDTO.getPostId()).orElseThrow(()
@@ -37,7 +37,7 @@ public class ReplyService {
 
 
     @Transactional
-    public ReplyResponse.UpdateDTO replyUpdate(User user, Integer replyId, ReplyRequest.UpdateDTO requestDTO) {
+    public ReplyResponse.UpdateDTO replyUpdate(User user, Integer replyId, ReplyRequest.DTO requestDTO) {
         Reply reply = replyRepo.findById(replyId).orElseThrow(() -> new ApiException404("존재하지 않는 댓글입니다"));
         Post post = postRepo.findById(requestDTO.getPostId()).orElseThrow(()
                 -> new Exception404("게시글이 존재하지 않습니다."));
