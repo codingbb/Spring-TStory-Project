@@ -60,7 +60,7 @@ public class UserService {
 
         //포함하면 true 반환 되어서 throw가 실행될 것임
         if (userOP.isPresent()) {
-            throw new Exception400("중복된 아이디입니다.");
+            throw new ApiException400("중복된 아이디입니다.");
         }
 
         // 이메일 인증 여부 확인
@@ -96,7 +96,7 @@ public class UserService {
     public void userUpdate(Integer sessionUserId, UserRequest.UpdateDTO requestDTO) {
         //먼저 조회
         User user = userRepo.findById(sessionUserId)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new ApiException404("존재하지 않는 회원입니다."));
         System.out.println("user = " + user);
 
         if (requestDTO.getNewPassword().equals(user.getPassword())) {
