@@ -27,7 +27,6 @@ public class Reply {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
     private Post post;
 
     @CreationTimestamp
@@ -35,10 +34,6 @@ public class Reply {
 
     @Transient
     private Boolean isReplyOwner;
-
-    @Transient
-    private Integer postId;
-
 
     @Builder
     public Reply(Integer id, String comment, User user, Post post, LocalDateTime createdAt) {
@@ -49,11 +44,5 @@ public class Reply {
         this.createdAt = createdAt;
     }
 
-    public void setPost(Post post) {
-        this.post = post;
-        if (post != null) {
-            this.postId = post.getId();
-        }
-    }
 
 }
