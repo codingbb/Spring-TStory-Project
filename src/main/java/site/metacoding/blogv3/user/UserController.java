@@ -2,10 +2,12 @@ package site.metacoding.blogv3.user;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import site.metacoding.blogv3._core.util.ApiUtil;
 import site.metacoding.blogv3._core.util.EmailUtil;
@@ -86,7 +88,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserRequest.LoginDTO requestDTO) {
+    public ResponseEntity<?> login(@Valid @RequestBody UserRequest.LoginDTO requestDTO, Errors errors) {
         System.out.println("requestDTO 1 = " + requestDTO);
 
         User sessionUser = userService.login(requestDTO);
@@ -113,13 +115,13 @@ public class UserController {
     }
 
     @PutMapping("/user/update")
-    public ResponseEntity<?> update(@RequestBody UserRequest.UpdateDTO requestDTO) {
+    public ResponseEntity<?> update(@Valid @RequestBody UserRequest.UpdateDTO requestDTO, Errors errors) {
         System.out.println("requestDTO22222 = " + requestDTO);
 //        System.out.println("비번 확인용 = " + requestDTO);
         User sessionUser = (User) session.getAttribute("sessionUser");
         userService.userUpdate(sessionUser.getId(), requestDTO);
 
-        return ResponseEntity.ok(new ApiUtil<>(true));
+        return ResponseEntity.ok(new ApiUtil<>(null));
     }
 
     @GetMapping("/logout")

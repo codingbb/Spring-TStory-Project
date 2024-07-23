@@ -83,6 +83,7 @@
             type: 'PUT'
 
         }).done((res) => {
+            console.log("gbbb" + res);
             //swal - 비동기적으로 작동. 그래서 자꾸 alert창 안뜨고 바로 /로 넘어간다
             Swal.fire({
                 title: "회원정보 변경이 완료되었습니다.",
@@ -101,8 +102,9 @@
                     icon: "warning",
                     button: "확인"
                 });
+            } else {
+                alert("%55");
             }
-            console.log("실패", res);
         });
     });
 
